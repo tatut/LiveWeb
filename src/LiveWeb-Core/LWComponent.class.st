@@ -18,8 +18,16 @@ Class {
 		'mounted',
 		'ctx'
 	],
+	#classVars : [
+		'js'
+	],
 	#category : #'LiveWeb-Core'
 }
+
+{ #category : #initialization }
+LWComponent class >> initialize [
+	js := LWScriptHelper 
+]
 
 { #category : #adding }
 LWComponent >> add: aChildComponent [
