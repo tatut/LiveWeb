@@ -1,3 +1,12 @@
+"
+I output HTML to a WriteStream.
+
+All HTML5 and SVG tags are implemented as messages
+to render that element. There are variants of the 
+messages for rendering an element with or without
+attributes.
+
+"
 Class {
 	#name : #HTMLRenderer,
 	#superclass : #Object,
