@@ -29,6 +29,27 @@ HTMLRendererTest >> testAttributes [
 ]
 
 { #category : #tests }
+HTMLRendererTest >> testComponentId [
+	"content block without arguments (use the same renderer)"
+	self assert: (self html: [:h |
+		h id: 42.
+		h div: 'hello'
+		])
+		equals: '<div data-lw="42">hello</div>'.
+	
+	self assert: (self html: [:h |
+		h id: 123.
+		h div: [ h div: 'inner' ]])
+		equals: '<div data-lw="123"><div>inner</div></div>'.
+		
+	self assert: (self html: [:h |
+		h id: 0.
+		h div: { #id -> 'foobar' } with: 'content'])
+		equals: '<div data-lw="0" id="foobar">content</div>'.
+ 
+]
+
+{ #category : #tests }
 HTMLRendererTest >> testContentBlock [
 	"content block without arguments (use the same renderer)"
 	self assert: (self html: [:h |
