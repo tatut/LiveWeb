@@ -26,7 +26,7 @@ LWScriptCallback >> asJS: cb [
 			nextPutAll: cb asString; 
 			nextPutAll:',['.
 		jsParams 	doWithIndex: [ :p :i | 
-			i > 0 ifTrue: [ js nextPut: $, ].
+			i > 1 ifTrue: [ js nextPut: $, ].
 			js nextPutAll: p.		
 		].
 		js nextPutAll: ']'.
