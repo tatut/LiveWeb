@@ -18,6 +18,22 @@ Class {
 	#category : #'LiveWeb-Core'
 }
 
+{ #category : #converting }
+LWScriptCallback >> asJS: cb [
+	String streamContents: [ :js |
+		condition ifNotNil: [ js nextPutAll: 'if('; nextPutAll: condition; nextPutAll: ') '  ].
+		js nextPutAll: '_lws('; 
+			nextPutAll: cb asString; 
+			nextPutAll:',['.
+		jsParams 	doWithIndex: [ :p :i | 
+			i > 0 ifTrue: [ js nextPut: $, ].
+			js nextPutAll: p.		
+		].
+		js nextPutAll: ']'.
+		debounceMs ifNotNil: [ js nextPut: $‚; nextPutAll: debounceMs asString ].
+		js nextPut: $) ]
+]
+
 { #category : #accessing }
 LWScriptCallback >> callback [
 
