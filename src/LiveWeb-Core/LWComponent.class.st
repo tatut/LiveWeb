@@ -15,7 +15,9 @@ Class {
 	#instVars : [
 		'changeListeners',
 		'children',
-		'id'
+		'id',
+		'mounted',
+		'ctx'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -24,6 +26,7 @@ Class {
 LWComponent >> add: aChildComponent [
 	"add child component to this component"
 	children ifNil: [ children := OrderedCollection new ].
+	aChildComponent inContext: ctx.
 	children add: aChildComponent 
 ]
 
@@ -45,9 +48,17 @@ LWComponent >> childrenDo: aBlock [
 	
 ]
 
+{ #category : #'instance creation' }
+LWComponent >> inContext: aContext [
+	ctx := aContext.
+	id := ctx nextComponentId.
+	self childrenDo: [ :c | c inContext: ctx ].
+	
+]
+
 { #category : #initialization }
 LWComponent >> initialize [
-	changeListeners := OrderedCollection new.
+	mounted := false.
 ]
 
 { #category : #initialization }
@@ -66,8 +77,13 @@ LWComponent >> mount [
 { #category : #rendering }
 LWComponent >> render: aHtmlRenderer [
 	"Render this component using HTML renderer. 
+	Mounts the component before first render.
 	Sets the component id to renderer before calling renderOn:. 
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
+	mounted ifFalse: [ 
+		mounted := true. 
+		self mount.
+	].
 	aHtmlRenderer id: id.
 	self renderOn: aHtmlRenderer .
 ]
