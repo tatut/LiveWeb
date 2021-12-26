@@ -50,12 +50,13 @@ LWPageConnection >> callback: idAndArgs [
 
 { #category : #'as yet unclassified' }
 LWPageConnection >> component: parentComponent childAdded: newChildComponent at: index [
-	| html p |
+	| html p cc |
 	html := self renderToString: newChildComponent.
 	"FIXME: we don't really use index..."
 	p := parentComponent id asString.
-	index = parentComponent children size 
-		"added as last index, append to element"
+	cc := parentComponent childCount.
+	(index = cc) | (cc = 0)
+		"added as last index or no children before, append to element"
 		ifTrue: 	[ self send: { { p . 'A' . html } } ]
 		ifFalse: [ 
 			"added before last, insert before another child"

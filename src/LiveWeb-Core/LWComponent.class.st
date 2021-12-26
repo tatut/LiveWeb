@@ -47,6 +47,11 @@ LWComponent >> changed [
 	ctx ifNotNil: [ ctx componentChanged: self ].
 ]
 
+{ #category : #accessing }
+LWComponent >> childCount [
+	^ children ifNil: 0 ifNotNil: [ children size ]
+]
+
 { #category : #enumerating }
 LWComponent >> childrenDo: aBlock [
 	"run block with each child"			
@@ -87,12 +92,19 @@ LWComponent >> render: aHtmlRenderer [
 	Mounts the component before first render.
 	Sets the component id to renderer before calling renderOn:. 
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
+	| oldId oldComp |
 	mounted ifFalse: [ 
 		self mount.
 		mounted := true. 
 	].
+
+	"keep old id and component safe in stack, 
+	restore them if parent renders something after rendering children"
+	oldId := aHtmlRenderer id.
+	oldComp := aHtmlRenderer component.
 	aHtmlRenderer id: id; component: self.
-	self renderOn: aHtmlRenderer .
+	self renderOn: aHtmlRenderer.
+	aHtmlRenderer id: oldId; component: oldComp.
 ]
 
 { #category : #rendering }

@@ -1019,6 +1019,12 @@ HTMLRenderer >> i: attrs with: content [
 ]
 
 { #category : #accessing }
+HTMLRenderer >> id [
+
+	^ id
+]
+
+{ #category : #accessing }
 HTMLRenderer >> id: componentId [
 	"set the next component id, that will be added as data attribute to the next element"
 	id := componentId.
