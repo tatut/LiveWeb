@@ -69,6 +69,16 @@ HTMLRendererTest >> testContentBlock [
 ]
 
 { #category : #tests }
+HTMLRendererTest >> testEmptyTags [	
+	self assert: (self html: [:h |
+		h div: 'Hello'.
+		h hr.
+		h div: 'world'
+		])
+		equals: '<div>Hello</div><hr/><div>world</div>'
+]
+
+{ #category : #tests }
 HTMLRendererTest >> testSimpleHtmlContent [
 	self assert: (self html: [:h |
 		h div: 'Hello'
