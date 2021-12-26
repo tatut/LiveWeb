@@ -83,7 +83,7 @@ HTMLRendererTest >> testEscapeHtml [
 	| esc |
 	esc := [ :txt | HTMLRenderer new escapeHtml: txt ].
 	self assert: (esc value: '<script>alert("evil")</script>')
-		  equals: '&lt;script&gt;alert(&quot;evil&quot;)&lt;&#x2F;script&gt;'
+		  equals: '&lt;script&gt;alert(&quot;evil&quot;)&lt;/script&gt;'
 ]
 
 { #category : #tests }

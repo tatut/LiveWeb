@@ -116,7 +116,7 @@ HTMLRenderer class >> initialize [
 		add: $> -> '&gt;';
 		add: $" -> '&quot;';
 		add: $' -> '&#x27;';
-		add: $/ -> '&#x2F;'; yourself.		
+		yourself.		
 
 
 ]
