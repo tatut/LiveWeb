@@ -55,7 +55,7 @@ LWComponent >> id [
 { #category : #'instance creation' }
 LWComponent >> inContext: aContext [
 	ctx := aContext.
-	id := ctx nextComponentId.
+	id := ctx registerComponent: self.
 	self childrenDo: [ :c | c inContext: ctx ].
 	
 ]

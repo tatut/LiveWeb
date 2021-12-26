@@ -5,7 +5,8 @@ Class {
 		'nextId',
 		'changeListeners',
 		'callbacks',
-		'callbackIdsByComponent'
+		'callbackIdsByComponent',
+		'components'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -28,6 +29,12 @@ LWContext >> cleanup: component [
 LWContext >> componentChanged: component [
 	"notify that some component in the tree has changed and needs rerender"
 	changeListeners do: [ :c | c value: component ]
+]
+
+{ #category : #accessing }
+LWContext >> components [
+
+	^ components
 ]
 
 { #category : #initialization }
@@ -64,6 +71,16 @@ LWContext >> registerCallback: aBlock for: component [
 		].
 	callbacks at: id put: aBlock.
 	callbackIdsByComponent at: component id update: [ :ids | ids add: id; yourself ] initial: [Bag with: id].
+	^ id
+]
+
+{ #category : #registering }
+LWContext >> registerComponent: anLWComponent [
+   "register new component in this context, returns id number of component"
+	| id |
+	id := self nextComponentId .
+	components ifNil: [ components := Dictionary new. ].
+	components at: id put: anLWComponent.
 	^ id
 ]
 
