@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'nextId',
-		'changeListeners',
+		'connection',
 		'callbacks',
 		'callbackIdsByComponent',
 		'components'
@@ -26,9 +26,17 @@ LWContext >> cleanup: component [
 ]
 
 { #category : #'as yet unclassified' }
+LWContext >> component: parentComponent childAdded: newChildComponent at: index [
+	"notify that a child was added to an already mounted parent component.
+	Will mount and render the child and send it to the client, adding it
+	to the page DOM at the right position."
+	connection component: parentComponent childAdded: newChildComponent at: index.
+]
+
+{ #category : #'as yet unclassified' }
 LWContext >> componentChanged: component [
 	"notify that some component in the tree has changed and needs rerender"
-	changeListeners do: [ :c | c value: component ]
+	connection componentChanged: component
 ]
 
 { #category : #accessing }
@@ -37,19 +45,21 @@ LWContext >> components [
 	^ components
 ]
 
+{ #category : #accessing }
+LWContext >> connection [
+
+	^ connection
+]
+
+{ #category : #accessing }
+LWContext >> connection: anObject [
+
+	connection := anObject
+]
+
 { #category : #initialization }
 LWContext >> initialize [
 	nextId := 0.
-]
-
-{ #category : #'as yet unclassified' }
-LWContext >> listenToChanges: aListenerBlock [
-	"Add a change listener to this context.
-	The listener will be called with the component that has changed.
-	Returns a block that will remove the listener."
-	changeListeners ifNil: [ changeListeners := IdentitySet new ].
-	changeListeners add: aListenerBlock.
-	^ [ changeListeners remove: aListenerBlock ]
 ]
 
 { #category : #accessing }

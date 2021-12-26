@@ -34,7 +34,8 @@ LWComponent >> add: aChildComponent [
 	"add child component to this component"
 	children ifNil: [ children := OrderedCollection new ].
 	aChildComponent inContext: ctx.
-	children add: aChildComponent 
+	children add: aChildComponent.
+	mounted ifTrue: [ ctx component: self childAdded: aChildComponent at: children size ]
 ]
 
 { #category : #updating }
@@ -87,8 +88,8 @@ LWComponent >> render: aHtmlRenderer [
 	Sets the component id to renderer before calling renderOn:. 
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
 	mounted ifFalse: [ 
-		mounted := true. 
 		self mount.
+		mounted := true. 
 	].
 	aHtmlRenderer id: id; component: self.
 	self renderOn: aHtmlRenderer .

@@ -49,17 +49,27 @@ LWPageConnection >> callback: idAndArgs [
 ]
 
 { #category : #'as yet unclassified' }
+LWPageConnection >> component: parentComponent childAdded: newChildComponent at: index [
+	| html p |
+	html := self renderToString: newChildComponent.
+	"FIXME: we don't really use index..."
+	p := parentComponent id asString.
+	index = parentComponent children size 
+		"added as last index, append to element"
+		ifTrue: 	[ self send: { { p . 'A' . html } } ]
+		ifFalse: [ 
+			"added before last, insert before another child"
+			self send: {{ p . '+' . index - 1 . html }}
+			]
+
+]
+
+{ #category : #'as yet unclassified' }
 LWPageConnection >> componentChanged: component [
 	| html |
 	page ctx cleanup: component.
-	html := (String streamContents: [:out |
-		| h |
-		h := HTMLRenderer on: out.
-		h ctx: page ctx.
-		component render: h
-		]).
-	
-	Transcript show: 'this component changed:', component asString;cr.
+	html := self renderToString: component.
+	Transcript show: 'this component changed:', component asString, ' => ', html;cr.
 	ws sendMessage: (STONJSON toString: { { component id asString . 'R' . html } })
 ]
 
@@ -75,12 +85,22 @@ LWPageConnection >> page: anObject [
 	page := anObject
 ]
 
+{ #category : #rendering }
+LWPageConnection >> renderToString: component [ 
+	^ String streamContents: [:out |
+		| h |
+		h := HTMLRenderer on: out.
+		h ctx: page ctx.
+		component render: h
+	].
+
+]
+
 { #category : #running }
 LWPageConnection >> run: aWebSocket [ 
-	| removeChangeListener |
 	ws := aWebSocket.
 	Transcript show: 'yhdistetty ', ws asString; cr.
-	removeChangeListener := page ctx listenToChanges: [ :c | self componentChanged: c ].
+	page ctx connection: self. "set myself as the page context connection, for change notifications"
 	
 	[ ws runWith: [ :msg |
 		"Transcript show: 'viestin sain: ', msg printString;cr."
@@ -90,8 +110,13 @@ LWPageConnection >> run: aWebSocket [
 	on: ConnectionClosed 
 	do: [ 
 		Transcript show: 'Page disconnected'.
-		removeChangeListener value.
+		page ctx connection: nil.
 		LWPage unregisterPage: page id.
 	].
 
+]
+
+{ #category : #instructions }
+LWPageConnection >> send: patches [
+	ws sendMessage: (STONJSON toString: patches)
 ]

@@ -20,7 +20,7 @@ Class {
 
 { #category : #converting }
 LWScriptCallback >> asJS: cb [
-	String streamContents: [ :js |
+	^ String streamContents: [ :js |
 		condition ifNotNil: [ js nextPutAll: 'if('; nextPutAll: condition; nextPutAll: ') '  ].
 		js nextPutAll: '_lws('; 
 			nextPutAll: cb asString; 

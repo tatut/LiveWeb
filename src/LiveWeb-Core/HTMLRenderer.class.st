@@ -1541,6 +1541,7 @@ HTMLRenderer >> renderAttrs: attrs [
 			name := attr key.
 			value := attr value. 
 			
+			Transcript show: value class asString; cr.
 			('on*' match: name) & ((value isBlock) | (value class = LWScriptCallback))
 				ifTrue: [  
 					| cb |

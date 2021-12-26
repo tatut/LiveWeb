@@ -147,6 +147,8 @@ LWPage class >> clientConnectionScript [
                        case ">": elt.parentElement.insertAdjacentElement("beforeend",elt); break;
                        case "@": for(var attr in payload) { _lw.setAttr(elt, attr, payload[attr]) }; break;
                        case "E": (new Function(payload)).call(elt); break;
+                       case "+": /* add child at index */
+                           elt.insertBefore(patch[3], elt.childNodes[patch[2]]); break;
 						}
                 }
             }
@@ -292,7 +294,7 @@ LWPage >> writeOn: stream [
 		ctx used ifTrue: [ 
 			"if body render did cause some live elements, output connection script
 			and register this page"
- 			ctx used ifTrue: [ self class registerPage: self for: id. ]. 
+ 			self class registerPage: self for: id. 
 			h script: self class clientConnectionScript, '
 				document.onload = _lw.connect("/__liveweb", "', id asString  ,'")'.
 		]

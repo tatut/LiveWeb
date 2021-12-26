@@ -18,6 +18,13 @@ LWMultiCounter >> renderOn: h [
 		self childrenDo: [ :c |
 			c render: h .
 			h hr.
-		]	
+		].
+		h div: { #style -> 'display: flex; flex: row;' }
+			with: [ 
+				h input: { #id -> #initialCount }.
+				h button: { #onclick -> (js call: [ :c | self add: (LWCounter new counter: c asNumber) ] with: (js inputValue: 'initialCount')) }
+				  with: 'Add new counter'		
+				 ]
+		
 	]
 ]
