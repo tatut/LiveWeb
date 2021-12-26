@@ -8,6 +8,47 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+LWScriptHelper class >> call: block with: jsParam1 [ 
+	^ LWScriptCallback new 
+		callback: block;
+		jsParams: { jsParam1 }
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> call: block with: jsParam1 with: jsParam2 [
+	^ LWScriptCallback new 
+		callback: block;
+		jsParams: { jsParam1 . jsParam2 }
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> call: block with: jsParam1 with: jsParam2 with: jsParam3 [ 
+	^ LWScriptCallback new 
+		callback: block;
+		jsParams: { jsParam1 . jsParam2 . jsParam3 }
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> call: block with: jsParam1 with: jsParam2 with: jsParam3 with: jsParam4 [
+	^ LWScriptCallback new 
+		callback: block;
+		jsParams: { jsParam1 . jsParam2 . jsParam3 . jsParam4 }
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> debounced: aScriptCallback wait: aDuration [ 
+	^ aScriptCallback debounceMs: aDuration asMilliSeconds 
+]
+
+{ #category : #'as yet unclassified' }
 LWScriptHelper class >> eventChangeValue [ 
 	^ 'window.event.target.value'
 	
@@ -48,5 +89,45 @@ LWScriptHelper class >> inputValue: id [
 { #category : #'as yet unclassified' }
 LWScriptHelper class >> preventDefault [
  ^ 'window.event.preventDefault'
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> when: jsCondition call: block [ 
+	^ LWScriptCallback new 
+		condition: jsCondition;
+		callback: block
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> when: jsCondition call: block with: jsParam [
+	^ (self when: jsCondition call: block) 
+		jsParams: { jsParam }
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> when: jsCondition call: block with: jsParam1 with: jsParam2 [
+	^ (self when: jsCondition call: block) 
+		jsParams: { jsParam1 . jsParam2 }
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> when: jsCondition call: block with: jsParam1 with: jsParam2 with: jsParam3 [
+	^ (self when: jsCondition call: block) 
+		jsParams: { jsParam1 . jsParam2 . jsParam3}
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> when: jsCondition call: block with: jsParam1 with: jsParam2 with: jsParam3 with: jsParam4 [
+	^ (self when: jsCondition call: block) 
+		jsParams: { jsParam1 . jsParam2 . jsParam3 . jsParam4 }
+		
 	
 ]
