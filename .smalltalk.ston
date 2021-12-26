@@ -1,0 +1,9 @@
+SmalltalkCISpec {
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'LiveWeb',
+      #directory: 'src',
+      #platforms : [ #pharo ]
+    }
+  ]
+}
