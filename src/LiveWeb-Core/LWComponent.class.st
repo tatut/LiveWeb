@@ -13,7 +13,6 @@ Class {
 	#name : #LWComponent,
 	#superclass : #Object,
 	#instVars : [
-		'changeListeners',
 		'children',
 		'id',
 		'mounted',
@@ -36,8 +35,7 @@ LWComponent >> changed [
 	Do not call this when adding or removing children, as they are handled
 	separately. Calling changed will cause the whole component to be rerendered
 	and sent to the client page."
-	changeListeners ifNotNil: [ 
-		changeListeners do: [ :l | l value: self ] ].
+	ctx ifNotNil: [ ctx componentChanged: self ].
 ]
 
 { #category : #enumerating }
@@ -46,6 +44,12 @@ LWComponent >> childrenDo: aBlock [
 	children ifNotNil: [ 
 		children do: [ :child | aBlock value: child ]].
 	
+]
+
+{ #category : #accessing }
+LWComponent >> id [
+
+	^ id
 ]
 
 { #category : #'instance creation' }
@@ -59,12 +63,6 @@ LWComponent >> inContext: aContext [
 { #category : #initialization }
 LWComponent >> initialize [
 	mounted := false.
-]
-
-{ #category : #initialization }
-LWComponent >> listenToChanges: aListenerBlock [
-	changeListeners ifNil: [ changeListeners := OrderedCollection  new ].
-	changeListeners add: aListenerBlock 
 ]
 
 { #category : #'component lifecycle' }
@@ -84,7 +82,7 @@ LWComponent >> render: aHtmlRenderer [
 		mounted := true. 
 		self mount.
 	].
-	aHtmlRenderer id: id.
+	aHtmlRenderer id: id; component: self.
 	self renderOn: aHtmlRenderer .
 ]
 
