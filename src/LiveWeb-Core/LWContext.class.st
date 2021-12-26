@@ -11,7 +11,7 @@ Class {
 	#category : #'LiveWeb-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LWContext >> callbackFor: id [
 	^ callbacks at: id ifAbsent: nil
 ]

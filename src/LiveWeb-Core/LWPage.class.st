@@ -295,8 +295,8 @@ LWPage >> writeOn: stream [
 			"if body render did cause some live elements, output connection script
 			and register this page"
  			self class registerPage: self for: id. 
-			h script: self class clientConnectionScript, '
-				document.onload = _lw.connect("/__liveweb", "', id asString  ,'")'.
+			h script: [ h raw: (self class clientConnectionScript, '
+				document.onload = _lw.connect("/__liveweb", "', id asString  ,'")') ].
 		]
 	 ]
    ].
