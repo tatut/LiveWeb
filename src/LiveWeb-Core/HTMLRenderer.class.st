@@ -568,11 +568,18 @@ HTMLRenderer >> embed: attrs [
 HTMLRenderer >> escapeHtml: text [
 	"escape HTML in text for attributes and text content"
 	^ String streamContents: [ :s |
-		text do: [ :ch |
-			| esc |
-			esc := escapedCharacters at: ch ifAbsent: nil.
-			esc ifNil: [ s nextPut: ch ] ifNotNil: [ s nextPutAll: esc ]
-	   ]
+		self escapeHtml: text to: s.
+	].
+
+]
+
+{ #category : #rendering }
+HTMLRenderer >> escapeHtml: text to: stream [
+	"escape HTML in text for attributes and text content"
+	text do: [ :ch |
+		| esc |
+		esc := escapedCharacters at: ch ifAbsent: nil.
+		esc ifNil: [ stream nextPut: ch ] ifNotNil: [ stream nextPutAll: esc ]
 	].
 
 ]
@@ -1598,9 +1605,9 @@ HTMLRenderer >> renderAttrs: attrs [
 				].
 			out nextPut: Character space.
 			out nextPutAll: name asString; 
-				 nextPutAll: '="';
-				 nextPutAll: (self escapeHtml: value asString);
-				 nextPut: $".
+				 nextPutAll: '="'.
+			self escapeHtml: value asString to: out.
+			out nextPut: $".
 		]
 ]
 
@@ -1619,7 +1626,7 @@ HTMLRenderer >> renderContent: blockOrStatic [
 			blockOrStatic argumentCount = 0
 				ifFalse: [ blockOrStatic value: self ]
 				ifTrue: [ blockOrStatic value ] ]
-		ifFalse: [ out nextPutAll: (self escapeHtml: blockOrStatic asString) ].
+		ifFalse: [ self escapeHtml: blockOrStatic asString to: out ].
 	
 ]
 
