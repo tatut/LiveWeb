@@ -70,8 +70,7 @@ LWPageConnection >> componentChanged: component [
 	| html |
 	page ctx cleanup: component.
 	html := self renderToString: component.
-	Transcript show: 'this component changed:', component asString, ' => ', html;cr.
-	ws sendMessage: (STONJSON toString: { { component id asString . 'R' . html } })
+	self send: { { component id asString . 'R' . html } }
 ]
 
 { #category : #accessing }
