@@ -17,7 +17,8 @@ Class {
 		'component'
 	],
 	#classVars : [
-		'escapedCharacters'
+		'BooleanAttributes',
+		'EscapedCharacters'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -110,13 +111,23 @@ HTMLRenderer class >> compileTag: aTag [
 
 { #category : #initialization }
 HTMLRenderer class >> initialize [
-	escapedCharacters := Dictionary new
+	EscapedCharacters := Dictionary new
 		add: $& -> '&amp;';
 		add: $< -> '&lt;';
 		add: $> -> '&gt;';
 		add: $" -> '&quot;';
 		add: $' -> '&#x27;';
 		yourself.		
+	
+	BooleanAttributes := Set new
+		add: 'checked';
+		add: 'selected';
+		add: 'disabled';
+		add: 'readonly'; 
+		add: 'multiple';
+		add: 'defer'; 
+		yourself.
+
 
 
 ]
@@ -578,7 +589,7 @@ HTMLRenderer >> escapeHtml: text to: stream [
 	"escape HTML in text for attributes and text content"
 	text do: [ :ch |
 		| esc |
-		esc := escapedCharacters at: ch ifAbsent: nil.
+		esc := EscapedCharacters at: ch ifAbsent: nil.
 		esc ifNil: [ stream nextPut: ch ] ifNotNil: [ stream nextPutAll: esc ]
 	].
 
@@ -1599,28 +1610,34 @@ HTMLRenderer >> renderAttrs: attrs [
 	(attrs isDictionary ifTrue: [ attrs associations ] ifFalse: [ attrs ])
 		do: [ :attr |
 			| name value |
-			name := attr key.
+			name := attr key asString.
 			value := attr value. 
 			
-			('on*' match: name) & ((value isBlock) | (value class = LWScriptCallback))
-				ifTrue: [  
-					| cb |
-					value isBlock 
-						ifTrue: [ 
-							"a regular smalltalk block"
-							cb := ctx registerCallback: value for: component.
-							value := '_lws(<1p>,[])' expandMacrosWith: cb. ]
-						ifFalse: [  
-							"an LWScriptCallback instance"
-							cb := ctx registerCallback: value callback for: component.
-							value := value asJS: cb ]
-				].
-			out nextPut: Character space.
-			out nextPutAll: name asString; 
-				 nextPutAll: '="'.
-			self escapeHtml: value asString to: out.
-			out nextPut: $".
-		]
+			(BooleanAttributes includes: name)
+				ifTrue: [
+					"boolean attr, only output the name if value is not false/nil"
+					(value isNil) | (value = false) ifFalse: [ out nextPut: Character space; nextPutAll: name ]
+				]
+				ifFalse: [   
+				('on*' match: name) & ((value isBlock) | (value class = LWScriptCallback))
+					ifTrue: [  
+						| cb |
+						value isBlock 
+							ifTrue: [ 
+								"a regular smalltalk block"
+								cb := ctx registerCallback: value for: component.
+								value := '_lws(<1p>,[])' expandMacrosWith: cb. ]
+							ifFalse: [  
+								"an LWScriptCallback instance"
+								cb := ctx registerCallback: value callback for: component.
+								value := value asJS: cb ]
+					].
+				out nextPut: Character space;
+					 nextPutAll: name; 
+					 nextPutAll: '="'.
+				self escapeHtml: value asString to: out.
+				out nextPut: $".
+			]]
 ]
 
 { #category : #rendering }
