@@ -34,7 +34,9 @@ LWComponent >> changed [
 	Do not call this when adding or removing children, as they are handled
 	separately. Calling changed will cause the whole component to be rerendered
 	and sent to the client page."
-	ctx ifNotNil: [ ctx componentChanged: self ].
+	mounted ifTrue: [
+		ctx ifNotNil: [ ctx componentChanged: self ]
+	]
 ]
 
 { #category : #accessing }
