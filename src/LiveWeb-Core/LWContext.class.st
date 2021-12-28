@@ -19,10 +19,12 @@ LWContext >> callbackFor: id [
 { #category : #cleaning }
 LWContext >> cleanup: component [ 
 	"do state cleanup for component before rerender"
-	| callbackIds |
-	callbackIds := callbackIdsByComponent removeKey: component id ifAbsent: #().
-	callbackIds do: [ :id | callbacks removeKey: id ]
-	
+	component childrenRecursive do: [ :c | 
+		| callbackIds |
+		c unmount.
+		callbackIds := callbackIdsByComponent removeKey: component id ifAbsent: #().
+		callbackIds do: [ :id | callbacks removeKey: id ]
+	].
 ]
 
 { #category : #'as yet unclassified' }
@@ -36,7 +38,11 @@ LWContext >> component: parentComponent childAdded: newChildComponent at: index 
 { #category : #'as yet unclassified' }
 LWContext >> componentChanged: component [
 	"notify that some component in the tree has changed and needs rerender"
-	connection componentChanged: component
+	connection 
+		ifNil: [ 
+			"PENDING: handle separate cases: page not YET connected and connection going away"
+			component unmount ]
+		ifNotNil: [ 	connection componentChanged: component ]
 ]
 
 { #category : #accessing }

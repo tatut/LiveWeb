@@ -42,7 +42,5 @@ LWMultiCounter >> renderOn: h [
 				h input: { #id -> #initialCount }.
 				h button: { #onclick -> (js call: [ :c | counters add: (LWCounter new counter: c asNumber) ] with: (js inputValue: 'initialCount')) }
 				    with: 'Add new counter'		
-				 ]
-		
-	]
+				 ]]
 ]

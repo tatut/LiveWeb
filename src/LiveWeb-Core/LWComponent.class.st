@@ -85,8 +85,7 @@ LWComponent >> initialize [
 { #category : #'component lifecycle' }
 LWComponent >> mount [
 	"Do any initialization before rendering. 
-	Component must add any initial child components while mounting.
-	Any children added will be mounted by the system."
+	Component can acquire resources or start init before the first render."
 ]
 
 { #category : #rendering }
@@ -114,4 +113,10 @@ LWComponent >> render: aHtmlRenderer [
 LWComponent >> renderOn: aHtmlRenderer [
 	"Subclasses should override this to produce HTML"
 	SubclassResponsibility new signal: 'LWComponent subclasses must implement renderOn: '
+]
+
+{ #category : #'component lifecycle' }
+LWComponent >> unmount [
+	"Do any cleanup before component is removed from the page.
+	If you started something in mount, you better stop it here!"
 ]

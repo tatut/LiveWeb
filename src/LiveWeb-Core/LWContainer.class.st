@@ -41,6 +41,11 @@ LWContainer >> childCount [
 	^ children ifNil: 0 ifNotNil: [ children size ]
 ]
 
+{ #category : #accessing }
+LWContainer >> children [
+	^ ReadStream on: children
+]
+
 { #category : #enumerating }
 LWContainer >> childrenDo: aBlock [
 	"run block with each child"			

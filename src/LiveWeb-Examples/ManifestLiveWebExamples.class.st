@@ -23,3 +23,8 @@ Class {
 	#superclass : #PackageManifest,
 	#category : #'LiveWeb-Examples-Manifest'
 }
+
+{ #category : #'code-critics' }
+ManifestLiveWebExamples class >> ruleUtilityMethodsRuleV1FalsePositive [
+	^ #(#(#(#RGPackageDefinition #(#'LiveWeb-Examples')) #'2021-12-28T18:13:31.52601+02:00') )
+]

@@ -87,6 +87,14 @@ HTMLRendererTest >> testEscapeHtml [
 ]
 
 { #category : #tests }
+HTMLRendererTest >> testOnlyAttrs [
+	self assert: (self html: [:h |
+		h div: { #id->'hello' }
+		])
+		equals: '<div id="hello"/>'
+]
+
+{ #category : #tests }
 HTMLRendererTest >> testSimpleHtmlContent [
 	self assert: (self html: [:h |
 		h div: 'Hello'

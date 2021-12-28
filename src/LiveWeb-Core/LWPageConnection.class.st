@@ -67,10 +67,12 @@ LWPageConnection >> component: parentComponent childAdded: newChildComponent at:
 
 { #category : #'as yet unclassified' }
 LWPageConnection >> componentChanged: component [
-	| html |
-	page ctx cleanup: component.
-	html := self renderToString: component.
-	self send: { { component id asString . 'R' . html } }
+	[ page ctx cleanup: component.
+	  self send: { { component id asString . 'R' . self renderToString: component } } ]
+	on: Exception  
+	do: [ :e |
+		ws logGeneric: 'Exception in component change handling, closing. ', e asString.
+		ws close. ].
 ]
 
 { #category : #accessing }
