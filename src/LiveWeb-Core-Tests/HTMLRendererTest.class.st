@@ -29,6 +29,12 @@ HTMLRendererTest >> testAttributes [
 ]
 
 { #category : #tests }
+HTMLRendererTest >> testBooleanAttribute [
+	self assert: (self html: [:h | h div: [ h input: { #checked->true }; input: { #checked->false } ]])
+		equals: '<div><input checked/><input/></div>'
+]
+
+{ #category : #tests }
 HTMLRendererTest >> testComponentId [
 	"content block without arguments (use the same renderer)"
 	self assert: (self html: [:h |
