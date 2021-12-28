@@ -18,14 +18,14 @@ Class {
 		'ctx'
 	],
 	#classVars : [
-		'js'
+		'Js'
 	],
 	#category : #'LiveWeb-Core'
 }
 
-{ #category : #initialization }
+{ #category : #'class initialization' }
 LWComponent class >> initialize [
-	js := LWScriptHelper 
+	Js := LWScriptHelper 
 ]
 
 { #category : #updating }

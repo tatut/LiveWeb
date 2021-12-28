@@ -40,7 +40,7 @@ LWMultiCounter >> renderOn: h [
 		h div: { #style -> 'display: flex; flex: row;' }
 		 with: [ 
 				h input: { #id -> #initialCount }.
-				h button: { #onclick -> (js call: [ :c | counters add: (LWCounter new counter: c asNumber) ] with: (js inputValue: 'initialCount')) }
+				h button: { #onclick -> (Js call: [ :c | counters add: (LWCounter new counter: c asNumber) ] with: (Js inputValue: 'initialCount')) }
 				    with: 'Add new counter'		
 				 ]]
 ]
