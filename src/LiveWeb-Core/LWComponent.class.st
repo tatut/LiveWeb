@@ -13,7 +13,6 @@ Class {
 	#name : #LWComponent,
 	#superclass : #Object,
 	#instVars : [
-		'children',
 		'id',
 		'mounted',
 		'ctx'
@@ -29,15 +28,6 @@ LWComponent class >> initialize [
 	js := LWScriptHelper 
 ]
 
-{ #category : #adding }
-LWComponent >> add: aChildComponent [
-	"add child component to this component"
-	children ifNil: [ children := OrderedCollection new ].
-	aChildComponent inContext: ctx.
-	children add: aChildComponent.
-	mounted ifTrue: [ ctx component: self childAdded: aChildComponent at: children size ]
-]
-
 { #category : #updating }
 LWComponent >> changed [ 
 	"Signal that this component state has changed and should be rerendered.
@@ -48,16 +38,28 @@ LWComponent >> changed [
 ]
 
 { #category : #accessing }
-LWComponent >> childCount [
-	^ children ifNil: 0 ifNotNil: [ children size ]
+LWComponent >> children [ 
+	"Answer with a ReadStream of all children of this component.
+	This is used if the component is rerendered, to unmount and clean up all
+	child components.
+	
+	If a component has child components, it must override this method to ensure
+	correct behaviour."
+	^ ReadStream on: #().
 ]
 
-{ #category : #enumerating }
-LWComponent >> childrenDo: aBlock [
-	"run block with each child"			
-	children ifNotNil: [ 
-		children do: [ :child | aBlock value: child ]].
+{ #category : #'as yet unclassified' }
+LWComponent >> childrenRecursive [
+	"answer with a read stream of all recursive children for this component.
+	This includes all descendants.
 	
+	The children are returned depth first, the child always returned before the parent."
+	^ Generator on: [ :g |
+		self children do: [ :c |
+			c childrenRecursive do: [ :r | g yield: r ].
+			g yield: c.
+		 ]
+	  ]
 ]
 
 { #category : #accessing }
@@ -68,9 +70,10 @@ LWComponent >> id [
 
 { #category : #'instance creation' }
 LWComponent >> inContext: aContext [
-	ctx := aContext.
+ 	ctx := aContext.
 	id := ctx registerComponent: self.
-	self childrenDo: [ :c | c inContext: ctx ].
+	self children do: [ :c | c inContext: aContext ].
+	
 	
 ]
 
