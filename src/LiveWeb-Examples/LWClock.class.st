@@ -1,3 +1,9 @@
+"
+I am a simple SVG clock.
+
+When mounted, start a process to repeatedly signal changes to rerender the component.
+The process is terminated when the component is unmounted.
+"
 Class {
 	#name : #LWClock,
 	#superclass : #LWComponent,
