@@ -6,3 +6,8 @@ Class {
 	#superclass : #SkModel,
 	#category : #'LiveWeb-Schjerfbeck'
 }
+
+{ #category : #visiting }
+SkChoice >> accept: aVisitor [
+	^ aVisitor visitChoice: self
+]

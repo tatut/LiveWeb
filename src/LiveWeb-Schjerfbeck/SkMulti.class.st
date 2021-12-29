@@ -7,3 +7,8 @@ Class {
 	#superclass : #SkModel,
 	#category : #'LiveWeb-Schjerfbeck'
 }
+
+{ #category : #visiting }
+SkMulti >> accept: aVisitor [
+	^ aVisitor visitMulti: self
+]

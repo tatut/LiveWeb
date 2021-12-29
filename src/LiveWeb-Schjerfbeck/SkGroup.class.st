@@ -10,6 +10,11 @@ Class {
 	#category : #'LiveWeb-Schjerfbeck'
 }
 
+{ #category : #visiting }
+SkGroup >> accept: aVisitor [
+	^ aVisitor visitGroup: self
+]
+
 { #category : #adding }
 SkGroup >> add: aModel [
 	aModel parent: self.

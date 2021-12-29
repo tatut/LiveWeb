@@ -19,6 +19,12 @@ Class {
 	#category : #'LiveWeb-Schjerfbeck'
 }
 
+{ #category : #visiting }
+SkModel >> accept: aVisitor [
+	"accept a visitor for this model node"
+	self subclassResponsibility 
+]
+
 { #category : #accessing }
 SkModel >> accessor: name [
 	"Set read/write accessors by a symbol name. the write accessor 
