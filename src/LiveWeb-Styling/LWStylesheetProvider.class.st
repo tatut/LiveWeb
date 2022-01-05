@@ -14,6 +14,10 @@ For example:
 
 This will register a new CSS style and generate a class name for it. 
 The method will answer with an association #class->'generated class name'
+
+Note that the methods should be *pure* so that they only use the parameters and 
+not any internal state of the object. The class name is generated solely based 
+on the method selector and a hash of the arguments.
 "
 Class {
 	#name : #LWStylesheetProvider,
@@ -35,12 +39,38 @@ LWStylesheetProvider >> style: aStyleBlock [
 	Answers with an associaciont #class->'generated class name' that can be directly used
 	in HTML rendering as attribute."
 
-	| sender name params |
+	| sender cls |
 	
 	"determine caller name and its parameters"
 	sender := thisContext sender.
-	^ String streamContents: [:out |
+	cls :=  String streamContents: [:out |
 		out nextPutAll: sender method selector asString;
-		    nextPut: $-;
-			 nextPutAll: sender arguments hash asString ]
+			 nextPutAll: sender arguments hash asString ].
+		
+	"render style, if we haven't done so already"
+	(styles includes: cls) ifFalse: [
+		| rendered |
+		rendered := String streamContents: [ :out |
+			aStyleBlock value: (LWStyle on: out) ].
+		 styles at: cls put: rendered
+	].
+
+	^ cls
+]
+
+{ #category : #writing }
+LWStylesheetProvider >> writeOn: out [
+	"write this stylesheet to the out stream"
+	styles keysAndValuesDo: [ :class :decl |
+		(class indexOf: $:) > 0 
+			ifTrue: [ | split |
+				split := class splitOn: ':'.
+				split allButLastDo: [ :part | out nextPutAll: part; nextPutAll: '\:' ].
+				out nextPutAll: split last ]
+			ifFalse: [ out nextPutAll: class ].
+		out nextPutAll: ' { '; 
+		    nextPutAll: decl;
+		    nextPutAll: '}'; 
+		    nextPut: Character lf.
+   ]
 ]
