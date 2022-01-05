@@ -1,3 +1,7 @@
+"
+I render inline style definitions as HTML style attributes.
+
+"
 Class {
 	#name : #LWStyleAttributeRenderer,
 	#superclass : #LWAttributeRenderer,

@@ -1,3 +1,7 @@
+"
+I am a root page that installs the LWStyleAttributeRenderer to 
+the page HTML renderer.
+"
 Class {
 	#name : #LWStyledPage,
 	#superclass : #LWPage,
