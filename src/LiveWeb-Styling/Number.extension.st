@@ -16,6 +16,11 @@ Number >> em [
 ]
 
 { #category : #'*LiveWeb-Styling' }
+Number >> isCSSCalculated [ 
+	^ false
+]
+
+{ #category : #'*LiveWeb-Styling' }
 Number >> mm [
  ^ CSSValue of: self as: 'mm' 
 ]

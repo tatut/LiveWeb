@@ -13,6 +13,8 @@ BaselineOfLiveWeb >> baseline: spec [
 			"Packages"
 			spec 
 				package: 'LiveWeb-Core';
-				package: 'LiveWeb-Core-Tests' with: [ spec requires: #('LiveWeb-Core') ]
+				package: 'LiveWeb-Styling' with: [ spec requires: #('LiveWeb-Core') ];
+				package: 'LiveWeb-Core-Tests' with: [ spec requires: #('LiveWeb-Core') ];
+				package: 'LiveWeb-Styling-Tests' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ]
 		]
 ]

@@ -1,6 +1,6 @@
 Class {
 	#name : #CSSValue,
-	#superclass : #Object,
+	#superclass : #CSSExpr,
 	#instVars : [
 		'value',
 		'unit'
