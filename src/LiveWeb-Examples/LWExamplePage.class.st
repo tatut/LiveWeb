@@ -1,6 +1,6 @@
 Class {
 	#name : #LWExamplePage,
-	#superclass : #LWPage,
+	#superclass : #LWStyledPage,
 	#instVars : [
 		'componentClass'
 	],

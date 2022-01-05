@@ -91,7 +91,7 @@ LWPageConnection >> page: anObject [
 LWPageConnection >> renderToString: component [ 
 	^ String streamContents: [:out |
 		| h |
-		h := HTMLRenderer on: out.
+		h := page htmlRenderer: out.
 		h ctx: page ctx.
 		component render: h
 	].
