@@ -246,6 +246,11 @@ LWPage >> head: args [
 	^ nil
 ]
 
+{ #category : #'as yet unclassified' }
+LWPage >> htmlRenderer: stream [
+	^ HTMLRenderer on: stream
+]
+
 { #category : #accessing }
 LWPage >> id [
 
@@ -278,11 +283,10 @@ LWPage >> writeOn: stream [
 	head := self head: args.
 	body := self body: args.
 	stream nextPutAll: '<!doctype html>'; nextPut: Character lf.
-	h := HTMLRenderer on: stream.
+	h := self htmlRenderer: stream.
 	h ctx: ctx.
 	h html: 
 	[ h head: [ 
-		"output JS to connect websocket"
 		head ifNotNil: [ 
 			head inContext: ctx.
 			head render: h ].

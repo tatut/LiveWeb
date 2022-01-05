@@ -1,9 +1,6 @@
 Class {
 	#name : #LWStyleAttributeRenderer,
 	#superclass : #LWAttributeRenderer,
-	#instVars : [
-		'styles'
-	],
 	#category : #'LiveWeb-Styling'
 }
 
@@ -35,14 +32,14 @@ LWStyleAttributeRenderer >> cssDeclarations [
 
 { #category : #rendering }
 LWStyleAttributeRenderer >> render: attributeEntry [  
-	| class value |
 	"if attribute is not style, delegate to parent"
 	attributeEntry key = #style ifFalse: [ ^ parent render: attributeEntry ].
-	value := attributeEntry value.
+
+	"if attribute is not a block, don't process this"
+	attributeEntry value isBlock ifFalse: [ ^ attributeEntry ].
 	
-	"add value to cached CSS declarations"
-	(styles includes: value) ifFalse: [ styles add: value ]. "fixme: hook sending new styles via WS"
+	^ #style -> (String streamContents: [:out |
+		attributeEntry value value: (LWStyle on: out)])	
 	
-	^ #class -> value cssClassName
 	
 ]
