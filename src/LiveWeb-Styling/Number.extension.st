@@ -6,6 +6,11 @@ Number >> asCSSPropertyValue [
 ]
 
 { #category : #'*LiveWeb-Styling' }
+Number >> asCSSPropertyValueNested [ 
+	^ self asCSSPropertyValue 
+]
+
+{ #category : #'*LiveWeb-Styling' }
 Number >> cm [
  ^ CSSValue of: self as: 'cm' 
 ]

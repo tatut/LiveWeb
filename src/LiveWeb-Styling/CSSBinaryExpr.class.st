@@ -11,10 +11,21 @@ Class {
 
 { #category : #converting }
 CSSBinaryExpr >> asCSSPropertyValue [ 
-	^ 'calc(<1s> <2s> <3s>)' 
-		expandMacrosWith: left asCSSPropertyValue 
+	^ self asCSSPropertyValue: false
+]
+
+{ #category : #converting }
+CSSBinaryExpr >> asCSSPropertyValue: nested [ 
+	^ '<1s>(<2s> <3s> <4s>)' 
+		expandMacrosWith: (nested ifTrue: '' ifFalse: 'calc')
+		with: left asCSSPropertyValueNested 
 		with: op 
-		with: right asCSSPropertyValue 
+		with: right asCSSPropertyValueNested 
+]
+
+{ #category : #converting }
+CSSBinaryExpr >> asCSSPropertyValueNested [ 
+	^ self asCSSPropertyValue: true
 ]
 
 { #category : #testing }

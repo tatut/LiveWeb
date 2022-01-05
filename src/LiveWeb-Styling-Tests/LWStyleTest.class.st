@@ -18,7 +18,7 @@ LWStyleTest >> testCalc [
 		equals: 'width: calc(90vw - 20px); '.
 	
 	self assert: (self css: [ :s | s margin: 0.5rem * 2 / 7 ])
-		equals: 'margin: calc(calc(0.5rem * 2) / 7); '
+		equals: 'margin: calc((0.5rem * 2) / 7); '
 ]
 
 { #category : #tests }
