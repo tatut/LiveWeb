@@ -28,9 +28,27 @@ Class {
 	#category : #'LiveWeb-Styling'
 }
 
+{ #category : #'as yet unclassified' }
+LWStylesheetProvider >> generateClassName: namePrefix with: arguments [
+	^ arguments isEmpty 
+		ifTrue: [ namePrefix ] 
+		ifFalse: [ String streamContents: [:out |
+			out nextPutAll: namePrefix;
+				 nextPutAll: arguments hash asString ] ].
+
+]
+
 { #category : #initialization }
 LWStylesheetProvider >> initialize [
 	styles := Dictionary new.
+]
+
+{ #category : #accessing }
+LWStylesheetProvider >> registerClass: cls with: aStyleBlock [
+	(styles includes: cls) ifTrue: [ ^ self ].
+	styles at: cls
+		   put: (String streamContents: [ :out | 
+ 				    aStyleBlock value: (LWStyle on: out) ]). 
 ]
 
 { #category : #accessing }
@@ -43,18 +61,20 @@ LWStylesheetProvider >> style: aStyleBlock [
 	
 	"determine caller name and its parameters"
 	sender := thisContext sender.
-	cls :=  String streamContents: [:out |
-		out nextPutAll: sender method selector asString;
-			 nextPutAll: sender arguments hash asString ].
+	cls :=  self generateClassName: sender method selector asString
+		 with: sender arguments.
 		
-	"render style, if we haven't done so already"
-	(styles includes: cls) ifFalse: [
-		| rendered |
-		rendered := String streamContents: [ :out |
-			aStyleBlock value: (LWStyle on: out) ].
-		 styles at: cls put: rendered
-	].
+	self registerClass: cls with: aStyleBlock.
 
+	^ cls
+]
+
+{ #category : #accessing }
+LWStylesheetProvider >> style: aStyleBlock named: namePrefix [
+	"Register a new style in this stylesheet with overridden name prefix"
+	| cls |	
+	cls := self generateClassName: namePrefix with: thisContext sender arguments.
+	self registerClass: cls with: aStyleBlock.
 	^ cls
 ]
 

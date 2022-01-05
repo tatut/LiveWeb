@@ -17,10 +17,15 @@ LWStylesheetProviderTest >> testSheet [
 		description: 'Generated class name has method selector'.
 	self assert: (cls endsWith: hash)
 		description: 'Generated class ends with hash of arguments'.
-		
+	
+	"generate big text"
+	cls := ts bigText: 3.
+	self assert: cls equals: ('big<1s>' expandMacrosWith: { 3 } hash asString).
+	
+	"check generated CSS has the classes"
 	css := String streamContents: [ :out | ts writeOn: out ].
 	self assert: css 
-		equals: ('myContainer\:background\:margin\:<1s> { display: flex; flex-direction: col; background-color: wheat; margin: 2px; }<n>'
-					expandMacrosWith: hash)
+		equals: ('myContainer\:background\:margin\:<1s> { display: flex; flex-direction: col; background-color: wheat; margin: 2px; }<n>big<2s> { font-size: calc(10px * 3); }<n>'
+					expandMacrosWith: hash with: {3} hash asString)
 		
 ]
