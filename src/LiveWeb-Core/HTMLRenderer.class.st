@@ -2114,3 +2114,9 @@ HTMLRenderer >> withAttributeRenderer: newAttributeRenderer [
 	newAttributeRenderer parent: attributeRenderer.
 	attributeRenderer := newAttributeRenderer  
 ]
+
+{ #category : #'writing text' }
+HTMLRenderer >> write: writeable [ 
+	"Write an object directly to the output stream. The object must respond to writeOn: "
+	writeable writeOn: out
+]

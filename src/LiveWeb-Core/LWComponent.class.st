@@ -31,11 +31,16 @@ LWComponent class >> initialize [
 { #category : #updating }
 LWComponent >> changed [ 
 	"Signal that this component state has changed and should be rerendered.
+	
+	If component does not want a rerender when updating. Override this method 
+	and do some other patching via the ctx. For example evaluating JS in the
+	context of the rendered element.
+	
 	Do not call this when adding or removing children, as they are handled
 	separately. Calling changed will cause the whole component to be rerendered
 	and sent to the client page."
 	mounted ifTrue: [
-		ctx ifNotNil: [ ctx componentChanged: self ]
+		ctx ifNotNil: [ ctx rerenderComponent: self ]
 	]
 ]
 

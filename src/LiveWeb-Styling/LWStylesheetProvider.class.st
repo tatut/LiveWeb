@@ -23,10 +23,33 @@ Class {
 	#name : #LWStylesheetProvider,
 	#superclass : #Object,
 	#instVars : [
-		'styles'
+		'styles',
+		'listeners'
+	],
+	#classVars : [
+		'providers'
 	],
 	#category : #'LiveWeb-Styling'
 }
+
+{ #category : #'as yet unclassified' }
+LWStylesheetProvider class >> clearProviders [
+	providers := Dictionary new.
+]
+
+{ #category : #accessing }
+LWStylesheetProvider class >> provider: class [
+	"Get a singleton provider of the given class."
+	providers ifNil: [ providers := Dictionary new ].
+	^ providers at: class ifAbsentPut: [ class new ].
+]
+
+{ #category : #adding }
+LWStylesheetProvider >> addStyleAddedListener: listener [ 
+	"add listener for added styles"
+	listeners add: listener.
+	
+]
 
 { #category : #'as yet unclassified' }
 LWStylesheetProvider >> generateClassName: namePrefix with: arguments [
@@ -41,17 +64,30 @@ LWStylesheetProvider >> generateClassName: namePrefix with: arguments [
 { #category : #initialization }
 LWStylesheetProvider >> initialize [
 	styles := Dictionary new.
+	listeners := IdentitySet new.
 ]
 
 { #category : #accessing }
 LWStylesheetProvider >> registerClass: cls with: aStyleBlock [
-   | b |
+   | b decl css |
 	(styles includes: cls) ifTrue: [ ^ self ].
 	b := LWStyleBuilder new.
 	aStyleBlock value: b.
+	decl := String streamContents: [ :out | b writeOn: out].
 	styles 
 		at: cls
-		put: (String streamContents: [ :out | b writeOn: out]) 
+		put: decl. 
+		
+	"Send new CSS declarations in the background to any listening pages"
+	[ css := String streamContents: [ :out | self writeCSS: cls decl: decl on: out ].
+	  listeners do: [ :l | l onStyleAdded: css ] ] fork
+]
+
+{ #category : #adding }
+LWStylesheetProvider >> removeStyleAddedListener: listener [ 
+	"add listener for added styles"
+	listeners remove: listener.
+	
 ]
 
 { #category : #accessing }
@@ -69,7 +105,7 @@ LWStylesheetProvider >> style: aStyleBlock [
 		
 	self registerClass: cls with: aStyleBlock.
 
-	^ cls
+	^ #class->cls
 ]
 
 { #category : #accessing }
@@ -78,14 +114,12 @@ LWStylesheetProvider >> style: aStyleBlock named: namePrefix [
 	| cls |	
 	cls := self generateClassName: namePrefix with: thisContext sender arguments.
 	self registerClass: cls with: aStyleBlock.
-	^ cls
+	^ #class->cls
 ]
 
 { #category : #writing }
-LWStylesheetProvider >> writeOn: out [
-	"write this stylesheet to the out stream"
-	styles keysAndValuesDo: [ :class :decl |
-		out nextPut: $..
+LWStylesheetProvider >> writeCSS: class decl: decl on: out [ 
+	out nextPut: $..
 		(class indexOf: $:) > 0 
 			ifTrue: [ | split |
 				split := class splitOn: ':'.
@@ -96,5 +130,12 @@ LWStylesheetProvider >> writeOn: out [
 		    nextPutAll: decl;
 		    nextPutAll: '}'; 
 		    nextPut: Character lf.
+]
+
+{ #category : #writing }
+LWStylesheetProvider >> writeOn: out [
+	"write this stylesheet to the out stream"
+	styles keysAndValuesDo: [ :class :decl |
+		self writeCSS: class decl: decl on: out.
    ]
 ]

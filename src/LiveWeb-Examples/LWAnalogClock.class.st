@@ -17,8 +17,8 @@ LWAnalogClock >> renderOn: h [
 	h div: [  
 		h svg: { #viewBox -> '0 0 100 100' }
 		with: [  
-			h circle: { #cx -> 50 . #cy -> 50 . #r -> 45. #style->'stroke-width: 2px; stroke: wheat;' }.
-			h g: { #style-> [ :s | s strokeWidth: 1px; fill: '#333'; stroke: '#555']} with: [ 
+			h circle: { #cx -> 50 . #cy -> 50 . #r -> 45. self style clockFace  }.
+			h g: { self style clockHands } with: [ 
 				h rect: { #x->48.5. #y->22.5. 
 							 #width->5. #height->30. 
 							 #rx->2.5. #ry->2.55.

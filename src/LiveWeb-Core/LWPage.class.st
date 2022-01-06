@@ -263,6 +263,12 @@ LWPage >> isEmpty [
 ]
 
 { #category : #'as yet unclassified' }
+LWPage >> prepareCtx [ 
+	"Prepare context before page is being rendered.
+	Called after ctx and args instance variables have been set."
+]
+
+{ #category : #'as yet unclassified' }
 LWPage >> readArguments: aZnRequest [
 	"read incoming HTTP arguments that will be passed to head: and body: calls.
 	By default returns the request as is."
@@ -274,6 +280,7 @@ LWPage >> value: req [
 	id := UUIDGenerator next. 
 	ctx := LWContext new.
 	args := self readArguments: req.
+	self prepareCtx .
 	^ ZnResponse ok: self
 ]
 
@@ -282,6 +289,7 @@ LWPage >> writeOn: stream [
 	| h head body |
 	head := self head: args.
 	body := self body: args.
+	
 	stream nextPutAll: '<!doctype html>'; nextPut: Character lf.
 	h := self htmlRenderer: stream.
 	h ctx: ctx.

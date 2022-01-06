@@ -1,6 +1,6 @@
 Class {
 	#name : #LWClock,
-	#superclass : #LWComponent,
+	#superclass : #LWStyledComponent,
 	#instVars : [
 		'time'
 	],

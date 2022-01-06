@@ -52,7 +52,6 @@ LWPageConnection >> callback: idAndArgs [
 LWPageConnection >> component: parentComponent childAdded: newChildComponent at: index [
 	| html p cc |
 	html := self renderToString: newChildComponent.
-	"FIXME: we don't really use index..."
 	p := parentComponent id asString.
 	cc := parentComponent childCount.
 	(index = cc) | (cc = 0)
@@ -63,16 +62,6 @@ LWPageConnection >> component: parentComponent childAdded: newChildComponent at:
 			self send: {{ p . '+' . index - 1 . html }}
 			]
 
-]
-
-{ #category : #'as yet unclassified' }
-LWPageConnection >> componentChanged: component [
-	[ page ctx cleanup: component.
-	  self send: { { component id asString . 'R' . self renderToString: component } } ]
-	on: Exception  
-	do: [ :e |
-		ws logGeneric: 'Exception in component change handling, closing. ', e asString.
-		ws close. ].
 ]
 
 { #category : #accessing }
@@ -98,6 +87,16 @@ LWPageConnection >> renderToString: component [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LWPageConnection >> rerenderComponent: component [
+	[ page ctx cleanup: component.
+	  self send: { { component id asString . 'R' . self renderToString: component } } ]
+	on: Exception  
+	do: [ :e |
+		ws logGeneric: 'Exception in component change handling, closing. ', e asString.
+		ws close. ].
+]
+
 { #category : #running }
 LWPageConnection >> run: aWebSocket [ 
 	ws := aWebSocket.
@@ -112,7 +111,7 @@ LWPageConnection >> run: aWebSocket [
 	on: ConnectionClosed 
 	do: [ 
 		Transcript show: 'Page disconnected'.
-		page ctx connection: nil.
+		page ctx connectionClosed.
 		LWPage unregisterPage: page id.
 	].
 

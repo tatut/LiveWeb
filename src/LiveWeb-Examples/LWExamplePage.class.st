@@ -21,3 +21,9 @@ LWExamplePage >> body: args [
 LWExamplePage >> componentClass: cls [
 	componentClass := cls
 ]
+
+{ #category : #'as yet unclassified' }
+LWExamplePage >> stylesheetProvider [ 
+	^ LWStylesheetProvider provider: LWExampleStyles 
+
+]

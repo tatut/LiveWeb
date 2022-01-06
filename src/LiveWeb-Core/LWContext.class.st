@@ -1,3 +1,9 @@
+"
+I provide a context for the client's instance of a component tree.
+I keep track of all the components and their ids and callbacks.
+
+I also provide user objects that can be used to provide additional information to components. 
+"
 Class {
 	#name : #LWContext,
 	#superclass : #Object,
@@ -6,10 +12,23 @@ Class {
 		'connection',
 		'callbacks',
 		'callbackIdsByComponent',
-		'components'
+		'components',
+		'user'
 	],
 	#category : #'LiveWeb-Core'
 }
+
+{ #category : #accessing }
+LWContext >> at: aKey [
+	"Get the user object at key."
+	^ user at: aKey
+]
+
+{ #category : #accessing }
+LWContext >> at: aKey put: userObject [
+	"Put a user object into context."
+	user at: aKey put: userObject
+]
 
 { #category : #accessing }
 LWContext >> callbackFor: id [
@@ -27,22 +46,12 @@ LWContext >> cleanup: component [
 	].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'component lifecycle' }
 LWContext >> component: parentComponent childAdded: newChildComponent at: index [
 	"notify that a child was added to an already mounted parent component.
 	Will mount and render the child and send it to the client, adding it
 	to the page DOM at the right position."
 	connection component: parentComponent childAdded: newChildComponent at: index.
-]
-
-{ #category : #'as yet unclassified' }
-LWContext >> componentChanged: component [
-	"notify that some component in the tree has changed and needs rerender"
-	connection 
-		ifNil: [ 
-			"PENDING: handle separate cases: page not YET connected and connection going away"
-			component unmount ]
-		ifNotNil: [ 	connection componentChanged: component ]
 ]
 
 { #category : #accessing }
@@ -63,9 +72,17 @@ LWContext >> connection: anObject [
 	connection := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+LWContext >> connectionClosed [
+	connection := nil.
+	components valuesDo: [ :c | self cleanup: c ]. 
+	components := nil.
+]
+
 { #category : #initialization }
 LWContext >> initialize [
 	nextId := 0.
+	user := Dictionary new.
 ]
 
 { #category : #accessing }
@@ -98,6 +115,16 @@ LWContext >> registerComponent: anLWComponent [
 	components ifNil: [ components := Dictionary new. ].
 	components at: id put: anLWComponent.
 	^ id
+]
+
+{ #category : #'component lifecycle' }
+LWContext >> rerenderComponent: component [
+	"notify that some component in the tree has changed and needs rerender"
+	connection 
+		ifNil: [ 
+			"PENDING: handle separate cases: page not YET connected and connection going away"
+			component unmount ]
+		ifNotNil: [ 	connection rerenderComponent: component ]
 ]
 
 { #category : #testing }
