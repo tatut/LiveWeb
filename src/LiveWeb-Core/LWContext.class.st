@@ -40,7 +40,7 @@ LWContext >> cleanup: component [
 	"do state cleanup for component before rerender"
 	component childrenRecursive do: [ :c | 
 		| callbackIds |
-		c unmount.
+		c doUnmount.
 		callbackIds := callbackIdsByComponent removeKey: component id ifAbsent: #().
 		callbackIds do: [ :id | callbacks removeKey: id ]
 	].

@@ -41,6 +41,7 @@ LWSwitch >> isOn [
 LWSwitch >> off [
 	"set the switch to off (hiding the component)"
 	on := false.
+	child isMounted ifTrue: [ ctx cleanup: child ].
 	self changed.
 ]
 
@@ -60,7 +61,6 @@ LWSwitch >> renderOn: h [
 { #category : #operations }
 LWSwitch >> toggle [
 	"If switch is OFF, turn it ON... and vice versa."
-	on := on not.
-	self changed
+	on ifTrue: [ self off ] ifFalse: [ self on ]
 
 ]

@@ -69,6 +69,21 @@ LWComponent >> childrenRecursive [
 	  ]
 ]
 
+{ #category : #'as yet unclassified' }
+LWComponent >> doMount [ 
+	"internal, never override. Do initialization in mount."
+	self mount.
+	mounted := true
+]
+
+{ #category : #'as yet unclassified' }
+LWComponent >> doUnmount [ 
+	"internal, never override. Do cleanup in unmount."
+	self unmount.
+	mounted := false
+	
+]
+
 { #category : #accessing }
 LWComponent >> id [
 
@@ -89,6 +104,11 @@ LWComponent >> initialize [
 	mounted := false.
 ]
 
+{ #category : #testing }
+LWComponent >> isMounted [ 
+	^ mounted
+]
+
 { #category : #'component lifecycle' }
 LWComponent >> mount [
 	"Do any initialization before rendering. 
@@ -103,8 +123,7 @@ LWComponent >> render: aHtmlRenderer [
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
 	| oldId oldComp |
 	mounted ifFalse: [ 
-		self mount.
-		mounted := true. 
+		self doMount
 	].
 
 	"keep old id and component safe in stack, 
