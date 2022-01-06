@@ -184,10 +184,12 @@ LWPage class >> clientConnectionScript [
         }
         // if there were any scripts in the replaced content, evaluate them
         // we need to refetch the element from DOM after its outerHTML changd
-        if(withContent.match(/<script/ig)) {
-            let id = elt.getAttribute("data-rl");
+        if(withContent.match(/<script/ig)) {   
+			   let id = elt.getAttribute("data-lw");
             _lw.get(id).querySelectorAll("script").forEach( (script) => {
-                eval(script.text+"")
+					if(script.getAttribute("type") != "liveweb/placeholder") {  
+	                eval(script.text+"")
+					}
             })
         }
     }
