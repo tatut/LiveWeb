@@ -3,7 +3,7 @@ I allow subclasses to build new styles dynamically and cache the CSS style sheet
 
 The style sheet can be sent on each page and any new dynamically added styles
 will be sent through the WebSocket so that any new styles will be available without
-doing a page reload.
+doing a page reload (see LWStylesheetComponent).
 
 Subclasses should provide style methods that register CSS with the.
 
@@ -13,7 +13,8 @@ For example:
 >>>   ^ self style: [:s | s display: 'flex'; flexDirection: dir; background: col ]
 
 This will register a new CSS style and generate a class name for it. 
-The method will answer with an association #class->'generated class name'
+The method will answer with an association #class->'generated class name' that
+can be directly used in HTML rendering of components.
 
 Note that the methods should be *pure* so that they only use the parameters and 
 not any internal state of the object. The class name is generated solely based 
@@ -70,7 +71,7 @@ LWStylesheetProvider >> initialize [
 { #category : #accessing }
 LWStylesheetProvider >> registerClass: cls with: aStyleBlock [
    | b decl css |
-	(styles includes: cls) ifTrue: [ ^ self ].
+	(styles includesKey: cls) ifTrue: [ ^ self ].
 	b := LWStyleBuilder new.
 	aStyleBlock value: b.
 	decl := String streamContents: [ :out | b writeOn: out].
