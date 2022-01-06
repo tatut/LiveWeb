@@ -45,10 +45,13 @@ LWStylesheetProvider >> initialize [
 
 { #category : #accessing }
 LWStylesheetProvider >> registerClass: cls with: aStyleBlock [
+   | b |
 	(styles includes: cls) ifTrue: [ ^ self ].
-	styles at: cls
-		   put: (String streamContents: [ :out | 
- 				    aStyleBlock value: (LWStyle on: out) ]). 
+	b := LWStyleBuilder new.
+	aStyleBlock value: b.
+	styles 
+		at: cls
+		put: (String streamContents: [ :out | b writeOn: out]) 
 ]
 
 { #category : #accessing }
@@ -82,6 +85,7 @@ LWStylesheetProvider >> style: aStyleBlock named: namePrefix [
 LWStylesheetProvider >> writeOn: out [
 	"write this stylesheet to the out stream"
 	styles keysAndValuesDo: [ :class :decl |
+		out nextPut: $..
 		(class indexOf: $:) > 0 
 			ifTrue: [ | split |
 				split := class splitOn: ':'.

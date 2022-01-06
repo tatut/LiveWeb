@@ -23,9 +23,14 @@ LWStylesheetProviderTest >> testSheet [
 	self assert: cls equals: ('big<1s>' expandMacrosWith: { 3 } hash asString).
 	
 	"check generated CSS has the classes"
-	css := String streamContents: [ :out | ts writeOn: out ].
-	self assert: css 
-		equals: ('myContainer\:background\:margin\:<1s> { display: flex; flex-direction: col; background-color: wheat; margin: 2px; }<n>big<2s> { font-size: calc(10px * 3); }<n>'
-					expandMacrosWith: hash with: {3} hash asString)
+	css := (String streamContents: [ :out | ts writeOn: out ]) lines .
+	self assert: ((css at: 1) beginsWith: ('.myContainer\:background\:margin\:<1s> { ' expandMacrosWith: hash)) description: '1st rule starts with correct selector'.
+	self assert: ((css at: 1) includesSubstring: 'display: flex;') description: 'has flex property'.
+	self assert: ((css at: 1) includesSubstring: 'flex-direction: col;') description: 'has flex-direction property'.
+	self assert: ((css at: 1) includesSubstring: 'background-color: wheat;') description: 'has bacground-color property'.
+	self assert: ((css at: 1) includesSubstring: 'margin: 2px;') description: 'has margin property'.
+	
+	self assert: ((css at: 2) beginsWith: ('.big<1s>' expandMacrosWith: {3} hash asString)) description: '2nd rule starts with correct selector'.
+	self assert: ((css at: 2) includesSubstring: 'font-size: calc(10px * 3);') description: 'has font-size property'.
 		
 ]
