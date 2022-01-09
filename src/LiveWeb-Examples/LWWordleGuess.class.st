@@ -23,8 +23,9 @@ LWWordleGuess >> enter [
 ]
 
 { #category : #accessing }
-LWWordleGuess >> guess [
-	^ guess
+LWWordleGuess >> guess [ 
+  ^ guess
+
 ]
 
 { #category : #rendering }

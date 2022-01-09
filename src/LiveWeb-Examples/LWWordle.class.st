@@ -10,7 +10,8 @@ Class {
 		'guesses',
 		'typed',
 		'currentGuess',
-		'keyboard'
+		'keyboard',
+		'notice'
 	],
 	#classVars : [
 		'FiveLetterWords'
@@ -36,7 +37,7 @@ LWWordle >> backspace [
 { #category : #accessing }
 LWWordle >> children [ 
 	^ Generator on: [ :gen |
-			gen yield: keyboard.
+			gen yield: keyboard; yield: notice.
 			guesses do: [ :g | gen yield: g ]
 		]
 ]
@@ -48,7 +49,14 @@ LWWordle >> enter [
 	g := (guesses at: currentGuess) guess.
 	g size < 5 ifTrue: [ ^ nil ]. "not 5 chars yet, do nothing"
 	(guesses at: currentGuess) enter.
-	currentGuess := currentGuess + 1. 
+	currentGuess := currentGuess + 1.
+	
+	"update disabled keys on the keyboard"
+	keyboard disableKeys: (g reject: [ :k | word includes: k ]).
+	
+	"if player has won or lost, set notice"
+	self playerHasWon ifTrue: [ notice block: [ :h | self renderWin: h] ].
+	self playerHasLost ifTrue: [ notice block: [ :h | self renderLose: h ] ].
 ]
 
 { #category : #initialization }
@@ -59,7 +67,29 @@ LWWordle >> initialize [
 	typed := OrderedCollection new. 
 	currentGuess := 1.
 	keyboard := LWWordleKeyboard new game: self.
+	notice := LWBlockContainer new.
 	
+]
+
+{ #category : #'as yet unclassified' }
+LWWordle >> playerHasLost [ 
+	^ currentGuess > 6
+]
+
+{ #category : #'as yet unclassified' }
+LWWordle >> playerHasWon [ 
+	^ guesses anySatisfy: [ :g | g guess = word ]
+]
+
+{ #category : #rendering }
+LWWordle >> renderLose: h [
+	self renderNotice: h with: 'YOU LOSE!'
+]
+
+{ #category : #rendering }
+LWWordle >> renderNotice: h with: content [
+	h div: { self style centeredDialog }
+	  with: content
 ]
 
 { #category : #rendering }
@@ -67,11 +97,17 @@ LWWordle >> renderOn: h [
 	Transcript show: 'oikea sana: ', word;cr. "cheating!"
 	h div: { self style wordleGame }
 		with: [
+			notice render: h. "render win/lose notice, if any"
 			h div: [  
 				guesses do: [ :g | g render: h ]
 			].
 		  keyboard render: h.
 	 ]
+]
+
+{ #category : #rendering }
+LWWordle >> renderWin: h [
+	self renderNotice: h with: 'YOU WIN!'
 ]
 
 { #category : #'accessing - structure variables' }

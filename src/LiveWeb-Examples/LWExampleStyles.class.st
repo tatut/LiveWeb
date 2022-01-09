@@ -5,6 +5,19 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+LWExampleStyles >> centeredDialog [ 
+	^ self style: [ :s |
+		s display: 'flex'; position: 'fixed';
+       alignItems:'center'; justifyContent: 'center'; textAlign: 'center';
+			fontSize: 5 rem;
+			left: 25vw; top: 25vh;
+			width: 50vw; height: 50vh;
+			zIndex: 100;
+			border: 'solid 5px black'; borderRadius: 0.5em;
+			backgroundColor: 'gray' ]
+]
+
+{ #category : #'as yet unclassified' }
 LWExampleStyles >> clockFace [ 
 	^ self style: [:s | s strokeWidth: 2px; stroke: 'wheat' ]
 ]
@@ -61,7 +74,8 @@ LWExampleStyles >> wordleKey: s [
   s display: 'block'; 
     width: 7vw; height: 7vh; margin: 2px; 
     fontSize: 5.5vh; fontFamily:'sans-serif'; textTransform: 'capitalize'; textAlign:'center';
-    border: 'solid 0.5vw black'; borderRadius: 2vw
+    border: 'solid 0.5vw black'; borderRadius: 2vw;
+    cursor: 'pointer'
 
 ]
 
@@ -71,8 +85,11 @@ LWExampleStyles >> wordleKeyboard [
 ]
 
 { #category : #'as yet unclassified' }
-LWExampleStyles >> wordleKeyboardKey: wrong [
-	^ self style: [ :s | self wordleKey: s ]
+LWExampleStyles >> wordleKeyboardKey: disabled [
+	^ self style: [ :s | 
+		self wordleKey: s.
+		disabled ifTrue: [ s backgroundColor: 'darkGray' ]
+		]
 		named: 'k'
 ]
 

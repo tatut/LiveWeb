@@ -2,14 +2,28 @@ Class {
 	#name : #LWWordleKeyboard,
 	#superclass : #LWStyledComponent,
 	#instVars : [
-		'game'
+		'game',
+		'disabledKeys'
 	],
 	#category : #'LiveWeb-Examples'
 }
 
+{ #category : #'as yet unclassified' }
+LWWordleKeyboard >> disableKeys: someKeys [
+	disabledKeys addAll: someKeys.
+	self changed.
+]
+
 { #category : #accessing }
 LWWordleKeyboard >> game: aGame [
  game := aGame
+]
+
+{ #category : #initialization }
+LWWordleKeyboard >> initialize [ 
+  super initialize.
+  disabledKeys := Set new.
+
 ]
 
 { #category : #rendering }
@@ -22,9 +36,7 @@ LWWordleKeyboard >> renderOn: h [
 				last := (row at: 1) = $z.
 				last ifTrue: [ h button: { #onclick -> [ game enter ] } with: 'ENTER' ].
 				row do: [ :ch |
-					| wrong |
-					wrong := false. "check all wrong characters"
-					h div: { self style wordleKeyboardKey: false. #onclick -> [ game type: ch ] }
+					h div: { self style wordleKeyboardKey: (disabledKeys includes: ch). #onclick -> [ game type: ch ] }
 						with: ch 
 				].
 				last ifTrue: [ h button: { #onclick -> [ game backspace ] } with: 'BACKSPACE' ]
