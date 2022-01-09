@@ -34,6 +34,11 @@ LWScriptCallback >> asJS: cb [
 		js nextPut: $) ]
 ]
 
+{ #category : #converting }
+LWScriptCallback >> asLWScriptCallback [ 
+  ^ self
+]
+
 { #category : #accessing }
 LWScriptCallback >> callback [
 
@@ -80,4 +85,9 @@ LWScriptCallback >> jsParams [
 LWScriptCallback >> jsParams: anObject [
 
 	jsParams := anObject
+]
+
+{ #category : #evaluating }
+LWScriptCallback >> valueWithArguments: args [
+  ^ callback valueWithArguments: args
 ]

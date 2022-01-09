@@ -4,3 +4,8 @@ Extension { #name : #BlockClosure }
 BlockClosure >> asLWComponent [
 	^ LWBlockContainer new block: self
 ]
+
+{ #category : #'*LiveWeb-Core' }
+BlockClosure >> asLWScriptCallback [
+	^ LWScriptCallback new callback: self; jsParams: #()
+]

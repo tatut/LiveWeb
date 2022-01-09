@@ -1627,18 +1627,7 @@ HTMLRenderer >> renderAttrs: attrs [
 				]
 				ifFalse: [   
 				('on*' match: name) & ((value isBlock) | (value class = LWScriptCallback))
-					ifTrue: [  
-						| cb |
-						value isBlock 
-							ifTrue: [ 
-								"a regular smalltalk block"
-								cb := ctx registerCallback: value for: component.
-								value := '_lws(<1p>,[])' expandMacrosWith: cb. ]
-							ifFalse: [  
-								"an LWScriptCallback instance"
-								cb := ctx registerCallback: value callback for: component.
-								value := value asJS: cb ]
-					].
+					ifTrue: [ value := value asLWScriptCallback asJS: (ctx registerCallback: value for: component) ].
 				out nextPut: Character space;
 					 nextPutAll: name; 
 					 nextPutAll: '="'.
