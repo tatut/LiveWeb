@@ -30,7 +30,7 @@ LWWordleKeyboard >> initialize [
   super initialize.
   disabledKeys := Set new.
   keyboardListener := LWWindowListener 
-		on: #keyup call: (Js call: [ :k | Transcript show: 'keyuppii', k asString;cr.self onKeyUp: k ] with: 'event.keyCode') 
+		on: #keyup call: (Js call: [ :k | self onKeyUp: k ] with: 'event.keyCode') 
 
 ]
 

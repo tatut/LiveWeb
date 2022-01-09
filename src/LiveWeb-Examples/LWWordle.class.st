@@ -113,6 +113,5 @@ LWWordle >> renderWin: h [
 { #category : #'accessing - structure variables' }
 LWWordle >> type: ch [
 	"type a character to current guess"
-	Transcript show: 'kirjoitellaas ', ch asString;cr.
 	(guesses at: currentGuess) type: ch
 ]
