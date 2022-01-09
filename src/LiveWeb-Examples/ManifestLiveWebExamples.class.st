@@ -5,7 +5,7 @@ To get started:
   
   >>> ZnServer startDefaultOn: 8080.
   >>> d := ZnServer default.
-  >>> d delegate map: #counter to: (LWExamplePage of: LWMultiCounter).
+  >>> d delegate map: #counter to: [ :req | (LWExamplePage of: LWMultiCounter) value: req].
   >>> d delegate map: '__liveweb' to: LWPageConnection.
 
 And open http://localhost:8080/counter in a browser.

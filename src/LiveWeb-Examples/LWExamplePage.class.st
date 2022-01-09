@@ -22,8 +22,25 @@ LWExamplePage >> componentClass: cls [
 	componentClass := cls
 ]
 
+{ #category : #'push state handling' }
+LWExamplePage >> initialPushState [ 
+	Transcript show: 'we got the args: ', args asString; cr.
+	^ { #foo -> 'bar' . #jotain -> 'ihan muuta' } asDictionary 
+]
+
+{ #category : #'push state handling' }
+LWExamplePage >> pushStateChanged: newState [
+	Transcript show: 'tulipa uusi tila: ', newState asString;cr.
+]
+
 { #category : #'as yet unclassified' }
 LWExamplePage >> stylesheetProvider [ 
 	^ LWStylesheetProvider provider: LWExampleStyles 
+
+]
+
+{ #category : #'push state handling' }
+LWExamplePage >> usePushState [ 
+	^ true
 
 ]
