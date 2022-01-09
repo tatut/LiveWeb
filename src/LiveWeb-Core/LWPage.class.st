@@ -192,6 +192,15 @@ LWPage class >> clientConnectionScript [
 					}
             })
         }
+    },
+    pushState: function(state, location) { 
+      let l = window.location;
+      window.history.pushState({s:state}, l.protocol+"//"+l.host+location);
+    },
+    enablePushState: function(initialState, callbackId) { 
+      pushStateCallbackId = callbackId;
+ 		 history.replaceState({s:initialState},document.title);
+		 window.addEventListener("popstate", (s) => _lw.send(callbackId, [s.state.s]));
     }
 }
 
@@ -259,6 +268,13 @@ LWPage >> id [
 	^ id
 ]
 
+{ #category : #'push state handling' }
+LWPage >> initialPushState [
+	"Get the initial pushState when the page is rendered. Must be serializable as JSON."
+	self subclassResponsibility 
+
+]
+
 { #category : #testing }
 LWPage >> isEmpty [
 	^ false
@@ -270,11 +286,30 @@ LWPage >> prepareCtx [
 	Called after ctx and args instance variables have been set."
 ]
 
+{ #category : #'push state handling' }
+LWPage >> pushStateChanged: newPushState [
+	"Update component state based on new push state received from client."
+	self subclassResponsibility 
+
+]
+
 { #category : #'as yet unclassified' }
 LWPage >> readArguments: aZnRequest [
 	"read incoming HTTP arguments that will be passed to head: and body: calls.
 	By default returns the request as is."
 	^ aZnRequest 
+]
+
+{ #category : #'push state handling' }
+LWPage >> usePushState [
+	"If true, subclass must handle updating state based on received popped navigation state by the browser.
+	Push state is handled by rendering a script that will invoke a callback when the server state is 
+	popped.
+	Subclasses using must also override initialPushState to return the initial state when the page
+	is first rendered (should use any arguments or path to determine it). The state is serialized as JSON.
+	 
+	If false, no scripts to handle pushState in the client will be rendered."
+	^ false
 ]
 
 { #category : #accessing }
@@ -288,15 +323,18 @@ LWPage >> value: req [
 
 { #category : #writing }
 LWPage >> writeOn: stream [
-	| h head body |
+	| h head body pushStateScript |
 	head := self head: args.
 	body := self body: args.
-	
+	self usePushState ifTrue: [ pushStateScript := LWPushState on: self ].
 	stream nextPutAll: '<!doctype html>'; nextPut: Character lf.
 	h := self htmlRenderer: stream.
 	h ctx: ctx.
 	h html: 
 	[ h head: [ 
+		pushStateScript ifNotNil: [
+			pushStateScript inContext: ctx.
+			pushStateScript render: h ].
 		head ifNotNil: [ 
 			head inContext: ctx.
 			head render: h ].
