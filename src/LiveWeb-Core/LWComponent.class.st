@@ -90,6 +90,19 @@ LWComponent >> id [
 	^ id
 ]
 
+{ #category : #'public - layout' }
+LWComponent >> ifConnected: aBlock [
+	"Run a block if this component is mounted and the page has active connection."	
+	mounted ifFalse: [ ^ nil ].
+	ctx connection ifNotNil: [ aBlock value: ctx connection ]
+]
+
+{ #category : #'as yet unclassified' }
+LWComponent >> ifMounted: aBlock [
+	"Run block if this component is mounted."
+	mounted ifTrue: [ aBlock value ]
+]
+
 { #category : #'instance creation' }
 LWComponent >> inContext: aContext [
  	ctx := aContext.
@@ -139,6 +152,12 @@ LWComponent >> render: aHtmlRenderer [
 LWComponent >> renderOn: aHtmlRenderer [
 	"Subclasses should override this to produce HTML"
 	SubclassResponsibility new signal: 'LWComponent subclasses must implement renderOn: '
+]
+
+{ #category : #'as yet unclassified' }
+LWComponent >> send: patchType with: content [
+	"Send patch for this component if component is mounted."
+	self ifMounted: [ ctx send: patchType for: id with: content ]
 ]
 
 { #category : #'component lifecycle' }

@@ -23,7 +23,7 @@ LWStylesheetComponent >> mount [
 
 { #category : #'as yet unclassified' }
 LWStylesheetComponent >> onStyleAdded: css [ 
-	Transcript show: 'lisättiinpä css: ', css;cr.
+	self send: #A with: css.
 ]
 
 { #category : #rendering }

@@ -13,7 +13,8 @@ Class {
 		'callbacks',
 		'callbackIdsByComponent',
 		'components',
-		'user'
+		'user',
+		'sendQueue'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -68,8 +69,11 @@ LWContext >> connection [
 
 { #category : #accessing }
 LWContext >> connection: anObject [
-
-	connection := anObject
+	connection := anObject.
+	sendQueue ifNotNil: [ 
+		connection send: sendQueue asArray.
+		sendQueue := nil.
+  ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -125,6 +129,18 @@ LWContext >> rerenderComponent: component [
 			"PENDING: handle separate cases: page not YET connected and connection going away"
 			component unmount ]
 		ifNotNil: [ 	connection rerenderComponent: component ]
+]
+
+{ #category : #'as yet unclassified' }
+LWContext >> send: patchType for: componentId with: content [
+	"Send patch for component with content.
+	If connection is not yet established, the send will be queued."
+	connection
+	  ifNil: [
+			sendQueue ifNil: [ sendQueue := OrderedCollection new ].
+			sendQueue add: { componentId asString . patchType asString . content }
+		]
+	  ifNotNil: [ connection send: { { componentId asString. patchType asString. content } } ] 
 ]
 
 { #category : #testing }
