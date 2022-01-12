@@ -8,7 +8,8 @@ Class {
 BaselineOfLiveWeb >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ spec 
-		baseline: 'ZincHTTPComponents' with: [ spec repository: 'github://svenvc/zinc' ];
+		package: 'Zinc-WebSocket-Core' with: [ spec repository: 'github://svenvc/zinc' ];
+		
  		package: 'LiveWeb-Core' with: [ spec requires: #('Zinc-WebSocket-Core') ];
 		package: 'LiveWeb-Styling' with: [ spec requires: #('LiveWeb-Core') ];
 		package: 'LiveWeb-Core-Tests' with: [ spec requires: #('LiveWeb-Core') ];
