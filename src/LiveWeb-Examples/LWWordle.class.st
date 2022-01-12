@@ -55,8 +55,11 @@ LWWordle >> enter [
 	keyboard disableKeys: (g reject: [ :k | word includes: k ]).
 	
 	"if player has won or lost, set notice"
-	self playerHasWon ifTrue: [ notice block: [ :h | self renderWin: h] ].
-	self playerHasLost ifTrue: [ notice block: [ :h | self renderLose: h ] ].
+	self playerHasWon 
+	  ifTrue: [ notice block: [ :h | self renderWin: h] ]
+	  ifFalse: [ 
+		 self playerHasLost ifTrue: [ notice block: [ :h | self renderLose: h ] ]
+		].
 ]
 
 { #category : #initialization }
