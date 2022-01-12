@@ -18,7 +18,7 @@ BaselineOfLiveWeb >> baseline: spec [
 		group: 'default' with: #(core tests);
 		group: 'core' with: #('LiveWeb-Core' 'LiveWeb-Styling');
 		group: 'tests' with: #('LiveWeb-Core-Tests' 'LiveWeb-Styling-Tests');
-		group: 'examples' with: #('LiveWeb-Examples')
+		group: 'examples' with: #('core' 'LiveWeb-Examples')
 		
 	]
 ]
