@@ -7,14 +7,13 @@ Class {
 { #category : #baselines }
 BaselineOfLiveWeb >> baseline: spec [
 	<baseline>
-	spec
-		for: #common do: [
-			self core: spec.
-		];
-		for: #examples do: [ 
-			self core: spec.
-			spec package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ]
-		]
+	spec for: #common do: [ 
+		spec 
+		  group: 'default'  with: [ self core: spec ];
+		  group: 'examples' with: [ 
+ 			  spec package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ]
+		  ]
+	]
 ]
 
 { #category : #'as yet unclassified' }
