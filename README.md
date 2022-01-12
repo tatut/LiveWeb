@@ -10,6 +10,14 @@ The components live on the server and can send updates to clients through the we
 
 ## Quick start guide
 
+### Try docker examples
+
+You can try the examples in a docker with
+
+`docker run -p 8080:8080 antitadex/liveweb-examples`
+
+and opening examples: `http://localhost:8080/clock` (and `/counter`, `/wordle`).
+
 ### Installation
 
 ```smalltalk
