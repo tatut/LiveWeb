@@ -18,7 +18,7 @@ BaselineOfLiveWeb >> baseline: spec [
 { #category : #'as yet unclassified' }
 BaselineOfLiveWeb >> core: spec [
   spec 
-		package: 'LiveWeb-Core' with: [ spec requires: #('Zinc-HTTP' 'Zinc-WebSocket-Core') ];
+		package: 'LiveWeb-Core' with: [ spec requires: #('Zinc-WebSocket-Core') ];
 		package: 'LiveWeb-Styling' with: [ spec requires: #('LiveWeb-Core') ];
 		package: 'LiveWeb-Core-Tests' with: [ spec requires: #('LiveWeb-Core') ];
 		package: 'LiveWeb-Styling-Tests' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ]
