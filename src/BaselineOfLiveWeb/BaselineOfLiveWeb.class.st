@@ -8,11 +8,12 @@ Class {
 BaselineOfLiveWeb >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
-		spec 
-		  group: 'default'  with: [ self core: spec ];
-		  group: 'examples' with: [ 
- 			  spec package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ]
-		  ]
+		self core: spec.
+ 		spec 
+		  package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ];
+ 		  group: 'default'  with: #('LiveWeb-Core' 'LiveWeb-Styling' );
+		  group: 'examples' with: #('LiveWeb-Examples');
+		  group: 'tests' with: #('LiveWeb-Core-Tests' 'LiveWeb-Styling-Tests')
 	]
 ]
 
