@@ -42,7 +42,11 @@ LWStylesheetProvider class >> clearProviders [
 LWStylesheetProvider class >> provider: class [
 	"Get a singleton provider of the given class."
 	providers ifNil: [ providers := Dictionary new ].
-	^ providers at: class ifAbsentPut: [ class new ].
+	^ providers at: class ifAbsentPut: [ 
+		| p |
+		p := class new.
+		p globals.
+		p ].
 ]
 
 { #category : #adding }
@@ -63,9 +67,45 @@ LWStylesheetProvider >> generateClassName: namePrefix with: arguments [
 ]
 
 { #category : #initialization }
+LWStylesheetProvider >> globals [
+	"Override this method to initialize any global styles (like keyframes)"
+
+]
+
+{ #category : #initialization }
 LWStylesheetProvider >> initialize [
 	styles := Dictionary new.
 	listeners := IdentitySet new.
+]
+
+{ #category : #accessing }
+LWStylesheetProvider >> keyframes: name with: keyframeDefinitions [
+	"Register keyframes with given name and definitions.
+	Definitions is an array of associations that where the key
+	is the frame name (like '10 pct' or #from) or array of names and
+	the value is a block that defines the style for that frame.
+	
+	>>> self keyframes: #shake with: { 10 pct -> [ :s | s transform: 'translateX(5px)' ] .
+	>>>                                50 pct -> [ :s | s transform: 'translateX(-5px)' ] }
+	"
+	| cls defs |
+	cls := '@keyframes ', name asString.
+	"(styles includesKey: cls) ifTrue: [ ^ self ]."
+	
+  defs := String streamContents: [ :out |
+	  keyframeDefinitions do: [ :kf |
+			| key val |
+			key := kf key.
+			val := kf value.
+			out nextPutAll: (key isArray 
+				ifTrue: [ (', ' join: (key collect: #asCSSPropertyValue)) ] 
+				ifFalse: [ key asCSSPropertyValue ]).
+			out nextPutAll: ' { '.
+			val value: (LWStyle on: out).
+			out nextPutAll: ' }'; nextPut: Character cr.
+		]
+	].
+  styles at: cls put: defs.
 ]
 
 { #category : #accessing }
@@ -118,19 +158,28 @@ LWStylesheetProvider >> style: aStyleBlock named: namePrefix [
 	^ #class->cls
 ]
 
+{ #category : #accessing }
+LWStylesheetProvider >> style: aStyleBlock namedGlobally: globalName [
+	"Register a new style in this stylesheet with specific global name."
+	| cls |
+	cls := globalName asString.
+	self registerClass: cls with: aStyleBlock.
+	^ #class->cls
+]
+
 { #category : #writing }
 LWStylesheetProvider >> writeCSS: class decl: decl on: out [ 
-	out nextPut: $..
-		(class indexOf: $:) > 0 
-			ifTrue: [ | split |
-				split := class splitOn: ':'.
-				split allButLastDo: [ :part | out nextPutAll: part; nextPutAll: '\:' ].
-				out nextPutAll: split last ]
-			ifFalse: [ out nextPutAll: class ].
-		out nextPutAll: ' { '; 
-		    nextPutAll: decl;
-		    nextPutAll: '}'; 
-		    nextPut: Character lf.
+	(class at: 1) = $@ ifFalse: [ out nextPut: $. ].
+	(class indexOf: $:) > 0 
+		ifTrue: [ | split |
+			split := class splitOn: ':'.
+			split allButLastDo: [ :part | out nextPutAll: part; nextPutAll: '\:' ].
+			out nextPutAll: split last ]
+		ifFalse: [ out nextPutAll: class ].
+	out nextPutAll: ' { '; 
+	    nextPutAll: decl;
+	    nextPutAll: '}'; 
+	    nextPut: Character lf.
 ]
 
 { #category : #writing }

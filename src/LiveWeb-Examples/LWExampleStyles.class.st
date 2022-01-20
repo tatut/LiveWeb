@@ -40,6 +40,21 @@ LWExampleStyles >> flexRow: s [
 
 ]
 
+{ #category : #accessing }
+LWExampleStyles >> globals [
+	self keyframes: #shake with: {
+    { 10 pct . 90 pct } -> [:s | s transform: 'translateX(-1px)'] .
+    { 20 pct . 80 pct } -> [:s | s transform: 'translateX(2px)'] .
+    { 30 pct . 50 pct . 70 pct } -> [:s | s transform: 'translateX(-4px)'] .
+    { 40 pct . 60 pct } -> [:s | s transform: 'translateX(4px)']
+  }.
+
+  "add global animation classes"
+	self style: [ :s | s animationName: #shake; animationDuration: '500ms' ] 
+	     namedGlobally: #invalid.
+
+]
+
 { #category : #initialization }
 LWExampleStyles >> initialize [
 	super initialize

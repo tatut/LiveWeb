@@ -28,6 +28,12 @@ LWWordleGuess >> guess [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LWWordleGuess >> invalid [
+	"send flash patch"
+	ctx send: #H for: id  with: #invalid.
+]
+
 { #category : #rendering }
 LWWordleGuess >> renderOn: h [
 	h div: { self style wordleGuess }

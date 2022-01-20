@@ -31,6 +31,11 @@ Number >> mm [
 ]
 
 { #category : #'*LiveWeb-Styling' }
+Number >> pct [
+	^ CSSValue of: self as: '%'
+]
+
+{ #category : #'*LiveWeb-Styling' }
 Number >> px [
  ^ CSSValue of: self as: 'px' 
 ]
