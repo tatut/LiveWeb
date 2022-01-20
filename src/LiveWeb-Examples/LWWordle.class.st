@@ -48,6 +48,13 @@ LWWordle >> enter [
 	| g | 
 	g := (guesses at: currentGuess) guess.
 	g size < 5 ifTrue: [ ^ nil ]. "not 5 chars yet, do nothing"
+	
+	"if guess is not a word, flash invalid"
+	(FiveLetterWords includes: g) ifFalse: [ 
+		(guesses at: currentGuess) invalid.
+		^ nil
+	].
+	
 	(guesses at: currentGuess) enter.
 	currentGuess := currentGuess + 1.
 	

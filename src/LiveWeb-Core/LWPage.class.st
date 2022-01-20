@@ -149,6 +149,8 @@ LWPage class >> clientConnectionScript [
                        case "E": (new Function(payload)).call(elt); break;
                        case "+": /* add child at index */
                            elt.insertBefore(patch[3], elt.childNodes[patch[2]]); break;
+                       case "H": /* flasH an animation class */
+                           _lw.flash(elt,payload); break;
 						}
                 }
             }
@@ -192,6 +194,18 @@ LWPage class >> clientConnectionScript [
 					}
             })
         }
+    },
+    flash: function(elt, className) { 
+      // add animationend handler if needed
+      if(!elt.hasAttribute("data-lw-flashhandler")) { 
+        elt.addEventListener("animationend", (e) => { 
+          console.log("animation ended, remove the class");
+          e.target.classList.remove(e.target.getAttribute("data-lw-flash"));
+        });
+        elt.setAttribute("data-lw-flashhandler", "1");
+      }
+      elt.setAttribute("data-lw-flash", className);
+      elt.classList.add(className);
     },
     pushState: function(state, location) { 
       let l = window.location;
