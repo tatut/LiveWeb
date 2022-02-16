@@ -14,7 +14,8 @@ Class {
 		'callbackIdsByComponent',
 		'components',
 		'user',
-		'sendQueue'
+		'sendQueue',
+		'page'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -39,12 +40,21 @@ LWContext >> callbackFor: id [
 { #category : #cleaning }
 LWContext >> cleanup: component [ 
 	"do state cleanup for component before rerender"
-	component childrenRecursive do: [ :c | 
+	[ 
+	component childrenRecursive do:  [ :c | 
 		| callbackIds |
-		c doUnmount.
-		callbackIds := callbackIdsByComponent removeKey: component id ifAbsent: #().
-		callbackIds do: [ :id | callbacks removeKey: id ]
-	].
+		c isMounted ifTrue: [ 
+			c doUnmount.
+			callbackIds := callbackIdsByComponent removeKey: component id ifAbsent: #().
+			callbackIds do: [ :id | callbacks removeKey: id ]
+		]
+	]] 
+	on: Error 
+	do: [ :sig |
+			"PENDING: what to do here? this is likely a bug in some component impl, 
+			we can just show it here so developer can take care of it"
+			Transcript show: 'Cleanup exception for ', component printString, ' signal: ', sig printString;cr.
+			]
 ]
 
 { #category : #'component lifecycle' }
@@ -83,6 +93,31 @@ LWContext >> connectionClosed [
 	components := nil.
 ]
 
+{ #category : #'as yet unclassified' }
+LWContext >> go: path with: state [
+	"Send push state navigation to client with given state (must be convertable to JSON).
+	This will only work if page is using push state. 
+	State should contain everything needed to reconstitute the parameters of the 
+	page, as they will be sent back by the browser when user navigates (eg. back/forward button)."
+	self send: 'E' for: '' with: ('_lw.pushState(<1s>, <2s>)'
+		expandMacrosWith: (STON toJsonString: state)
+		 with: (STON toJsonString: path)).
+		
+	"Also notify page that push state has changed (so it can update any components)"
+	page pushStateChanged: state.
+]
+
+{ #category : #'as yet unclassified' }
+LWContext >> goJS: path with: state [
+	"Return JS callback that navigates with push state using (go:with:).
+	The callback will prevent default click handler so it can be used in HTML anchor links."
+	^ LWScriptCallback new 
+			callback: [ self go: path with: state ]; 
+			jsParams: #(); 
+			preventDefault: true.
+			
+]
+
 { #category : #initialization }
 LWContext >> initialize [
 	nextId := 0.
@@ -95,6 +130,12 @@ LWContext >> nextComponentId [
 	id := nextId.
 	nextId := nextId + 1.
 	^ id
+]
+
+{ #category : #accessing }
+LWContext >> page: aPage [
+	"set the page I am the context for"
+	page := aPage
 ]
 
 { #category : #registering }

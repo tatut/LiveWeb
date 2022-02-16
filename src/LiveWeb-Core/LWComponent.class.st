@@ -135,6 +135,9 @@ LWComponent >> render: aHtmlRenderer [
 	Sets the component id to renderer before calling renderOn:. 
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
 	| oldId oldComp |
+	
+	ctx ifNil: [ Error new signal: 'Cant''t render without context!' ].
+	
 	mounted ifFalse: [ 
 		self doMount
 	].

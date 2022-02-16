@@ -13,7 +13,8 @@ Class {
 		'callback',
 		'condition',
 		'jsParams',
-		'debounceMs'
+		'debounceMs',
+		'preventDefault'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -21,6 +22,8 @@ Class {
 { #category : #converting }
 LWScriptCallback >> asJS: cb [
 	^ String streamContents: [ :js |
+		preventDefault ifTrue: [ js nextPutAll: 
+			'window.event.preventDefault();' ].
 		condition ifNotNil: [ js nextPutAll: 'if('; nextPutAll: condition; nextPutAll: ') '  ].
 		js nextPutAll: '_lws('; 
 			nextPutAll: cb asString; 
@@ -75,6 +78,12 @@ LWScriptCallback >> debounceMs: anObject [
 	debounceMs := anObject
 ]
 
+{ #category : #initialization }
+LWScriptCallback >> initialize [ 
+	preventDefault := false.
+	jsParams := #().
+]
+
 { #category : #accessing }
 LWScriptCallback >> jsParams [
 
@@ -85,6 +94,11 @@ LWScriptCallback >> jsParams [
 LWScriptCallback >> jsParams: anObject [
 
 	jsParams := anObject
+]
+
+{ #category : #accessing }
+LWScriptCallback >> preventDefault: prevent [
+	preventDefault := prevent
 ]
 
 { #category : #evaluating }

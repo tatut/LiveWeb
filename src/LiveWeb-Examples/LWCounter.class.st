@@ -13,6 +13,13 @@ LWCounter >> counter: newCounterValue [
 	self changed.
 ]
 
+{ #category : #initialization }
+LWCounter >> initialize [ 
+	super initialize.
+	counter := 0.
+
+]
+
 { #category : #rendering }
 LWCounter >> renderOn: h [
 	h div: [ 

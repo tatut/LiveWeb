@@ -30,7 +30,7 @@ LWContainer >> add: aChildComponent [
 LWContainer >> add: aChildComponent beforeIndex: idx [
 	"add child component to this component"
 	children ifNil: [ children := OrderedCollection new ].
-	aChildComponent inContext: ctx.
+	ctx ifNotNil: [ aChildComponent inContext: ctx ].
 	children add: aChildComponent beforeIndex: idx.
 	mounted ifTrue: [ ctx component: self childAdded: aChildComponent at: idx ].
 	^ aChildComponent 

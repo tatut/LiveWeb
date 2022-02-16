@@ -94,6 +94,7 @@ LWPageConnection >> rerenderComponent: component [
 	on: Exception  
 	do: [ :e |
 		ws logGeneric: 'Exception in component change handling, closing. ', e asString.
+		Transcript show: 'Error in component: ', component printString; cr.
 		ws close. ].
 ]
 

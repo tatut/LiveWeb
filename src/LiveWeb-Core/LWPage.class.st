@@ -15,7 +15,9 @@ Class {
 	#instVars : [
 		'ctx',
 		'id',
-		'args'
+		'args',
+		'head',
+		'body'
 	],
 	#classVars : [
 		'currentPages'
@@ -128,7 +130,7 @@ LWPage class >> clientConnectionScript [
             for(var p = 0; p < patchlen; p++) {
                 var patch = patches[p];
                 var id = patch[0];
-                var elt = _lw.get(id);
+                var elt = (id === "" && patch[1] === "E") ? document : _lw.get(id);
                 if(elt == null) {
                     console.error("Received content for non-existant element: ", id,
                                   "msg:", msg);
@@ -209,7 +211,7 @@ LWPage class >> clientConnectionScript [
     },
     pushState: function(state, location) { 
       let l = window.location;
-      window.history.pushState({s:state}, l.protocol+"//"+l.host+location);
+      window.history.pushState({s:state}, "", l.protocol+"//"+l.host+location);
     },
     enablePushState: function(initialState, callbackId) { 
       pushStateCallbackId = callbackId;
@@ -328,8 +330,10 @@ LWPage >> usePushState [
 
 { #category : #accessing }
 LWPage >> value: req [
+	Transcript show: 'rendering ', self printString; cr.
 	id := UUIDGenerator next. 
 	ctx := LWContext new.
+	ctx page: self.
 	args := self readArguments: req.
 	self prepareCtx .
 	^ ZnResponse ok: self
@@ -337,7 +341,8 @@ LWPage >> value: req [
 
 { #category : #writing }
 LWPage >> writeOn: stream [
-	| h head body pushStateScript |
+	| h pushStateScript |
+	Transcript show: 'writing ', self printString;cr.
 	head := self head: args.
 	body := self body: args.
 	self usePushState ifTrue: [ pushStateScript := LWPushState on: self ].

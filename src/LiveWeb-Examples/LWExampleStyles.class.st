@@ -60,6 +60,25 @@ LWExampleStyles >> initialize [
 	super initialize
 ]
 
+{ #category : #api }
+LWExampleStyles >> menu [ 
+  "container for menu links"
+	^ self style: [ :s | s 
+		display: #flex;
+		flexDirection: #row.
+		 ]
+	
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> menuLink: active [
+	^ self style: [ :s | 
+		active ifTrue: [ s fontWeight: #bold ].
+		s cursor: #pointer;
+			width: 15vw.
+		 ]
+]
+
 { #category : #'as yet unclassified' }
 LWExampleStyles >> wordleGame [
 	"Style for the main element"

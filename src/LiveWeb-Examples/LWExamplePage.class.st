@@ -1,9 +1,6 @@
 Class {
 	#name : #LWExamplePage,
 	#superclass : #LWStyledPage,
-	#instVars : [
-		'componentClass'
-	],
 	#category : #'LiveWeb-Examples'
 }
 
@@ -13,24 +10,37 @@ LWExamplePage class >> of: componentClass [
 ]
 
 { #category : #accessing }
-LWExamplePage >> body: args [
-	^ componentClass new
+LWExamplePage class >> value: req [
+	"create new instance of example page for request"
+	^ self new value: req.
+]
+
+{ #category : #accessing }
+LWExamplePage >> body: _args [
+	^ LWExampleMain new state: self initialPushState
 ]
 
 { #category : #accessing }
 LWExamplePage >> componentClass: cls [
-	componentClass := cls
+	| page |
+	page := args uri path.
+	"this is only for the demo, don't use reflection in real use"
+	componentClass := self class environment at: 'LW' , page capitalized
 ]
 
 { #category : #'push state handling' }
 LWExamplePage >> initialPushState [ 
-	Transcript show: 'we got the args: ', args asString; cr.
-	^ { #foo -> 'bar' . #jotain -> 'ihan muuta' } asDictionary 
+	| example |
+	example := args uri segments last.
+	Transcript show: 'we got the args: ', example asString; cr.
+	
+	^ { #example -> example } asDictionary 
 ]
 
 { #category : #'push state handling' }
 LWExamplePage >> pushStateChanged: newState [
 	Transcript show: 'tulipa uusi tila: ', newState asString;cr.
+	body state: newState.
 ]
 
 { #category : #'as yet unclassified' }
