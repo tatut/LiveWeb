@@ -16,7 +16,7 @@ You can try the examples in a docker with
 
 `docker run -p 8080:8080 antitadex/liveweb-examples`
 
-and opening examples: `http://localhost:8080/clock` (and `/counter`, `/wordle`).
+and opening examples: `http://localhost:8080/examples/clock` (and `counter`, `wordle`).
 
 ### Installation
 
