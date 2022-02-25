@@ -330,19 +330,19 @@ LWPage >> usePushState [
 
 { #category : #accessing }
 LWPage >> value: req [
-	Transcript show: 'rendering ', self printString; cr.
 	id := UUIDGenerator next. 
 	ctx := LWContext new.
 	ctx page: self.
 	args := self readArguments: req.
 	self prepareCtx .
-	^ ZnResponse ok: self
+	^ ZnResponse ok: (ZnStringEntity new 
+      string: (String streamContents: [:out | self writeOn: out ]);
+		 contentType: 'text/html')
 ]
 
 { #category : #writing }
 LWPage >> writeOn: stream [
 	| h pushStateScript |
-	Transcript show: 'writing ', self printString;cr.
 	head := self head: args.
 	body := self body: args.
 	self usePushState ifTrue: [ pushStateScript := LWPushState on: self ].
