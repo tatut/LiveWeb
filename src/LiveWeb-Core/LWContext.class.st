@@ -40,15 +40,10 @@ LWContext >> callbackFor: id [
 { #category : #cleaning }
 LWContext >> cleanup: component [ 
 	"do state cleanup for component before rerender"
-	[ 
-	component childrenRecursive do:  [ :c | 
-		| callbackIds |
-		c isMounted ifTrue: [ 
-			c doUnmount.
-			callbackIds := callbackIdsByComponent removeKey: component id ifAbsent: #().
-			callbackIds do: [ :id | callbacks removeKey: id ]
-		]
-	]] 
+	[ "cleanup all children before parents"
+	component childrenRecursive do:  [ :c | self doCleanupComponent: c ].
+	self doCleanupComponent: component.
+   ] 
 	on: Error 
 	do: [ :sig |
 			"PENDING: what to do here? this is likely a bug in some component impl, 
@@ -91,6 +86,16 @@ LWContext >> connectionClosed [
 	connection := nil.
 	components valuesDo: [ :c | self cleanup: c ]. 
 	components := nil.
+]
+
+{ #category : #'as yet unclassified' }
+LWContext >> doCleanupComponent: c [
+	| callbackIds |
+	c isMounted ifTrue: [ 
+		c doUnmount.
+		callbackIds := callbackIdsByComponent removeKey: c id ifAbsent: #().
+		callbackIds do: [ :id | callbacks removeKey: id ]
+	]
 ]
 
 { #category : #'as yet unclassified' }
