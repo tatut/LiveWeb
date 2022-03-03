@@ -16,12 +16,11 @@ Class {
 { #category : #accessing }
 LWSingleContainer >> child: aChildComponent [
 	"Set the new child component"
-	Transcript show: 'child is being changed!';cr.
 	child ifNotNil: [ ctx cleanup: child ].
 	child := aChildComponent.
 	ctx ifNotNil: [ child inContext: ctx ].
 	self changed.
-	Transcript show: 'child changed!';cr.
+
 ]
 
 { #category : #accessing }
@@ -33,7 +32,6 @@ LWSingleContainer >> children [
 
 { #category : #rendering }
 LWSingleContainer >> renderOn: h [
-	Transcript show: 'rendataas single container ', child printString ;cr.
 	child
 	 ifNil: [ h script: { #type -> 'liveweb/placeholder' } with: '' ]
 	 ifNotNil: [ 

@@ -104,7 +104,7 @@ LWWordle >> renderNotice: h with: content [
 
 { #category : #rendering }
 LWWordle >> renderOn: h [
-	Transcript show: 'oikea sana: ', word;cr. "cheating!"
+	LWLogEvent debug: 'cheat to win: ', word.
 	h div: { self style wordleGame }
 		with: [
 			notice render: h. "render win/lose notice, if any"

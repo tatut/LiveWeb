@@ -43,8 +43,8 @@ LWPageConnection >> callback: idAndArgs [
 	args := STONJSON fromString: (idAndArgs allButFirst: split).
 	cb := page ctx callbackFor: id.
 	cb ifNil: [ 
-		"fixme better logging? should disconnect if wrong callback called?"
-		Transcript show: 'no such callback', id asString;cr. ]
+		"PENDING: should disconnect if wrong callback called? client is confused"
+		LWLogEvent warn: 'no such callback', id asString ]
 		ifNotNil: [ cb valueWithArguments: args ]
 ]
 
@@ -93,25 +93,21 @@ LWPageConnection >> rerenderComponent: component [
 	  self send: { { component id asString . 'R' . self renderToString: component } } ]
 	on: Exception  
 	do: [ :e |
-		ws logGeneric: 'Exception in component change handling, closing. ', e asString.
-		Transcript show: 'Error in component: ', component printString; cr.
+		LWLogEvent error: 'Error in component: ', component printString.
 		ws close. ].
 ]
 
 { #category : #running }
 LWPageConnection >> run: aWebSocket [ 
 	ws := aWebSocket.
-	Transcript show: 'yhdistetty ', ws asString; cr.
 	page ctx connection: self. "set myself as the page context connection, for change notifications"
 	
 	[ ws runWith: [ :msg |
-		"Transcript show: 'viestin sain: ', msg printString;cr."
-		ws logGeneric: '<- ', msg printString.
-		self callback: msg.
-		"ws sendMessage: message" ]] 
+		LWLogEvent debug: '<- ', msg printString.
+		self callback: msg ]] 
 	on: ConnectionClosed 
 	do: [ 
-		Transcript show: 'Page disconnected'.
+		LWLogEvent debug: 'Page disconnected, id: ', page id asString.
 		page ctx connectionClosed.
 		LWPage unregisterPage: page id.
 	].

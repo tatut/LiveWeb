@@ -32,14 +32,13 @@ LWExamplePage >> componentClass: cls [
 LWExamplePage >> initialPushState [ 
 	| example |
 	example := args uri segments last.
-	Transcript show: 'we got the args: ', example asString; cr.
-	
+	LWLogEvent debug: 'we got the args: ', example asString.
 	^ { #example -> example } asDictionary 
 ]
 
 { #category : #'push state handling' }
 LWExamplePage >> pushStateChanged: newState [
-	Transcript show: 'tulipa uusi tila: ', newState asString;cr.
+	LWLogEvent debug: 'new push state: ', newState asString.
 	body state: newState.
 ]
 

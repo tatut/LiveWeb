@@ -53,7 +53,7 @@ LWContext >> cleanup: component [
 	do: [ :sig |
 			"PENDING: what to do here? this is likely a bug in some component impl, 
 			we can just show it here so developer can take care of it"
-			Transcript show: 'Cleanup exception for ', component printString, ' signal: ', sig printString;cr.
+			LWLogEvent warn: 'Cleanup exception for ', component printString, ' signal: ', sig printString.
 			]
 ]
 
