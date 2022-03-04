@@ -46,7 +46,8 @@ LWExampleMain >> state: aDictionary [
 		'wordle' -> LWWordle . 
 		'clock' -> LWClockExample . 
 		'counter' -> LWCounter . 
-		'multi-counter' -> LWMultiCounter } asDictionary at: (state at: 'example').
+		'multi-counter' -> LWMultiCounter . 
+		'crud' -> LWCrudExample } asDictionary at: (state at: 'example').
 
 	"set the child component to a new instance and change active item for menu"
 	example child: ex new.
