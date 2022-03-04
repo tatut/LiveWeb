@@ -73,7 +73,8 @@ LWComponent >> childrenRecursive [
 LWComponent >> doMount [ 
 	"internal, never override. Do initialization in mount."
 	self mount.
-	mounted := true
+	mounted := true.
+	self inContext: ctx. "reset context for any child components added in mount"
 ]
 
 { #category : #'as yet unclassified' }
@@ -105,8 +106,9 @@ LWComponent >> ifMounted: aBlock [
 
 { #category : #'instance creation' }
 LWComponent >> inContext: aContext [
- 	ctx := aContext.
-	id := ctx registerComponent: self.
+	ctx ifNotNil: [ ctx = aContext ifFalse: [ Error signal: 'can''t change context of a component!' ] ]
+		ifNil: [ ctx := aContext.
+					id := ctx registerComponent: self. ].
 	self children do: [ :c | c inContext: aContext ].
 	
 	
