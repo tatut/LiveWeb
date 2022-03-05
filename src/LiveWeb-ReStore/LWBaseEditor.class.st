@@ -1,22 +1,14 @@
 Class {
 	#name : #LWBaseEditor,
-	#superclass : #LWStyledComponent,
-	#instVars : [
-		'accessor',
-		'entity'
-	],
+	#superclass : #LWFormComponent,
 	#category : #'LiveWeb-ReStore'
 }
 
-{ #category : #accessing }
-LWBaseEditor >> accessor: aSymbol [
-	"Set the name of the read accessor, the writer is the same but with colon added."
-	accessor := aSymbol
-]
-
-{ #category : #accessing }
-LWBaseEditor >> entity: anEntity [
-	entity := anEntity 
+{ #category : #parsing }
+LWBaseEditor >> parseValue: aFormValue [
+	"Parse string form value (if needed) to instance. Default returns string as is."
+	^ aFormValue
+	
 ]
 
 { #category : #rendering }
@@ -36,7 +28,5 @@ LWBaseEditor >> renderOn: h [
 { #category : #accessing }
 LWBaseEditor >> setter [
 	"answer with a setter block that can be used as an onchange callback"
-	| sel |
-	sel := (accessor,':') asSymbol.
-	^ [ :v | entity perform: sel with: v ]
+	^ [ :v | form write: accessor value: (self parseValue: v) ]
 ]

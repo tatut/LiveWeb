@@ -1,6 +1,6 @@
 Extension { #name : #SSWDBStringWithInfo }
 
 { #category : #'*LiveWeb-ReStore' }
-SSWDBStringWithInfo >> asLWEditFormComponent: entity [
-	^ LWStringEditor new entity: entity; maxLength: self fieldSize 
+SSWDBStringWithInfo >> asLWEditFormComponent: form accessor: accessor [
+	^ LWStringEditor new form: form; maxLength: self fieldSize 
 ]

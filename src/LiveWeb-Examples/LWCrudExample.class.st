@@ -18,7 +18,8 @@ LWCrudExample >> initialize [
 	super initialize.
 	entity := Customer new.
 	form := LWEditForm forEntityClass: entity class.
-	form entity: entity.
+	form exclude: #name;
+		   entity: entity.
 	
 ]
 
