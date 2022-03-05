@@ -119,9 +119,17 @@ LWEditForm >> readEnsuring: aFieldAccessor [
 
 { #category : #rendering }
 LWEditForm >> renderOn: h [
-	h div: { #class -> 'editForm' } with: [ 
+	self isDependent 
+    ifTrue: [ 
+      h fieldset: { #class -> #editFormFieldset } with: [ 
+	     childComponents do: [ :c | c render: h ]
+		 ]
+	  ]
+    ifFalse: [ 
+     h form: { #class -> #editForm } with: [ 
 		childComponents do: [ :c | c render: h ]
-   ]
+    ]
+  ]
 ]
 
 { #category : #writing }
