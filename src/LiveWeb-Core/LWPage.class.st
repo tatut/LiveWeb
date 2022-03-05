@@ -330,14 +330,22 @@ LWPage >> usePushState [
 
 { #category : #accessing }
 LWPage >> value: req [
+	| content |
+	[ 
 	id := UUIDGenerator next. 
 	ctx := LWContext new.
 	ctx page: self.
 	args := self readArguments: req.
 	self prepareCtx .
-	^ ZnResponse ok: (ZnStringEntity new 
-      string: (String streamContents: [:out | self writeOn: out ]);
-		 contentType: 'text/html')
+	content := String streamContents: [:out | self writeOn: out ].
+	^ ZnResponse ok: (ZnStringEntity new string: content; contentType: 'text/html')
+	] on: Error 
+     do: [ :err | 
+		LWLogEvent error: 'Error rendering page: ', self printString, ' error: ', err printString.  
+		"err debug."
+		^ ZnResponse serverError: 'Internal server error, see log for details.'
+	].
+	
 ]
 
 { #category : #writing }
