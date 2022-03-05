@@ -49,6 +49,7 @@ LWEditForm >> initialize [
 LWEditForm >> mount [
 	"Create edit components for all children in ReStore definition."
 	childComponents := reStoreDefinition instVarDefinitions collect: [ :d | 
+		Transcript show: d key asString, ' has component ', d value printString;cr.
 		(d value asLWEditFormComponent: entity) accessor: d key; yourself ]
 ]
 

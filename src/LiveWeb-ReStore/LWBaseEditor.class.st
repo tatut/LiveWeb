@@ -21,7 +21,8 @@ LWBaseEditor >> entity: anEntity [
 
 { #category : #rendering }
 LWBaseEditor >> renderInput: h [
-	self subclassResponsibility 
+	h div: 'FIXME: implement renderInput for ', self class asString.
+	"self subclassResponsibility" 
 ]
 
 { #category : #rendering }
@@ -30,4 +31,12 @@ LWBaseEditor >> renderOn: h [
 		h label: { #for -> accessor } with:  accessor asString.
 		self renderInput: h
    ]
+]
+
+{ #category : #accessing }
+LWBaseEditor >> setter [
+	"answer with a setter block that can be used as an onchange callback"
+	| sel |
+	sel := (accessor,':') asSymbol.
+	^ [ :v | entity perform: sel with: v ]
 ]
