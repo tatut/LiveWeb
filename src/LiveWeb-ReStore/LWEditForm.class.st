@@ -122,12 +122,13 @@ LWEditForm >> renderOn: h [
 	self isDependent 
     ifTrue: [ 
       h fieldset: { #class -> #editFormFieldset } with: [ 
+			h legend: (self messages fieldsetCaption: accessor).
 	     childComponents do: [ :c | c render: h ]
 		 ]
 	  ]
     ifFalse: [ 
      h form: { #class -> #editForm } with: [ 
-		childComponents do: [ :c | c render: h ]
+		 childComponents do: [ :c | c render: h ]
     ]
   ]
 ]

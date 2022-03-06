@@ -20,7 +20,7 @@ LWBaseEditor >> renderInput: h [
 { #category : #rendering }
 LWBaseEditor >> renderOn: h [
 	h div: { #class -> 'formField' } with: [ 
-		h label: { #for -> accessor } with:  accessor asString.
+		h label: { #for -> accessor } with: (self messages fieldLabel: accessor).
 		self renderInput: h
    ]
 ]

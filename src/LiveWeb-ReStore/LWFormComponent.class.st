@@ -32,3 +32,9 @@ LWFormComponent >> form [
 LWFormComponent >> form: anLWEditForm [
 	form := anLWEditForm 
 ]
+
+{ #category : #accessing }
+LWFormComponent >> messages [
+	"answer with the LWFormMessages instance in context"
+	^ ctx at: #formMessages
+]
