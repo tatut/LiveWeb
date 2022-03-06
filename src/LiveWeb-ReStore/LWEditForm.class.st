@@ -137,6 +137,20 @@ LWEditForm >> renderOn: h [
   ]
 ]
 
+{ #category : #submit }
+LWEditForm >> submit [
+	"Run any validations and store the entity to the database. 
+	If there are any problems, highlights the fields.
+	This should also check if there has been other modifications to the entity
+	and possibly refresh.
+	
+	Answers with true if data was saved, false otherwise.
+	" 
+	"FIXME: validate"
+	self ensureEntity store.
+	^ true
+]
+
 { #category : #writing }
 LWEditForm >> write: aFieldAccessor value: aValue [ 
 	| sel |

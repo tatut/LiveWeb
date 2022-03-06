@@ -40,6 +40,20 @@ LWExampleStyles >> flexRow: s [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formField [ 
+	^ self style: [ :s | s display: #block ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formFieldLabel [ 
+	^ self style: [ :s | s 
+			display: 'inline-block';
+			width: 15vw  ]
+
+]
+
 { #category : #accessing }
 LWExampleStyles >> globals [
 	self keyframes: #shake with: {

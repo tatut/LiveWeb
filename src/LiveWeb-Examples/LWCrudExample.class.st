@@ -35,7 +35,7 @@ LWCrudExample >> initialize [
 { #category : #rendering }
 LWCrudExample >> renderOn: h [
 	h div: [ 
-		h span: 'editor form here'.
-		form render: h
+		form render: h.
+		h br; button: { #onclick -> [ form submit ] } with: 'Save' 
    ]
 ]
