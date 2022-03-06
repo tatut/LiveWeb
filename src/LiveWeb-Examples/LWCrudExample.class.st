@@ -14,6 +14,15 @@ LWCrudExample >> children [
 ]
 
 { #category : #initialization }
+LWCrudExample >> entity: anEntity [ 
+	entity := anEntity.
+	form := LWEditForm forEntityClass: entity class.
+	form exclude: #name;
+		   entity: entity.
+	
+]
+
+{ #category : #initialization }
 LWCrudExample >> initialize [ 
 	super initialize.
 	entity := Customer new.

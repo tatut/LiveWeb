@@ -338,7 +338,7 @@ LWPage >> value: req [
 	args := self readArguments: req.
 	self prepareCtx .
 	content := String streamContents: [:out | self writeOn: out ].
-	^ ZnResponse ok: (ZnStringEntity new string: content; contentType: 'text/html')
+	^ ZnResponse ok: (ZnStringEntity new string: content; contentType: 'text/html; charset=UTF-8')
 	] on: Error 
      do: [ :err | 
 		LWLogEvent error: 'Error rendering page: ', self printString, ' error: ', err printString.  

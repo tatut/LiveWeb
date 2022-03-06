@@ -11,7 +11,17 @@ LWCrudPage class >> value: req [
 
 { #category : #accessing }
 LWCrudPage >> body: _args [
-	^ LWCrudExample new 
+	^ LWSingleContainer new child: (LWCrudExample new entity: (self entityToEdit: (self initialPushState))) 
+]
+
+{ #category : #'as yet unclassified' }
+LWCrudPage >> entityToEdit: state [
+	| entityClass entityId |
+	entityClass := { #customer -> Customer } asDictionary at: (state at: #table).
+	entityId := state at: #id.
+	^ entityId 
+		ifNil: [ entityClass new ] 
+		ifNotNil: [ entityClass storedInstances detect: [ :e | e _id = entityId ] ]
 ]
 
 { #category : #'push state handling' }

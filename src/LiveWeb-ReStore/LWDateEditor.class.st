@@ -15,5 +15,6 @@ LWDateEditor >> renderInput: h [
 		#name -> accessor . 
 		#id -> accessor . 
 		#type -> #date . 
+		#value -> (self currentValue: #yyyymmdd) .
 		#onchange -> (Js call: self setter with: (Js inputValue: accessor)) }
 ]

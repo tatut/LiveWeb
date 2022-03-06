@@ -80,6 +80,10 @@ LWEditForm >> isDependent [
 { #category : #'component lifecycle' }
 LWEditForm >> mount [
 	"Create edit components for all children in ReStore definition."
+	
+	"If form is dependent, try to read the object now (it's okay if it doesn't exist)"
+	self isDependent ifTrue: [ entity := self form read: accessor ].
+	
 	childComponents := entityClass reStoreDefinition instVarDefinitions 
 		reject: [ :d | exclude includes: d key ]
 		thenCollect: [ :d | 
