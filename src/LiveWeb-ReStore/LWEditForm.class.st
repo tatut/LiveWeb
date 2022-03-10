@@ -5,7 +5,9 @@ Class {
 		'entityClass',
 		'entity',
 		'childComponents',
-		'exclude'
+		'exclude',
+		'renderBlock',
+		'fieldRenderBlock'
 	],
 	#category : #'LiveWeb-ReStore'
 }
@@ -14,6 +16,11 @@ Class {
 LWEditForm class >> forEntityClass: anEntityClass [
 	"Answer with a new LWEditForm instance for the given ReStore entity class. The entity must be set before mounting."
 	^ self new entityClass: anEntityClass; yourself
+]
+
+{ #category : #accessing }
+LWEditForm >> allFieldsConfigure: aConfigurationBlock [
+	childComponents do: [ :child | child configure: aConfigurationBlock ]
 ]
 
 { #category : #accessing }
@@ -63,6 +70,25 @@ LWEditForm >> exclude: aFieldName [
 	exclude add: aFieldName 
 ]
 
+{ #category : #accessing }
+LWEditForm >> field: aFieldName [
+	"Answer with the component for the given field name."
+	^ childComponents detect: [ :c | c accessor = aFieldName ]
+]
+
+{ #category : #accessing }
+LWEditForm >> field: aFieldName configure: aConfigurationBlock [
+	"Set configuration block for the named field"
+	(self field: aFieldName) configure: aConfigurationBlock
+]
+
+{ #category : #accessing }
+LWEditForm >> fieldRenderBlock: aRenderBlock [
+	"Set the block that overrides default field rendering wrapper.
+	The block receives the HTML renderer to render on and the field to render."
+	
+]
+
 { #category : #initialization }
 LWEditForm >> initialize [ 
 	super initialize.
@@ -90,7 +116,9 @@ LWEditForm >> mount [
 		| c |
 		c := d value asLWEditFormComponent: self accessor: d key.
 		c accessor: d key.
-		c ]
+		c ].
+	super mount.	
+
 ]
 
 { #category : #'meta-object-protocol' }
@@ -121,20 +149,46 @@ LWEditForm >> readEnsuring: aFieldAccessor [
 	^ self read: aFieldAccessor ifEntityNil: nil
 ]
 
+{ #category : #accessing }
+LWEditForm >> renderBlock: aBlock [
+	"Set a render block that overrides normal rendering. 
+	 The render block will receive 2 arguments:  
+	 - the HTMLRenderer instance to render on
+	 - mapping of child components (from accessor to component)
+	
+	The render block should render all child components."
+	renderBlock := aBlock
+]
+
+{ #category : #rendering }
+LWEditForm >> renderFieldOn: h component: c [
+	fieldRenderBlock 
+    ifNotNil: [ fieldRenderBlock value: h value: c ]
+    ifNil: [ c render: h ]
+	
+]
+
 { #category : #rendering }
 LWEditForm >> renderOn: h [
-	self isDependent 
-    ifTrue: [ 
-      h fieldset: { #class -> #editFormFieldset } with: [ 
-			h legend: (self messages fieldsetCaption: accessor).
-	     childComponents do: [ :c | c render: h ]
-		 ]
-	  ]
-    ifFalse: [ 
-     h form: { #class -> #editForm } with: [ 
-		 childComponents do: [ :c | c render: h ]
-    ]
-  ]
+	renderBlock
+	  ifNil: [
+		  self isDependent 
+       ifTrue: [ 
+        h fieldset: { #class -> #editFormFieldset } with: [ 
+			 h legend: (self messages fieldsetCaption: accessor).
+	      childComponents do: [ :c | self renderFieldOn: h component: c ]
+		  ]
+	   ]
+      ifFalse: [ 
+       h form: { #class -> #editForm } with: [ 
+		   childComponents do: [ :c | self renderFieldOn: h component: c ]
+     ]]]
+    ifNotNil: [ 
+			renderBlock 
+				value: h 
+				value: [ :acc | self renderFieldOn: h component: (self field: acc) ]
+		]
+	
 ]
 
 { #category : #submit }
