@@ -23,6 +23,11 @@ Class {
 }
 
 { #category : #accessing }
+LWBaseEditor >> children [
+	^ ReadStream on: { errorComponent }
+]
+
+{ #category : #accessing }
 LWBaseEditor >> currentValue [
 	^ form read: accessor
 ]
@@ -88,16 +93,19 @@ LWBaseEditor >> setter [
 	"answer with a setter block that can be used as an onchange callback"
 	^ [ :v | 
 			[ form write: accessor value: (self parseValue: v).
-			  "errorComponent child: nil." "clear error if setting field worked"
+				errorComponent hasError ifTrue: [ 
+				  "clear error message and error style, if setting worked"
+           errorComponent clearErrorMessage.
+           self send: '-C' with: 'formError'.
+         ]
 			] on: Error 
 			  do: [ :e | 
-				"If we catch an error setting the value, set error for this field."
-				Transcript show: 'virhe on: ', e printString;cr.
-				
-				errorMessage := self messages validationError: e.
-				self changed.
-				 ]
-			]
+				"If we catch an error setting the value, set error for this field."				
+				errorComponent errorMessage: (self messages validationError: e).
+			  self send: '+C' with: 'formError'
+
+			  ]
+		]
 ]
 
 { #category : #accessing }

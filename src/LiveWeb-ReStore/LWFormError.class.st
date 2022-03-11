@@ -10,6 +10,14 @@ Class {
 	#category : #'LiveWeb-ReStore'
 }
 
+{ #category : #'as yet unclassified' }
+LWFormError >> clearErrorMessage [
+	| needRender |
+	needRender := errorMessage isNotNil.
+	errorMessage := nil.
+	needRender ifTrue: [ self changed ]
+]
+
 { #category : #accessing }
 LWFormError >> errorMessage [
 
@@ -18,8 +26,8 @@ LWFormError >> errorMessage [
 
 { #category : #accessing }
 LWFormError >> errorMessage: anObject [
-
-	errorMessage := anObject
+	errorMessage := anObject.
+	self changed
 ]
 
 { #category : #testing }

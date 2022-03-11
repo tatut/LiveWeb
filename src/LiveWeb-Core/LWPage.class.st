@@ -153,6 +153,10 @@ LWPage class >> clientConnectionScript [
                            elt.insertBefore(patch[3], elt.childNodes[patch[2]]); break;
                        case "H": /* flasH an animation class */
                            _lw.flash(elt,payload); break;
+                       case "+C": /* add class */
+                           elt.classList.add(payload); break;
+                       case "-C": /* remove class */
+                           elt.classList.remove(payload); break;
 						}
                 }
             }

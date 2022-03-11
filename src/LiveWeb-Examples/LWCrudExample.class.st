@@ -18,7 +18,7 @@ LWCrudExample >> entity: anEntity [
 	entity := anEntity.
 	entity refresh. "make sure it is refreshed from db"
 	form := LWEditForm forEntityClass: entity class.
-	form	configure: [ :f | 
+	"form	configure: [ :f | 
 		entity class = Customer ifTrue: [ 
 			f allFieldsConfigure: #hideLabel;
  			  renderBlock: [ :h :renderChild | 
@@ -40,7 +40,7 @@ LWCrudExample >> entity: anEntity [
 					] 
 			]
 		]
-	] .
+	] ."
 	form exclude: #name;
 		   entity: entity.
 	 

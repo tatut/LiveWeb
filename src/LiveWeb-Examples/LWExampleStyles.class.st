@@ -65,7 +65,7 @@ LWExampleStyles >> formInput: hasError [
 	^ self style: [ :s | 
 		hasError 
 		  ifTrue: [ s borderColor: #red; borderWidth: 1px ]
-		  ifFalse: [ s border: #none ]
+		  ifFalse: [ s backgroundColor: #wheat ]
 		 ]
 
 ]
