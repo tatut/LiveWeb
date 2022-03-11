@@ -32,3 +32,10 @@ LWFormMessages >> fieldsetCaption: forAccessor [
 	"Answer with a caption for a fieldset, typically a dependent object."
 	^ self capitalizedField: forAccessor
 ]
+
+{ #category : #'as yet unclassified' }
+LWFormMessages >> validationError: aValidationError [
+	"Format message for validation error.
+	Should override this to get actual message from language resources."
+	^ self capitalizedField: aValidationError message
+]

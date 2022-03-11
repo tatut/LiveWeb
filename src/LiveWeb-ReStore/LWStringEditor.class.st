@@ -13,8 +13,9 @@ LWStringEditor >> maxLength: aPositiveInteger [
 ]
 
 { #category : #rendering }
-LWStringEditor >> renderInput: h [
+LWStringEditor >> renderInput: h hasError: aBoolean [
 	h input: { 
+		self style formInput: aBoolean.
 		 #type -> #text.
 		 #name -> accessor. 
 		 #id -> accessor. 

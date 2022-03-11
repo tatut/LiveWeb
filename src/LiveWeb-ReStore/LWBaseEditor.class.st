@@ -1,3 +1,16 @@
+"
+I am the base class for components that provide UI editors.
+
+I render the input field, and handle setting the new value when it changes.
+
+I am contained in a form and use that to read/write the value I operate on.
+
+I keep a separate child component that displays a possible error message for the field.
+It is needed so that changing the error doesn't rerender the whole input component, because
+that would cause the focus to be lost.
+ 
+
+"
 Class {
 	#name : #LWBaseEditor,
 	#superclass : #LWFormComponent,
@@ -8,11 +21,6 @@ Class {
 	],
 	#category : #'LiveWeb-ReStore'
 }
-
-{ #category : #accessing }
-LWBaseEditor >> children [ 
-	^ ReadStream on: { errorComponent }
-]
 
 { #category : #accessing }
 LWBaseEditor >> currentValue [
@@ -37,15 +45,9 @@ LWBaseEditor >> hideLabel [
 LWBaseEditor >> initialize [ 
 	super initialize.
 	showLabel := true.
-	errorComponent := LWSingleContainer new.
+	errorComponent := LWFormError new 
 
 
-]
-
-{ #category : #'component lifecycle' }
-LWBaseEditor >> mount [
-	errorComponent := LWSingleContainer new.
-	super mount 
 ]
 
 { #category : #parsing }
@@ -56,20 +58,29 @@ LWBaseEditor >> parseValue: aFormValue [
 ]
 
 { #category : #rendering }
-LWBaseEditor >> renderInput: h [
+LWBaseEditor >> renderInput: h hasError: aBoolean [
 	h div: 'FIXME: implement renderInput for ', self class asString.
 	"self subclassResponsibility" 
 ]
 
 { #category : #rendering }
+LWBaseEditor >> renderInputAndError: h [
+  h div: {self style formInputAndError} with: [
+		 self renderInput: h hasError: errorMessage isNotNil.
+      errorComponent render: h
+	]
+]
+
+{ #category : #rendering }
 LWBaseEditor >> renderOn: h [
 	showLabel
-	ifTrue: [ 
+	ifTrue: [
+		"render with additional HTML structure that has place for label and input" 
 		h div: { self style formField } with: [ 
  			h label: { #for -> accessor. self style formFieldLabel } 
 			  with: (self messages fieldLabel: accessor).
- 			self renderInput: h ]]
-	ifFalse: [ self renderInput: h ]
+ 			self renderInputAndError: h ]]
+	ifFalse: [ self renderInputAndError: h ]
 ]
 
 { #category : #accessing }
@@ -77,11 +88,15 @@ LWBaseEditor >> setter [
 	"answer with a setter block that can be used as an onchange callback"
 	^ [ :v | 
 			[ form write: accessor value: (self parseValue: v).
-			  errorComponent child: nil. "clear error if setting field worked"
+			  "errorComponent child: nil." "clear error if setting field worked"
 			] on: Error 
 			  do: [ :e | 
-				"If we catch an error setting the value, set error component for this field."
-				errorComponent := LWBlockContainer new block: [ :h | h div: 'Error: ', e asString ] ]
+				"If we catch an error setting the value, set error for this field."
+				Transcript show: 'virhe on: ', e printString;cr.
+				
+				errorMessage := self messages validationError: e.
+				self changed.
+				 ]
 			]
 ]
 

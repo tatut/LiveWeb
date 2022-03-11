@@ -121,6 +121,7 @@ LWStylesheetProvider >> registerClass: cls with: aStyleBlock [
 		
 	"Send new CSS declarations in the background to any listening pages"
 	[ css := String streamContents: [ :out | self writeCSS: cls decl: decl on: out ].
+	  Transcript show: 'have listeners: ', listeners size asString;cr.
 	  listeners do: [ :l | l onStyleAdded: css ] ] fork
 ]
 

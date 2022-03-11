@@ -41,6 +41,12 @@ LWExampleStyles >> flexRow: s [
 ]
 
 { #category : #'as yet unclassified' }
+LWExampleStyles >> formErrorMessage [
+	^ self style: [ :s | s fontWeight: #bold; backgroundColor: #red ]
+
+]
+
+{ #category : #'as yet unclassified' }
 LWExampleStyles >> formField [ 
 	^ self style: [ :s | s display: #block ]
 
@@ -51,6 +57,22 @@ LWExampleStyles >> formFieldLabel [
 	^ self style: [ :s | s 
 			display: 'inline-block';
 			width: 15vw  ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formInput: hasError [
+	^ self style: [ :s | 
+		hasError 
+		  ifTrue: [ s borderColor: #red; borderWidth: 1px ]
+		  ifFalse: [ s border: #none ]
+		 ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formInputAndError [ 
+	^ self style: [ :s | self flexCol: s ]
 
 ]
 

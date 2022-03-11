@@ -6,3 +6,9 @@ Class {
 	],
 	#category : #'LiveWeb-ReStore'
 }
+
+{ #category : #initialization }
+LWValueTooLowError >> initialize [
+	super initialize.
+	message := #valueTooLow
+]
