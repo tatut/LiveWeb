@@ -71,8 +71,8 @@ LWCrudExample >> submit [
   isNew ifFalse: [ ^self ].
   entityId := form entity _id.
   
-  ctx go: (LWCrudEditState new
+  ctx go: (LWCrudRouter new matchState: (LWCrudEditState new
 		id: form entity _id;
-		table: (ctx page initialPushState table)).
+		table: (ctx page initialPushState table))).
    
 ]

@@ -104,11 +104,11 @@ LWContext >> go: aPushState [
 	The push state must be a LWPushStateBase subclass or compatible that
 	knows how to create the route path and JSON state."
 	self send: 'E' for: '' with: ('_lw.pushState(<1s>, <2s>)'
-		expandMacrosWith: (STON toJsonString: aPushState asRoute)
-		 with: (STON toJsonString: aPushState asPushStateJSON)).
+		expandMacrosWith: (STON toJsonString: aPushState asPushStateJSON)
+		 with: (STON toJsonString: aPushState asRoute)).
 		
 	"Also notify page that push state has changed (so it can update any components)"
-	page pushStateChanged: aPushState.
+	page pushStateChanged: aPushState asPushStateJSON.
 ]
 
 { #category : #'as yet unclassified' }
