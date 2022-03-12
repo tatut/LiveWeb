@@ -99,6 +99,19 @@ LWContext >> doCleanupComponent: c [
 ]
 
 { #category : #'as yet unclassified' }
+LWContext >> go: aPushState [
+	"Send push state navigation to client.
+	The push state must be a LWPushStateBase subclass or compatible that
+	knows how to create the route path and JSON state."
+	self send: 'E' for: '' with: ('_lw.pushState(<1s>, <2s>)'
+		expandMacrosWith: (STON toJsonString: aPushState asRoute)
+		 with: (STON toJsonString: aPushState asPushStateJSON)).
+		
+	"Also notify page that push state has changed (so it can update any components)"
+	page pushStateChanged: aPushState.
+]
+
+{ #category : #'as yet unclassified' }
 LWContext >> go: path with: state [
 	"Send push state navigation to client with given state (must be convertable to JSON).
 	This will only work if page is using push state. 
@@ -110,6 +123,17 @@ LWContext >> go: path with: state [
 		
 	"Also notify page that push state has changed (so it can update any components)"
 	page pushStateChanged: state.
+]
+
+{ #category : #'as yet unclassified' }
+LWContext >> goJS: aPushState [
+	"Return JS callback that navigates with push state when invoked.
+	The callback will prevent default click handler so it can be used in HTML anchor links."
+	^ LWScriptCallback new 
+			callback: [ self go: aPushState ]; 
+			jsParams: #(); 
+			preventDefault: true.
+			
 ]
 
 { #category : #'as yet unclassified' }
@@ -135,6 +159,12 @@ LWContext >> nextComponentId [
 	id := nextId.
 	nextId := nextId + 1.
 	^ id
+]
+
+{ #category : #accessing }
+LWContext >> page [ 
+	"return the page I am the context for"
+	^ page
 ]
 
 { #category : #accessing }

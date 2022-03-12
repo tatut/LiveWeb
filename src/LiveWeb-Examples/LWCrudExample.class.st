@@ -16,7 +16,6 @@ LWCrudExample >> children [
 { #category : #initialization }
 LWCrudExample >> entity: anEntity [ 
 	entity := anEntity.
-	entity refresh. "make sure it is refreshed from db"
 	form := LWEditForm forEntityClass: entity class.
 	"form	configure: [ :f | 
 		entity class = Customer ifTrue: [ 
@@ -60,6 +59,20 @@ LWCrudExample >> initialize [
 LWCrudExample >> renderOn: h [
 	h div: [ 
 		form render: h.
-		h br; button: { #onclick -> [ form submit ] } with: 'Save' 
+		h br; button: { #onclick -> [ self submit ] } with: 'Save' 
    ]
+]
+
+{ #category : #submit }
+LWCrudExample >> submit [
+  | isNew entityId |
+  isNew := form ensureEntity isPersistent not.
+  form submit.
+  isNew ifFalse: [ ^self ].
+  entityId := form entity _id.
+  
+  ctx go: (LWCrudEditState new
+		id: form entity _id;
+		table: (ctx page initialPushState table)).
+   
 ]
