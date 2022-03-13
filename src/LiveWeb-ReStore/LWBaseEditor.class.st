@@ -108,6 +108,11 @@ LWBaseEditor >> setter [
 		]
 ]
 
+{ #category : #rendering }
+LWBaseEditor >> setterCallback [
+  ^Js call: self setter with: (Js inputValue: accessor)
+]
+
 { #category : #accessing }
 LWBaseEditor >> showLabel [ 
    showLabel := true

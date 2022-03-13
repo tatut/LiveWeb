@@ -82,6 +82,11 @@ LWScriptHelper class >> formValues: selector [
 ]
 
 { #category : #'as yet unclassified' }
+LWScriptHelper class >> inputChecked: id [ 
+	^ 'document.getElementById(''<1s>'').checked' expandMacrosWith: id
+]
+
+{ #category : #'as yet unclassified' }
 LWScriptHelper class >> inputValue: id [ 
 	^ 'document.getElementById(''<1s>'').value' expandMacrosWith: id
 ]

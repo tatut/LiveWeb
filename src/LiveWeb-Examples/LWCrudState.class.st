@@ -23,5 +23,6 @@ LWCrudState >> table: anObject [
 LWCrudState >> tableClass [ 
 	^ { #customer -> Customer. 
 	    #address -> Address.
-	    #order -> CustomerOrder } asDictionary at: table 
+	    #order -> CustomerOrder.
+	    #demo -> DemoEntity } asDictionary at: table 
 ]

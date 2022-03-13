@@ -14,11 +14,10 @@ LWDateEditor >> parseValue: aFormValue [
 
 { #category : #rendering }
 LWDateEditor >> renderInput: h hasError: aBoolean [
-	h input: { 
-		self style formInput: aBoolean.
-		#name -> accessor . 
-		#id -> accessor . 
-		#type -> #date . 
-		#value -> (self currentValue: #yyyymmdd) .
-		#onchange -> (Js call: self setter with: (Js inputValue: accessor)) }
+  h input: {(self style formInput: aBoolean) . 
+        (#name -> accessor) . 
+        (#id -> accessor) . 
+        (#type -> #date) . 
+        (#value -> (self currentValue: #yyyymmdd)) . 
+        (#onchange -> self setterCallback)}
 ]
