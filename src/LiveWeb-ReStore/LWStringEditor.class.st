@@ -1,3 +1,6 @@
+"
+I am an editor component for strings.
+"
 Class {
 	#name : #LWStringEditor,
 	#superclass : #LWBaseEditor,

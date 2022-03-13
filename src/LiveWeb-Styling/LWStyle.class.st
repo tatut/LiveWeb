@@ -1,3 +1,6 @@
+"
+I provide methods for generating CSS definitions programmatically.
+"
 Class {
 	#name : #LWStyle,
 	#superclass : #Object,

@@ -1,3 +1,6 @@
+"
+I am a CSS binary expression (like <left> + <right>) used to generate CSS.
+"
 Class {
 	#name : #CSSBinaryExpr,
 	#superclass : #CSSExpr,

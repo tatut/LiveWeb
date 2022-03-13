@@ -1,3 +1,8 @@
+"
+I am a log event for framework events in LiveWeb.
+I provide utility methods for sending info, warn or error level messages.
+
+"
 Class {
 	#name : #LWLogEvent,
 	#superclass : #ZnLogEvent,

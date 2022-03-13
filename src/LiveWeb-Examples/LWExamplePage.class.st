@@ -4,11 +4,6 @@ Class {
 	#category : #'LiveWeb-Examples'
 }
 
-{ #category : #'instance creation' }
-LWExamplePage class >> of: componentClass [
-	^ self new componentClass: componentClass.
-]
-
 { #category : #accessing }
 LWExamplePage class >> value: req [
 	"create new instance of example page for request"
@@ -18,14 +13,6 @@ LWExamplePage class >> value: req [
 { #category : #accessing }
 LWExamplePage >> body: _args [
 	^ LWExampleMain new state: self initialPushState
-]
-
-{ #category : #accessing }
-LWExamplePage >> componentClass: cls [
-	| page |
-	page := args uri path.
-	"this is only for the demo, don't use reflection in real use"
-	componentClass := self class environment at: 'LW' , page capitalized
 ]
 
 { #category : #'push state handling' }

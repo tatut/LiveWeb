@@ -1,3 +1,6 @@
+"
+I am a CSS leaf value.
+"
 Class {
 	#name : #CSSValue,
 	#superclass : #CSSExpr,

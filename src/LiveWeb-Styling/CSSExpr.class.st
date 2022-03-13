@@ -1,3 +1,6 @@
+"
+I am the base class for CSS expressions that can be calculated.
+"
 Class {
 	#name : #CSSExpr,
 	#superclass : #Object,

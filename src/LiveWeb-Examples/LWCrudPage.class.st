@@ -1,3 +1,6 @@
+"
+I am an example CRUD page. I can edit and list entities.
+"
 Class {
 	#name : #LWCrudPage,
 	#superclass : #LWStyledPage,

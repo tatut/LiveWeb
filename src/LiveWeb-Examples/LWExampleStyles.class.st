@@ -101,11 +101,6 @@ LWExampleStyles >> globals [
 
 ]
 
-{ #category : #initialization }
-LWExampleStyles >> initialize [
-	super initialize
-]
-
 { #category : #api }
 LWExampleStyles >> menu [ 
   "container for menu links"

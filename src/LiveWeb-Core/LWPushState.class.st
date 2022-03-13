@@ -1,3 +1,6 @@
+"
+I am a component that renders scripts needed to support push state in the browser.
+"
 Class {
 	#name : #LWPushState,
 	#superclass : #LWComponent,

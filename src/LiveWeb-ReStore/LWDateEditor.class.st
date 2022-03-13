@@ -1,3 +1,6 @@
+"
+I am an editor component for Date objects.
+"
 Class {
 	#name : #LWDateEditor,
 	#superclass : #LWBaseEditor,
