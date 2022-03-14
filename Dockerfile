@@ -1,15 +1,23 @@
-FROM ubuntu:21.04
-ARG DEBIAN_FRONTEND=noninteractive
+# Build in 2 stages to minimize the size of the final docker image
+# See https://docs.docker.com/develop/develop-images/multistage-build/
 
-RUN apt-get update
-RUN apt-get install -y gnupg curl unzip rlwrap
+# Stage 1: Load project
+FROM basmalltalk/pharo:9.0-image AS loader
+COPY load-project.st ./
+USER root
+RUN pharo Pharo.image load-project.st --save --quit
 
-RUN mkdir /pharo
-WORKDIR /pharo
-RUN curl -L https://get.pharo.org | bash
+# Stage 2: Copy the resulting Pharo.image with our project loaded
+# into a new docker image with just the vm
+FROM basmalltalk/pharo:9.0
+WORKDIR /app
+COPY --from=loader /opt/pharo/Pharo.image ./
+COPY --from=loader /opt/pharo/Pharo.changes ./
+COPY --from=loader /opt/pharo/Pharo*.sources ./
+COPY start.st ./
 
-# Install
-RUN ./pharo --headless -- eval "Metacello new repository: 'github://tatut/LiveWeb/src'; baseline: 'LiveWeb'; load: #(examples) . Smalltalk snapshot: true andQuit: true"
+USER root
+RUN chown pharo:users /app -R
 
-# entrypoint (we need sleep to make rlwrap work, async terminal settings)
-CMD sleep 1; rlwrap ./pharo --headless -- eval "ZnServer startDefaultOn: 8080. ZnServer default delegate map: '__liveweb' to: LWPageConnection; map: #examples to: LWExamplePage; map: #quit to: [ :_ | Smalltalk quitPrimitive ]."
+USER pharo
+CMD [ "pharo", "Pharo.image", "start.st" ]
