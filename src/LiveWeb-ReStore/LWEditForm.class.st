@@ -1,3 +1,7 @@
+"
+I am a form component for editing an entity.
+I generate child components for instance variables of the contained entity.
+"
 Class {
 	#name : #LWEditForm,
 	#superclass : #LWFormComponent,

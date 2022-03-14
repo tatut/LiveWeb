@@ -253,6 +253,12 @@ LWPage class >> unregisterPage: uuid [
 	currentPages removeKey: uuid.
 ]
 
+{ #category : #accessing }
+LWPage >> args [
+	"answer with the arguments for this page"
+	^ args
+]
+
 { #category : #'API - accessing' }
 LWPage >> body: args [
 	"create the body LWComponent"

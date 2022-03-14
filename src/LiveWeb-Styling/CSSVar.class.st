@@ -1,3 +1,6 @@
+"
+I represent a var reference in CSS calculations.
+"
 Class {
 	#name : #CSSVar,
 	#superclass : #CSSExpr,

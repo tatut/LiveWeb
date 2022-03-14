@@ -1,3 +1,6 @@
+"
+I represent a validation error of a value below the given minimum.
+"
 Class {
 	#name : #LWValueTooLowError,
 	#superclass : #LWValidationError,

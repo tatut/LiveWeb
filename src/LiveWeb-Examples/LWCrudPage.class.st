@@ -1,3 +1,6 @@
+"
+I am an example CRUD page. I can edit and list entities.
+"
 Class {
 	#name : #LWCrudPage,
 	#superclass : #LWStyledPage,
@@ -11,27 +14,27 @@ LWCrudPage class >> value: req [
 
 { #category : #accessing }
 LWCrudPage >> body: _args [
-	^ LWSingleContainer new child: (LWCrudExample new entity: (self entityToEdit: (self initialPushState))) 
+	| state |
+	state := self initialPushState.
+	^ LWSingleContainer new child: (LWCrudExample new entity: state entityToEdit) 
 ]
 
 { #category : #'as yet unclassified' }
 LWCrudPage >> entityToEdit: state [
 	| entityClass entityId |
-	entityClass := { #customer -> Customer } asDictionary at: (state at: #table).
+	entityClass := { 
+		#customer -> Customer. 
+		#address -> Address. 
+		#order -> CustomerOrder} asDictionary at: (state at: #table).
 	entityId := state at: #id.
 	^ entityId 
-		ifNil: [ entityClass new ] 
-		ifNotNil: [ entityClass storedInstances detect: [ :e | e _id = entityId ] ]
+		ifNil: [ LWLogEvent info: 'create new'. entityClass new ] 
+		ifNotNil: [ (entityClass storedInstances detect: [ :e | e _id = entityId ]) refresh; yourself ]
 ]
 
 { #category : #'push state handling' }
 LWCrudPage >> initialPushState [ 
-	| seg table entityId |
-	seg := args uri segments allButFirst.
-	(seg last matchesRegex: '\d+')
-	  ifTrue: [ table := seg first. entityId := seg last.  ]
-	  ifFalse: [ table := seg last. entityId := nil ].
-  ^ { #table -> table . #id -> entityId } asDictionary
+	^ LWCrudRouter new match: args uri.
 	 
 ]
 
@@ -39,6 +42,13 @@ LWCrudPage >> initialPushState [
 LWCrudPage >> prepareCtx [ 
 	super prepareCtx .
 	ctx at: #formMessages put: LWFormMessages new. "could use user's selected language here"
+]
+
+{ #category : #'push state handling' }
+LWCrudPage >> pushStateChanged: newState [
+ 	| state |
+	state := LWCrudRouter new fromPushStateJSON: newState.
+	body child: (LWCrudExample new entity: state entityToEdit)
 ]
 
 { #category : #'as yet unclassified' }

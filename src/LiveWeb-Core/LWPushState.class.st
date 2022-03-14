@@ -1,3 +1,6 @@
+"
+I am a component that renders scripts needed to support push state in the browser.
+"
 Class {
 	#name : #LWPushState,
 	#superclass : #LWComponent,
@@ -24,7 +27,7 @@ LWPushState >> page: aPage [
 LWPushState >> renderOn: h [
 	| cb initial |
 	cb := ctx registerCallback: [ :state | page pushStateChanged: state ] for: self.
-	initial := STONJSON toString: page initialPushState.  
+	initial := STONJSON toString: page initialPushState asPushStateJSON.  
 	h script: [ 
 		h raw: ('window.onload=function(){_lw.enablePushState(<1s>, <2s>)}' expandMacrosWith: initial with: cb asString)
    ]

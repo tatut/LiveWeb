@@ -81,24 +81,39 @@ LWContext >> connection: anObject [
   ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cleaning }
 LWContext >> connectionClosed [
 	connection := nil.
 	components valuesDo: [ :c | self cleanup: c ]. 
 	components := nil.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cleaning }
 LWContext >> doCleanupComponent: c [
-	| callbackIds |
-	c isMounted ifTrue: [ 
-		c doUnmount.
-		callbackIds := callbackIdsByComponent removeKey: c id ifAbsent: #().
-		callbackIds do: [ :id | callbacks removeKey: id ]
-	]
+  | callbackIds |
+  c isMounted ifFalse: [ ^self ].
+  c doUnmount.
+  callbackIds := callbackIdsByComponent removeKey: c id ifAbsent: #().
+  callbackIds do: [:id |  callbacks removeKey: id ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'client control' }
+LWContext >> go: aPushState [
+	"Send push state navigation to client.
+	The push state must be a LWPushStateBase subclass or compatible that
+	knows how to create the route path and JSON state."
+	| state route |
+	state := aPushState asPushStateJSON.
+	route := aPushState asRoute.
+	self send: 'E' for: '' with: ('_lw.pushState(<1s>, <2s>)'
+		expandMacrosWith: (STON toJsonString: state)
+		 with: (STON toJsonString: route)).
+		
+	"Also notify page that push state has changed (so it can update any components)"
+	page pushStateChanged: state.
+]
+
+{ #category : #'client control' }
 LWContext >> go: path with: state [
 	"Send push state navigation to client with given state (must be convertable to JSON).
 	This will only work if page is using push state. 
@@ -112,7 +127,18 @@ LWContext >> go: path with: state [
 	page pushStateChanged: state.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'client control' }
+LWContext >> goJS: aPushState [
+	"Return JS callback that navigates with push state when invoked.
+	The callback will prevent default click handler so it can be used in HTML anchor links."
+	^ LWScriptCallback new 
+			callback: [ self go: aPushState ]; 
+			jsParams: #(); 
+			preventDefault: true.
+			
+]
+
+{ #category : #'client control' }
 LWContext >> goJS: path with: state [
 	"Return JS callback that navigates with push state using (go:with:).
 	The callback will prevent default click handler so it can be used in HTML anchor links."
@@ -135,6 +161,12 @@ LWContext >> nextComponentId [
 	id := nextId.
 	nextId := nextId + 1.
 	^ id
+]
+
+{ #category : #accessing }
+LWContext >> page [ 
+	"return the page I am the context for"
+	^ page
 ]
 
 { #category : #accessing }
@@ -177,7 +209,7 @@ LWContext >> rerenderComponent: component [
 		ifNotNil: [ 	connection rerenderComponent: component ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'client control' }
 LWContext >> send: patchType for: componentId with: content [
 	"Send patch for component with content.
 	If connection is not yet established, the send will be queued."

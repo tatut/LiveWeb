@@ -96,16 +96,21 @@ LWBaseEditor >> setter [
 				errorComponent hasError ifTrue: [ 
 				  "clear error message and error style, if setting worked"
            errorComponent clearErrorMessage.
-           self send: '-C' with: 'formError'.
+           self send: '-C' with: (self style formFieldError) value
          ]
 			] on: Error 
 			  do: [ :e | 
 				"If we catch an error setting the value, set error for this field."				
 				errorComponent errorMessage: (self messages validationError: e).
-			  self send: '+C' with: 'formError'
+			  self send: '+C' with: (self style formFieldError) value
 
 			  ]
 		]
+]
+
+{ #category : #rendering }
+LWBaseEditor >> setterCallback [
+  ^Js call: self setter with: (Js inputValue: accessor)
 ]
 
 { #category : #accessing }

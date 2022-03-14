@@ -48,7 +48,17 @@ LWExampleStyles >> formErrorMessage [
 
 { #category : #'as yet unclassified' }
 LWExampleStyles >> formField [ 
-	^ self style: [ :s | s display: #block ]
+	^ self style: [ :s | 
+		s display: #block
+			 ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formFieldError [ 
+	^ self style: [ :s | 
+		s child: 'input' with: [ :input |
+				input borderColor: #red; borderWidth: 3px ]]
 
 ]
 
@@ -89,11 +99,6 @@ LWExampleStyles >> globals [
 	self style: [ :s | s animationName: #shake; animationDuration: '500ms' ] 
 	     namedGlobally: #invalid.
 
-]
-
-{ #category : #initialization }
-LWExampleStyles >> initialize [
-	super initialize
 ]
 
 { #category : #api }

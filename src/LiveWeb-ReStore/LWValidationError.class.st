@@ -1,3 +1,6 @@
+"
+I represent a validation error.
+"
 Class {
 	#name : #LWValidationError,
 	#superclass : #Error,
