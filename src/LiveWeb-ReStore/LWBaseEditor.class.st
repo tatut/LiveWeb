@@ -15,7 +15,6 @@ Class {
 	#name : #LWBaseEditor,
 	#superclass : #LWFormComponent,
 	#instVars : [
-		'showLabel',
 		'errorComponent',
 		'errorMessage'
 	],
@@ -38,12 +37,6 @@ LWBaseEditor >> currentValue: aBlock [
 	| v |
 	v := form read: accessor.
 	v ifNil: [ ^ '' ] ifNotNil: [ ^ aBlock value: v ]
-]
-
-{ #category : #accessing }
-LWBaseEditor >> hideLabel [ 
-   showLabel := false
-
 ]
 
 { #category : #initialization }
@@ -111,10 +104,4 @@ LWBaseEditor >> setter [
 { #category : #rendering }
 LWBaseEditor >> setterCallback [
   ^Js call: self setter with: (Js inputValue: accessor)
-]
-
-{ #category : #accessing }
-LWBaseEditor >> showLabel [ 
-   showLabel := true
-
 ]

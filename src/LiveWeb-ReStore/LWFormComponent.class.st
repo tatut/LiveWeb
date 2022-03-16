@@ -10,7 +10,8 @@ Class {
 	#instVars : [
 		'form',
 		'accessor',
-		'configure'
+		'configure',
+		'showLabel'
 	],
 	#category : #'LiveWeb-ReStore'
 }
@@ -55,6 +56,12 @@ LWFormComponent >> form: anLWEditForm [
 ]
 
 { #category : #accessing }
+LWFormComponent >> hideLabel [ 
+   showLabel := false
+
+]
+
+{ #category : #accessing }
 LWFormComponent >> messages [
 	"answer with the LWFormMessages instance in context"
 	^ ctx at: #formMessages
@@ -65,4 +72,10 @@ LWFormComponent >> mount [
 	"Run any configuration if configuration block is set. This should be called by subclasses
 	after other setup has been done."
 	configure ifNotNil: [ configure value: self ]
+]
+
+{ #category : #accessing }
+LWFormComponent >> showLabel [ 
+   showLabel := true
+
 ]
