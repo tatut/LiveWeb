@@ -23,27 +23,10 @@ LWCrudExample >> entity: anEntity [
 					LWBlockContainer new block: [ :h | 
 						h div: 'Add some order edit component here? ', (STON toStringPretty: order) ]
 					 ] ]. 
-		"entity class = Customer ifTrue: [ 
+	  entity class = Customer ifTrue: [ 
 			f allFieldsConfigure: #hideLabel;
- 			  renderBlock: [ :h :renderChild | 
-				h table: [
-					h tr: [
-						h td: 'Nimi: ';
-						  td: [ 
-								renderChild 
-								   value: #firstName; 
-									value: #surname.
-							]];
-					  tr: [ 
-						 h td: 'Sähköposti: ';
-							td: [ renderChild value: #emailAddress ]];
-						tr: [ 
-							h td: 'Synttärit: ';
-							  td: [ renderChild value: #dateOfBirth ]]
-					
-					] 
-			]
-		]"
+ 			  renderBlock: [ :h :renderChild | self renderCustomizedCustomerFormOn: h renderChild: renderChild ]
+		]
 	].
 	form 
 	  exclude: #name;
@@ -58,6 +41,29 @@ LWCrudExample >> initialize [
 	form := LWEditForm forEntityClass: entity class.
 	form exclude: #name;
 		   entity: entity.
+	
+]
+
+{ #category : #rendering }
+LWCrudExample >> renderCustomizedCustomerFormOn: h renderChild: renderChild [ 
+	h div: [ 
+	 h table: [
+		h tr: [
+			h td: 'Nimi: ';
+			  td: [ 
+					renderChild 
+						   value: #firstName; 
+							value: #surname.
+					]];
+			  tr: [ 
+				 h td: 'Sähköposti: ';
+		        td: [ renderChild value: #emailAddress ]];
+				tr: [ 
+					h td: 'Synttärit: ';
+					  td: [ renderChild value: #dateOfBirth ]]	
+					].
+		renderChild value: #address.
+	]
 	
 ]
 
