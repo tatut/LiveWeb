@@ -54,7 +54,13 @@ LWCollectionEditor >> initialize [
 
 { #category : #'component lifecycle' }
 LWCollectionEditor >> mount [
-	super mount
+	super mount.
+	
+  "create editor components for all currently existing items"
+	(form read: accessor ifEntityNil: #()) do: [ :item |
+		container add: (self newEditorComponentFor: item)		
+	].
+	
 ]
 
 { #category : #'instance creation' }
