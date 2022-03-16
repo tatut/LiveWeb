@@ -2,7 +2,8 @@ Extension { #name : #SSWDBScaledDecimalWithInfo }
 
 { #category : #'*LiveWeb-ReStore' }
 SSWDBScaledDecimalWithInfo >> asLWEditFormComponent: form accessor: accessor [
-	^ LWNumericEditor new
+	^ LWScaledDecimalEditor new
+		 scale: self scale;
 		 form: form; 
 		 accessor: accessor;
 		 yourself 
