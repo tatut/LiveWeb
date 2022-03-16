@@ -8,6 +8,14 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+LWScriptHelper class >> call: block [
+	^ LWScriptCallback new 
+		callback: block
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
 LWScriptHelper class >> call: block with: jsParam1 [ 
 	^ LWScriptCallback new 
 		callback: block;

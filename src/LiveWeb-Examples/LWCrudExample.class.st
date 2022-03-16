@@ -17,8 +17,13 @@ LWCrudExample >> children [
 LWCrudExample >> entity: anEntity [ 
 	entity := anEntity.
 	form := LWEditForm forEntityClass: entity class.
-	"form	configure: [ :f | 
-		entity class = Customer ifTrue: [ 
+	form	configure: [ :f | 
+			f field: #orders configure: [ :coll |
+				coll createEditorComponent: [ :order | 
+					LWBlockContainer new block: [ :h | 
+						h div: 'Add some order edit component here? ', (STON toStringPretty: order) ]
+					 ] ]. 
+		"entity class = Customer ifTrue: [ 
 			f allFieldsConfigure: #hideLabel;
  			  renderBlock: [ :h :renderChild | 
 				h table: [
@@ -38,10 +43,11 @@ LWCrudExample >> entity: anEntity [
 					
 					] 
 			]
-		]
-	] ."
-	form exclude: #name;
-		   entity: entity.
+		]"
+	].
+	form 
+	  exclude: #name;
+	  entity: entity.
 	 
 ]
 

@@ -150,6 +150,7 @@ LWEditForm >> read: aFieldAccessor withDefault: aDefaultValue [
 { #category : #'meta-object-protocol' }
 LWEditForm >> readEnsuring: aFieldAccessor [ 
 	"Answer with value of the entity for the accessor. If entity doesn't exist, it will be created."
+	self ensureEntity.
 	^ self read: aFieldAccessor ifEntityNil: nil
 ]
 

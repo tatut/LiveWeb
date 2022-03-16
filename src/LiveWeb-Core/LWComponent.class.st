@@ -138,7 +138,7 @@ LWComponent >> render: aHtmlRenderer [
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
 	| oldId oldComp |
 	
-	ctx ifNil: [ Error new signal: 'Cant''t render without context!' ].
+	ctx ifNil: [ Error new signal: 'Cant''t render without context! ', self printString ].
 	
 	mounted ifFalse: [ 
 		self doMount

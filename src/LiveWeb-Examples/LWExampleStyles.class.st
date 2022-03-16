@@ -41,6 +41,12 @@ LWExampleStyles >> flexRow: s [
 ]
 
 { #category : #'as yet unclassified' }
+LWExampleStyles >> formCollectionContainer [ 
+	^ self style: [ :s | self flexCol: s ]
+
+]
+
+{ #category : #'as yet unclassified' }
 LWExampleStyles >> formErrorMessage [
 	^ self style: [ :s | s fontWeight: #bold; backgroundColor: #red ]
 
