@@ -152,7 +152,7 @@ LWStylesheetProvider >> style: aStyleBlock [
 		
 	self registerClass: cls with: aStyleBlock.
 
-	^ #class->cls
+	^ LWClassAttribute new cls: cls
 ]
 
 { #category : #accessing }

@@ -130,6 +130,14 @@ LWComponent >> mount [
 	Component can acquire resources or start init before the first render."
 ]
 
+{ #category : #accessing }
+LWComponent >> nonNilChildren: childArray [ 
+	"Utility to filter out not yet initialized children."
+	^ Generator on: [ :yield |
+		childArray select: #isNotNil thenDo: [ :c | yield value: c ]
+	]
+]
+
 { #category : #rendering }
 LWComponent >> render: aHtmlRenderer [
 	"Render this component using HTML renderer. 

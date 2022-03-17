@@ -33,7 +33,7 @@ LWScriptCallback >> asJS: cb [
 			js nextPutAll: p.		
 		].
 		js nextPutAll: ']'.
-		debounceMs ifNotNil: [ js nextPut: $‚; nextPutAll: debounceMs asString ].
+		debounceMs ifNotNil: [ js nextPut: $,; nextPutAll: debounceMs asString ].
 		js nextPut: $) ]
 ]
 

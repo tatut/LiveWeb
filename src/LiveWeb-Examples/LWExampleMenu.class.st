@@ -31,5 +31,6 @@ LWExampleMenu >> renderOn: h [
 			self menu: h link: 'multi-counter' titled: 'Multi counter'.
 			self menu: h link: 'wordle' titled: 'Wordle'.
 			self menu: h link: 'clock' titled: 'Clock'.
+			self menu: h link: 'typeahead' titled: 'Typeahead'.
 		].
 ]

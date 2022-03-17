@@ -48,11 +48,26 @@ LWBaseEditor >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LWBaseEditor >> inputAndErrorClass [ 
+  ^ self style formInputAndError
+]
+
 { #category : #parsing }
 LWBaseEditor >> parseValue: aFormValue [
 	"Parse string form value (if needed) to instance. Default returns string as is."
 	^ aFormValue
 	
+]
+
+{ #category : #rendering }
+LWBaseEditor >> renderAfterInput: h [
+	"Do nothing by default"
+]
+
+{ #category : #rendering }
+LWBaseEditor >> renderBeforeInput: h [
+	"Do nothing by default"
 ]
 
 { #category : #rendering }
@@ -63,9 +78,11 @@ LWBaseEditor >> renderInput: h hasError: aBoolean [
 
 { #category : #rendering }
 LWBaseEditor >> renderInputAndError: h [
-  h div: {self style formInputAndError} with: [
-		 self renderInput: h hasError: errorMessage isNotNil.
-      errorComponent render: h
+  h div: {self inputAndErrorClass} with: [
+     self renderBeforeInput: h.
+     self renderInput: h hasError: errorMessage isNotNil.
+     errorComponent render: h.
+     self renderAfterInput: h.
 	]
 ]
 

@@ -11,7 +11,8 @@ Class {
 		'childComponents',
 		'exclude',
 		'renderBlock',
-		'fieldRenderBlock'
+		'fieldRenderBlock',
+		'customComponents'
 	],
 	#category : #'LiveWeb-ReStore'
 }
@@ -81,6 +82,13 @@ LWEditForm >> field: aFieldName [
 ]
 
 { #category : #accessing }
+LWEditForm >> field: aFieldName component: aCustomComponent [
+	"Set custom component for the named field"
+	customComponents ifNil: [ customComponents := Dictionary new. ].
+	customComponents at: aFieldName put: aCustomComponent.
+]
+
+{ #category : #accessing }
 LWEditForm >> field: aFieldName configure: aConfigurationBlock [
 	"Set configuration block for the named field"
 	(self field: aFieldName) configure: aConfigurationBlock
@@ -118,9 +126,13 @@ LWEditForm >> mount [
 		reject: [ :d | exclude includes: d key ]
 		thenCollect: [ :d | 
 		| c |
-		c := d value asLWEditFormComponent: self accessor: d key.
+		customComponents ifNotNil: [ c := customComponents at: d key ifAbsent: nil ].
+		c ifNil: [
+			c := d value asLWEditFormComponent: self accessor: d key.
+		].
 		c accessor: d key.
-		c ].
+     c 
+  ].
 	super mount.	
 
 ]

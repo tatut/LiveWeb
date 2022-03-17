@@ -92,6 +92,22 @@ LWExampleStyles >> formInputAndError [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formTypeAhead [
+	^ self style: [ :s | 
+		self flexCol: s.
+		s child: '.formCandidates' with: [ :c | c
+				display: #none;
+				position: #absolute;
+				zIndex: 99;
+				backgroundColor: #white;
+				border: 'solid 1px';
+				borderRadius: 5px;
+				padding: 0.5 em ]  
+		]
+
+]
+
 { #category : #accessing }
 LWExampleStyles >> globals [
 	self keyframes: #shake with: {
