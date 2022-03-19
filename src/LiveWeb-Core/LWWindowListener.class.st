@@ -32,18 +32,21 @@ LWWindowListener >> event: anObject [
 
 { #category : #rendering }
 LWWindowListener >> renderOn: h [
-	| callbackId |
+	| firstRender callbackId |
 	callbackId := (ctx registerCallback: callback for: self).
+	firstRender := listenerId isNil.
 	listenerId := '_lwlisten',id asString.
 	h script: [ 
 		h streamContents: [ :out |
 			"Output script that adds the listener when window is ready.
 			The listener is removed on unmount."
-			out
-			  << listenerId; << ' = {id: '; << callbackId asString; << ', cb: ';
+			firstRender 
+			ifTrue: [ out 
+				<< listenerId; << ' = {id: '; << callbackId asString; << ', cb: ';
 			  << '(event) => '; << (callback asLWScriptCallback asJS: listenerId,'.id'); <<' };';
-			  << 'window.addEventListener("load", () => window.addEventListener("'; 
-			  << event; << '", '; << listenerId; << '.cb));'.
+			  << 'window.addEventListener("'; << event; << '", '; << listenerId; << '.cb);' ]
+		  ifFalse: [ out 
+			  << listenerId; << '.id = '; << callbackId asString; << ';' ]
 		]]
 ]
 

@@ -80,7 +80,6 @@ LWComponent >> doMount [
 { #category : #'as yet unclassified' }
 LWComponent >> doUnmount [ 
 	"internal, never override. Do cleanup in unmount."
-	Transcript show: self class name, ' unmount';cr.
 	self unmount.
 	mounted := false
 	
