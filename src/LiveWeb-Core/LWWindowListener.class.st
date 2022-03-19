@@ -7,7 +7,8 @@ Class {
 	#superclass : #LWComponent,
 	#instVars : [
 		'event',
-		'callback'
+		'callback',
+		'listenerId'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -31,31 +32,27 @@ LWWindowListener >> event: anObject [
 
 { #category : #rendering }
 LWWindowListener >> renderOn: h [
-	| js ev |
-	js := callback asLWScriptCallback asJS: (ctx registerCallback: callback for: self).
-	ev := '"',event asString,'"'.
+	| callbackId |
+	callbackId := (ctx registerCallback: callback for: self).
+	listenerId := '_lwlisten',id asString.
 	h script: [ 
 		h streamContents: [ :out |
-			"output script that adds the listener when window is ready
-			and starts a mutation observer that removes it when this component
-			is removed from DOM."
-			out 
-			  nextPutAll: 'window.addEventListener("load", () => {  
- let listener = (event) => { ';
-			  nextPutAll: js;
-			  nextPutAll: '};  
- window.addEventListener('; nextPutAll: ev; nextPutAll: ', listener); 
- let me = _lw.get("'; nextPutAll: id asString; nextPutAll: '"); 
- (new MutationObserver((ml) => { console.log("mut: ", ml); 
-    ml.forEach((m) => { 
-      m.removedNodes.forEach((n) => {
-        if(n == me) { 
-          window.removeEventListener('; nextPutAll: ev; nextPutAll: ', listener); 
-        }
-      })
-    })
-  })).observe(me.parentNode, {subtree:false,childList:true});
- });'
-		]
-	]
+			"Output script that adds the listener when window is ready.
+			The listener is removed on unmount."
+			out
+			  << listenerId; << ' = {id: '; << callbackId asString; << ', cb: ';
+			  << '(event) => '; << (callback asLWScriptCallback asJS: listenerId,'.id'); <<' };';
+			  << 'window.addEventListener("load", () => window.addEventListener("'; 
+			  << event; << '", '; << listenerId; << '.cb));'.
+		]]
+]
+
+{ #category : #'component lifecycle' }
+LWWindowListener >> unmount [ 
+	self send: 'E' with: 
+		(String streamContents: [:out | out 
+			<< 'window.removeEventListener("';
+			<< event; << '", ' ;
+			<< listenerId; << '.cb); ';
+			<< 'delete '; << listenerId; << ';' ])
 ]

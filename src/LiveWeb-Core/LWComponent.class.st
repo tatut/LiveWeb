@@ -80,6 +80,7 @@ LWComponent >> doMount [
 { #category : #'as yet unclassified' }
 LWComponent >> doUnmount [ 
 	"internal, never override. Do cleanup in unmount."
+	Transcript show: self class name, ' unmount';cr.
 	self unmount.
 	mounted := false
 	
@@ -147,7 +148,7 @@ LWComponent >> render: aHtmlRenderer [
 	| oldId oldComp |
 	
 	ctx ifNil: [ Error new signal: 'Cant''t render without context! ', self printString ].
-	
+
 	mounted ifFalse: [ 
 		self doMount
 	].

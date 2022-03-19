@@ -89,7 +89,7 @@ LWPageConnection >> renderToString: component [
 
 { #category : #'as yet unclassified' }
 LWPageConnection >> rerenderComponent: component [
-	[ page ctx cleanup: component.
+	[ page ctx cleanup: component unmount: false.
 	  self send: { { component id asString . 'R' . self renderToString: component } } ]
 	on: Exception  
 	do: [ :e |

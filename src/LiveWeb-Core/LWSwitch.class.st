@@ -41,7 +41,7 @@ LWSwitch >> isOn [
 LWSwitch >> off [
 	"set the switch to off (hiding the component)"
 	on := false.
-	child isMounted ifTrue: [ ctx cleanup: child ].
+	child isMounted ifTrue: [ ctx cleanup: child unmount: true ].
 	self changed.
 ]
 

@@ -16,7 +16,7 @@ Class {
 { #category : #accessing }
 LWSingleContainer >> child: aChildComponent [
 	"Set the new child component"
-	child ifNotNil: [ ctx cleanup: child ].
+	child ifNotNil: [ ctx cleanup: child unmount: true ].
 	child := aChildComponent.
 	ctx ifNotNil: [ child inContext: ctx ].
 	self changed.

@@ -38,18 +38,25 @@ LWContext >> callbackFor: id [
 ]
 
 { #category : #cleaning }
-LWContext >> cleanup: component [ 
-	"do state cleanup for component before rerender"
-	[ "cleanup all children before parents"
-	component childrenRecursive do:  [ :c | self doCleanupComponent: c ].
-	self doCleanupComponent: component.
-   ] 
-	on: Error 
-	do: [ :sig |
-			"PENDING: what to do here? this is likely a bug in some component impl, 
-			we can just show it here so developer can take care of it"
-			LWLogEvent warn: 'Cleanup exception for ', component printString, ' signal: ', sig printString.
-			]
+LWContext >> cleanup: component [
+  "do state cleanup for component before rerender (does not unmount)"
+ self cleanup: component unmount: false
+]
+
+{ #category : #cleaning }
+LWContext >> cleanup: component unmount: unmount [
+  "do state cleanup for component before rerender"
+  [ component childrenRecursive do: [:c |  self cleanupComponent: c unmount: unmount ].
+  self cleanupComponent: component unmount: false ] on: Error do: [:sig |  LWLogEvent warn: 'Cleanup exception for ' , component printString , ' signal: ' , sig printString ]
+]
+
+{ #category : #cleaning }
+LWContext >> cleanupComponent: c unmount: shouldUnmount [
+  | callbackIds |
+  c isMounted ifFalse: [ ^self ].
+  shouldUnmount ifTrue: [ c doUnmount ].
+  callbackIds := callbackIdsByComponent removeKey: c id ifAbsent: #().
+  callbackIds do: [:id |  callbacks removeKey: id ]
 ]
 
 { #category : #'component lifecycle' }
@@ -84,17 +91,8 @@ LWContext >> connection: anObject [
 { #category : #cleaning }
 LWContext >> connectionClosed [
 	connection := nil.
-	components valuesDo: [ :c | self cleanup: c ]. 
+	components valuesDo: [ :c | self cleanup: c unmount: true ]. 
 	components := nil.
-]
-
-{ #category : #cleaning }
-LWContext >> doCleanupComponent: c [
-  | callbackIds |
-  c isMounted ifFalse: [ ^self ].
-  c doUnmount.
-  callbackIds := callbackIdsByComponent removeKey: c id ifAbsent: #().
-  callbackIds do: [:id |  callbacks removeKey: id ]
 ]
 
 { #category : #'client control' }
