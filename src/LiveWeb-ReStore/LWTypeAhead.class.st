@@ -9,6 +9,7 @@ Class {
 		'template',
 		'renderCandidate',
 		'fetchCandidates',
+		'renderValueString',
 		'candidateId'
 	],
 	#category : #'LiveWeb-ReStore'
@@ -62,7 +63,8 @@ LWTypeAhead >> mount [
 { #category : #rendering }
 LWTypeAhead >> renderAfterInput: h [
 	template render: h.
-	h div: { #class->#typeAheadCandidates } with: [
+	h script: [ h streamContents: [ :out | self renderJsOn: out ]];
+	  div: { #class->#typeAheadCandidates } with: [
 		h div: { #class -> 'formCandidates'. #id -> (accessor,'-candidates') } ]
 	
 ]
@@ -79,6 +81,24 @@ LWTypeAhead >> renderInput: h hasError: error [
 	h input: { 
 		#name -> accessor. 
 		#id -> accessor.
-		#onkeypress -> ((Js call: [:v | self fetch: v] with: (Js inputValue: accessor)) debounceMs: 300)
+		#onkeyup -> 
+			((Js call: [:v | self fetch: v] with: (Js inputValue: accessor)) 
+				debounceMs: 300;
+				condition: '_lw_typeAhead',accessor,'(event)')
 	 }
+]
+
+{ #category : #rendering }
+LWTypeAhead >> renderJsOn: out [
+	"Render JS code needed in the client side."
+	out << 'function _lw_typeAhead'; << accessor; << '(event) {
+	
+		return true;
+	}'
+]
+
+{ #category : #accessing }
+LWTypeAhead >> renderValueString: aBlock [ 
+	renderValueString := aBlock
+
 ]

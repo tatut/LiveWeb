@@ -23,6 +23,12 @@ LWExamplePage >> initialPushState [
 	^ { #example -> example } asDictionary 
 ]
 
+{ #category : #'as yet unclassified' }
+LWExamplePage >> prepareCtx [ 
+	super prepareCtx .
+	ctx at: #formMessages put: LWFormMessages new. 
+]
+
 { #category : #'push state handling' }
 LWExamplePage >> pushStateChanged: newState [
 	LWLogEvent debug: 'new push state: ', newState asString.
