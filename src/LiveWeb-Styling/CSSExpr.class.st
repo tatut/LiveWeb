@@ -50,3 +50,13 @@ CSSExpr >> calc: op with: right [
 CSSExpr >> isCSSCalculated [
 	^ false
 ]
+
+{ #category : #accessing }
+CSSExpr >> max: aCSSExpr [
+ ^ CSSFnExpr new function: #max; arguments: { self. aCSSExpr } 
+]
+
+{ #category : #accessing }
+CSSExpr >> min: aCSSExpr [
+ ^ CSSFnExpr new function: #min; arguments: { self. aCSSExpr } 
+]
