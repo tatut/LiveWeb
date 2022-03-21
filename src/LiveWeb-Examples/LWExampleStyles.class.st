@@ -103,7 +103,10 @@ LWExampleStyles >> formTypeAhead [
 				backgroundColor: #white;
 				border: 'solid 1px';
 				borderRadius: 5px;
-				padding: 0.5 em ]  
+				padding: 0.5 em ];
+		 child: '.formCandidates .highlight' with: [ :h | h backgroundColor: #wheat ];
+		 child: '.formCandidates :hover' with: [ :h | h backgroundColor: #wheat ]  
+		  
 		]
 
 ]

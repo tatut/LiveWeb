@@ -174,7 +174,17 @@ LWStylesheetProvider >> style: aStyleBlock namedGlobally: globalName [
 ]
 
 { #category : #writing }
-LWStylesheetProvider >> writeCSS: class decl: decl on: out [ 
+LWStylesheetProvider >> writeCSS: className decl: decl on: out [ 
+  | class childSelector subs |
+  subs := className substrings.
+  subs size > 1
+  ifTrue: [ 
+    class := subs first. 
+    childSelector := ' ' join: subs allButFirst ]
+  ifFalse: [ 
+	 class := className.
+	 childSelector := '' ].
+	
 	(class at: 1) = $@ ifFalse: [ out nextPut: $. ].
 	(class indexOf: $:) > 0 
 		ifTrue: [ | split |
@@ -182,7 +192,9 @@ LWStylesheetProvider >> writeCSS: class decl: decl on: out [
 			split allButLastDo: [ :part | out nextPutAll: part; nextPutAll: '\:' ].
 			out nextPutAll: split last ]
 		ifFalse: [ out nextPutAll: class ].
-	out nextPutAll: ' { '; 
+	out nextPutAll: ' '; 
+	    nextPutAll: childSelector;
+	    nextPutAll: ' { '; 
 	    nextPutAll: decl;
 	    nextPutAll: '}'; 
 	    nextPut: Character lf.

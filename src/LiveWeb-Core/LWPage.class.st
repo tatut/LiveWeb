@@ -47,7 +47,6 @@ LWPage class >> clientConnectionScript [
             if(debouncems === undefined) {
                 this._send(id,args);
             } else {
-console.log("nyt on debounce");
                 var tid = this.debounceTimeout[id];
                 if(tid !== undefined) {
                     window.clearTimeout(tid);
