@@ -1429,6 +1429,12 @@ HTMLRenderer >> option: attrs with: content [
 ]
 
 { #category : #accessing }
+HTMLRenderer >> out [ 
+  ^ out
+
+]
+
+{ #category : #accessing }
 HTMLRenderer >> out: aWriteStream [
 	"set the output stream"
 	out := aWriteStream 	

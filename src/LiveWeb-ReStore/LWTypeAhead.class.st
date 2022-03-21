@@ -10,17 +10,10 @@ Class {
 		'renderCandidate',
 		'fetchCandidates',
 		'renderValueString',
-		'candidateId'
+		'resolveCandidateId'
 	],
 	#category : #'LiveWeb-ReStore'
 }
-
-{ #category : #accessing }
-LWTypeAhead >> candidateId: aBlockOrSymbol [
-  "Set accessor to get id for candidate. Needed to resolve selected 
-  value back into an entity."
-	candidateId := aBlockOrSymbol
-]
 
 { #category : #accessing }
 LWTypeAhead >> children [ 
@@ -38,8 +31,8 @@ LWTypeAhead >> fetch: aString [
 	candidates := fetchCandidates value: aString.
 	template renderItems: candidates to: (accessor,'-candidates').
 	
-	"FIXME: should structure more elegantly, so this could be done with add/remove class patches"
-	self send: 'E' with: 'this.querySelector(".formCandidates").style.display="block"'
+	"Initialize the UI stuff and show the results"
+	self send: 'E' with: '_lw_typeAhead',accessor,'Results(this)'
 ]
 
 { #category : #accessing }
@@ -60,6 +53,11 @@ LWTypeAhead >> mount [
 
 ]
 
+{ #category : #parsing }
+LWTypeAhead >> parseValue: aFormValue [
+	^ resolveCandidateId value: aFormValue
+]
+
 { #category : #rendering }
 LWTypeAhead >> renderAfterInput: h [
 	template render: h.
@@ -72,7 +70,11 @@ LWTypeAhead >> renderAfterInput: h [
 { #category : #accessing }
 LWTypeAhead >> renderCandidate: aBlock [
 	"Set block to render a candidate template. Used in an LWTemplate and 
-	can include #templateSlot: calls that receive the fetched data."
+	can include #templateSlot: calls that receive the fetched data.
+	
+	The template MUST have the template attribute 'date-typeahead-id' that
+	will be used to select the actual item. The value is passed to the block passed 
+	to #resolveCandidateId: as a string."
 	renderCandidate := aBlock
 ]
 
@@ -91,9 +93,15 @@ LWTypeAhead >> renderInput: h hasError: error [
 { #category : #rendering }
 LWTypeAhead >> renderJsOn: out [
 	"Render JS code needed in the client side."
+	| selectCallback |
+	selectCallback := ctx registerCallback: self setter for: self.
 	out << 'function _lw_typeAhead'; << accessor; << '(event) {
 	
 		return true;
+	}
+	function _lw_typeAhead'; << accessor; << 'Results(elt) {
+	  elt.querySelector(".formCandidates").style.display="block";
+	  elt.querySelectorAll("[data-typeahead-id]").forEach(e=>e.onclick=_=>_lws('; << selectCallback asString; << ',[e.getAttribute("data-typeahead-id")]));
 	}'
 ]
 
@@ -101,4 +109,10 @@ LWTypeAhead >> renderJsOn: out [
 LWTypeAhead >> renderValueString: aBlock [ 
 	renderValueString := aBlock
 
+]
+
+{ #category : #accessing }
+LWTypeAhead >> resolveCandidateId: anObject [
+
+	resolveCandidateId := anObject
 ]

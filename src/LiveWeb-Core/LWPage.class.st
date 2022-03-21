@@ -210,7 +210,13 @@ console.log("nyt on debounce");
 		 for(let i=0;i<data.length;i++) {
 		   let n = document.importNode(templateElt.content,true).firstChild;
 		   n.classList.add("templateItem"+(i%2==0?"Even":"Odd"));
-			 n.querySelectorAll("slot").forEach(s => { 
+			n.getAttributeNames().forEach(a => { 
+			  let v = n.getAttribute(a);
+			  if(typeof(v) === "string" && v.startsWith("_lw_slot:")) { 
+			    n.setAttribute(a, data[i][parseInt(v.substring(9))]);
+			  }
+			});
+			n.querySelectorAll("slot").forEach(s => { 
 			  s.outerText = data[i][parseInt(s.name)];
 			});
 			target.appendChild(n);

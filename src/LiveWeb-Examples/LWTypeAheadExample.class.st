@@ -14,14 +14,14 @@ LWTypeAheadExample >> children [
 ]
 
 { #category : #'component lifecycle' }
-LWTypeAheadExample >> initialize [ 
-	super initialize.
-	
+LWTypeAheadExample >> initialize [
+	super initialize.	
 	typeahead := LWTypeAhead new 
 		renderValueString: #name;
+		resolveCandidateId: [ :candidateId | candidateId asClass  ];
 		renderCandidate: [ :h | h
-			 div: [ h
-           b: [ h templateSlot: [ :c | c name ] ];
+			 div: { h templateAttr: 'data-typeahead-id' with: #name } with: [ h
+           b: [ h templateSlot: #name ];
            span: [ h templateSlot: [ :c | c subclasses size asString ] ]]];
      fetchCandidates: [ :v | 
 			Smalltalk globals allClasses select: [ :c | (v,'*') match: c name ]];

@@ -28,9 +28,15 @@ Class {
 
 { #category : #adding }
 LWTemplate >> addSlot: aSlotContentBlock [ 
+   | existingIndex |
 	slots ifNil: [ slots := OrderedCollection new ].
-	slots add: aSlotContentBlock.
-	^ (slots size - 1) asString
+	existingIndex := slots indexOf: aSlotContentBlock.
+	existingIndex isZero 
+	ifTrue: [ 
+	  slots add: aSlotContentBlock.
+	  ^ (slots size - 1) asString ]
+   ifFalse: [ 
+	  ^ (existingIndex - 1) asString ]
 ]
 
 { #category : #rendering }
@@ -49,7 +55,7 @@ LWTemplate >> renderOn: h [
 	h template: [ 
 		template value: (LWTemplateHTMLRenderer new 
 			parent: self;
-			target: h;
+			out: h out;
 			yourself)
 	]
 ]
