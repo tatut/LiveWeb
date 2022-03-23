@@ -22,8 +22,8 @@ Class {
 
 { #category : #accessing }
 LWContext >> at: aKey [
-	"Get the user object at key."
-	^ user at: aKey
+	"Get the user object at key or nil."
+	^ user at: aKey ifAbsent: nil
 ]
 
 { #category : #accessing }

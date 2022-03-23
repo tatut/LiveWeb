@@ -32,7 +32,7 @@ LWTypeAhead >> fetch: aString [
 	template renderItems: candidates to: (accessor,'-candidates').
 	
 	"Initialize the UI stuff and show the results"
-	self send: 'E' with: '_lw_typeAhead',accessor,'Results(this)'
+	self send: 'E' with: 'this.candidatesRendered()'
 ]
 
 { #category : #accessing }
@@ -83,50 +83,75 @@ LWTypeAhead >> renderInput: h hasError: error [
 	h input: { 
 		#name -> accessor. 
 		#id -> accessor.
+		"#onkeydown -> 'if(event.keyCode==40||event.keyCode==38)event.preventDefault()'.
 		#onkeyup -> 
 			((Js call: [:v | self fetch: v] with: (Js inputValue: accessor)) 
 				debounceMs: 300;
-				condition: '_lw_typeAhead',accessor,'(event)')
+				condition: '_lw_typeAhead',accessor,'(event)')"
 	 }
 ]
 
 { #category : #rendering }
 LWTypeAhead >> renderJsOn: out [
 	"Render JS code needed in the client side."
-	| selectCallback |
-	selectCallback := (ctx registerCallback: self setter for: self) asString.
-	"PENDING: we need a sort 'include once' functionality that takes adds 
-	a specfic script to the page if it isn't already present (like the styling with classes)"
-	out << '
-	_lw_typeAhead'; << accessor; << 'Idx=null; 
-	function _lw_typeAhead'; << accessor; << '(event) {
-		console.log(event.keyCode);
-		let e = _lw.get('; << id asString; << ');
-		let idx = _lw_typeAhead'; << accessor; <<'Idx;
-		let cs = e.querySelectorAll("[data-typeahead-id]");
-		switch(event.keyCode) { 
-		case 38: /*up*/
-		  if(idx!==null) cs[idx].classList.remove("highlight"); 
-		  idx = (idx==0||idx==null?cs.length:idx)-1;
-		  _lw_typeAhead'; << accessor; <<'Idx=idx;
-		  cs[idx].classList.add("highlight");
-		  event.preventDefault(); return false;		
-		case 40: /*dn*/
-		  if(idx!==null) cs[idx].classList.remove("highlight");
-		  idx = (idx==cs.length-1||idx==null?0:idx+1);
-		  _lw_typeAhead'; << accessor; <<'Idx=idx;
-		  cs[idx].classList.add("highlight");
-		  event.preventDefault(); return false;
-		case 13: /*sel*/
-		  if(idx!==null) _lws(';<<selectCallback; <<',[cs[idx].getAttribute("data-typeahead-id")]);
-        event.preventDefault(); return false;		
-		}
-		return true;
-	}
-	function _lw_typeAhead'; << accessor; << 'Results(elt) {
-	  elt.querySelector(".formCandidates").style.display="block";
-	  elt.querySelectorAll("[data-typeahead-id]").forEach(e=>e.onclick=_=>_lws('; << selectCallback; << ',[e.getAttribute("data-typeahead-id")]));
-	}'
+	| init |
+	(ctx at: #TypeAheadScript) ifNil: [   
+		ctx at: #TypeAheadScript put: true.	
+		out << '_lwTypeAhead = function(id, fetchCallbackId, selectCallbackId) { 
+			let e = _lw.get(id);
+			let s = { idx: null, val: "" };			 
+			let input = e.querySelector("input");
+			input.onkeydown = event => { 
+			  if(event.keyCode==40||event.keyCode==38)
+			    event.preventDefault(); 
+			};
+			input.onkeyup = event => { 
+			   let cs = e.querySelectorAll("[data-typeahead-id]");
+				switch(event.keyCode) { 
+				case 38: /*up*/
+		  			if(s.idx!==null) cs[s.idx].classList.remove("highlight"); 
+		  			s.idx = (s.idx==0||s.idx==null?cs.length:s.idx)-1;
+		 			cs[s.idx].classList.add("highlight");
+					break;
+				case 40: /*dn*/
+		  			if(s.idx!==null) cs[s.idx].classList.remove("highlight");
+		  			s.idx = (s.idx==cs.length-1||s.idx==null?0:s.idx+1);
+				   cs[s.idx].classList.add("highlight");
+				   break;
+				case 13: /*sel*/
+		  			if(s.idx!==null) _lws(selectCallbackId,[cs[s.idx].getAttribute("data-typeahead-id")]);
+        			event.preventDefault();
+			      break;
+			   default:  
+					if(input.value!==s.value)	{ 
+				     s.value = input.value;
+					  let c = e.querySelector(".typeAheadCandidates");
+					  c.classList.add("loading");
+					  c.classList.remove("noResults");
+					  e.querySelector(".formCandidates").style.display="none";
+				     _lws(fetchCallbackId, [ s.value ], 300);
+				   }
+				}
+			};
+			e.candidatesRendered = () => {
+				e.querySelector(".typeAheadCandidates").classList.remove("loading");
+				if(e.querySelectorAll("[data-typeahead-id]").length == 0) { 
+					e.querySelector(".typeAheadCandidates").classList.add("noResults");
+				} else {  
+  		   			e.querySelector(".formCandidates").style.display="block";
+					e.querySelectorAll("[data-typeahead-id]").forEach(e=>e.onclick=_=>_lws(selectCallbackId,[e.getAttribute("data-typeahead-id")]));
+				}	
+			};
+	};' ].
+	"Output code to initialize this instance"
+	"PENDING: LiveWeb could directly support this type of behaviour to initialize JS components that have been
+	 defined in data attributes like <div data-lw-class=TypeAhead data-lw-fetch=.../>.
+	LiveWeb could automatically initialize instances on load and when replacing/adding elements."
+	init := '_lwTypeAhead(',id asString,', ',(ctx registerCallback: [ :v | self fetch: v ] for: self) asString,',',(ctx registerCallback: self setter for: self) asString,');'.
+	out 
+		<< 'if(typeof(_lw)==="undefined") { window.addEventListener("load", _ => { '; << init; 
+		<< '}); } else { '; << init; << ' }'.
+	
 ]
 
 { #category : #accessing }
