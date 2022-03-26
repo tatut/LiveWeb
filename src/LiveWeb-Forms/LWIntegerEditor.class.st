@@ -1,3 +1,6 @@
+"
+I am an editor widget for an integer value.
+"
 Class {
 	#name : #LWIntegerEditor,
 	#superclass : #LWNumericEditor,

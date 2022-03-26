@@ -1,3 +1,6 @@
+"
+I am an editor widget for floating point numbers.
+"
 Class {
 	#name : #LWFloatEditor,
 	#superclass : #LWNumericEditor,

@@ -1,3 +1,6 @@
+"
+I am an editor widget for ScaledDecimal values.
+"
 Class {
 	#name : #LWScaledDecimalEditor,
 	#superclass : #LWNumericEditor,

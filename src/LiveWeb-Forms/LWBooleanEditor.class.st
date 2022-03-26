@@ -1,3 +1,6 @@
+"
+I am an editor widget for a boolean value. I render a checkbox.
+"
 Class {
 	#name : #LWBooleanEditor,
 	#superclass : #LWBaseEditor,

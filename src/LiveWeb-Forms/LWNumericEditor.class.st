@@ -1,3 +1,6 @@
+"
+I am the base class for editor widgets that edit numerical values.
+"
 Class {
 	#name : #LWNumericEditor,
 	#superclass : #LWBaseEditor,

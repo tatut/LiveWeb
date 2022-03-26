@@ -1,3 +1,8 @@
+"
+I represent a 'class' attribute mapping for HTML rendering.
+I know how to combine with another instance with comma (,) message to easily 
+merge two classes.
+"
 Class {
 	#name : #LWClassAttribute,
 	#superclass : #Object,

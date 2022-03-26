@@ -1,3 +1,6 @@
+"
+I am an editor widget for collections.
+"
 Class {
 	#name : #LWCollectionEditor,
 	#superclass : #LWBaseEditor,

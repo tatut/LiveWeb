@@ -1,3 +1,6 @@
+"
+I represent a CSS function call.
+"
 Class {
 	#name : #CSSFnExpr,
 	#superclass : #CSSExpr,
