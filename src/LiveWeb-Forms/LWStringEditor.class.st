@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'maxLength'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #accessing }

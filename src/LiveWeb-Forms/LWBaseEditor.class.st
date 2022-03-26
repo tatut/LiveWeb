@@ -18,7 +18,7 @@ Class {
 		'errorComponent',
 		'errorMessage'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #accessing }

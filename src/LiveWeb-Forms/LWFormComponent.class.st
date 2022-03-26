@@ -13,7 +13,7 @@ Class {
 		'configure',
 		'showLabel'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #accessing }

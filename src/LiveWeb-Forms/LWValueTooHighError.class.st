@@ -8,7 +8,7 @@ Class {
 	#instVars : [
 		'maximum'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #initialization }

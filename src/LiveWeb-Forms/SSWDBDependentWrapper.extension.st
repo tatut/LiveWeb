@@ -1,6 +1,6 @@
 Extension { #name : #SSWDBDependentWrapper }
 
-{ #category : #'*LiveWeb-ReStore' }
+{ #category : #'*LiveWeb-Forms' }
 SSWDBDependentWrapper >> asLWEditFormComponent: form accessor: accessor [
 	^ LWEditForm new 
 		  entityClass: self dependentObject;

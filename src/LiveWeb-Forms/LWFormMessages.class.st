@@ -8,7 +8,7 @@ Override this class and set it to #formMessages in the component context.
 Class {
 	#name : #LWFormMessages,
 	#superclass : #Object,
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #'as yet unclassified' }

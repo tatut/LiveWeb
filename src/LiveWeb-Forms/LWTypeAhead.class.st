@@ -12,7 +12,7 @@ Class {
 		'renderValueString',
 		'resolveCandidateId'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'scale'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #rendering }

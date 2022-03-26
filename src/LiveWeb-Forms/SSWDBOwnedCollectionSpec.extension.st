@@ -1,6 +1,6 @@
 Extension { #name : #SSWDBOwnedCollectionSpec }
 
-{ #category : #'*LiveWeb-ReStore' }
+{ #category : #'*LiveWeb-Forms' }
 SSWDBOwnedCollectionSpec >> asLWEditFormComponent: form accessor: anObject [
 	^ LWCollectionEditor new 
 		 form: form;

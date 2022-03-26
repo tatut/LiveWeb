@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'errorMessage'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #'as yet unclassified' }

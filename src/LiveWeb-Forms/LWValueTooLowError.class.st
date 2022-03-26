@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'minimum'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #initialization }

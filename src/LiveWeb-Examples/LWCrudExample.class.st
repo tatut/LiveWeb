@@ -27,10 +27,10 @@ LWCrudExample >> entity: anEntity [
 					LWBlockContainer new block: [ :h | 
 						h div: 'Add some order edit component here? ', (STON toStringPretty: order) ]
 					 ] ]. 
-	  entity class = Customer ifTrue: [ 
+	  "entity class = Customer ifTrue: [ 
 			f allFieldsConfigure: #hideLabel;
  			  renderBlock: [ :h :renderChild | self renderCustomizedCustomerFormOn: h renderChild: renderChild ]
-		]
+		]"
 	]].
   entity class = CustomerOrder ifTrue: [ 
 	  form field: #customer component: (LWTypeAhead new 

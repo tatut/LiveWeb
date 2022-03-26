@@ -1,7 +1,7 @@
 Class {
 	#name : #LWNumericEditor,
 	#superclass : #LWBaseEditor,
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #rendering }

@@ -8,7 +8,7 @@ Class {
 		'invalidValue',
 		'message'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #creating }

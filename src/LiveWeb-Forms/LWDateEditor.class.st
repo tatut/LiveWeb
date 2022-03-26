@@ -4,7 +4,7 @@ I am an editor component for Date objects.
 Class {
 	#name : #LWDateEditor,
 	#superclass : #LWBaseEditor,
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #parsing }

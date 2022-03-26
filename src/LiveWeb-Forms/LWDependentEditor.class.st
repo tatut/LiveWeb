@@ -5,7 +5,7 @@ Class {
 		'dependent',
 		'childComponents'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #accessing }

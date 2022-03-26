@@ -1,7 +1,7 @@
 Class {
 	#name : #LWBooleanEditor,
 	#superclass : #LWBaseEditor,
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #initialization }

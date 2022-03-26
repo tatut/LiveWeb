@@ -14,7 +14,7 @@ Class {
 		'fieldRenderBlock',
 		'customComponents'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #'as yet unclassified' }

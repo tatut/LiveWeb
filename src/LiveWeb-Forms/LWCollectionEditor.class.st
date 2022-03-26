@@ -6,7 +6,7 @@ Class {
 		'container',
 		'createEditorComponent'
 	],
-	#category : #'LiveWeb-ReStore'
+	#category : #'LiveWeb-Forms'
 }
 
 { #category : #adding }
