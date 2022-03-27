@@ -11,7 +11,7 @@ resources (like CSS and fonts).
 "
 Class {
 	#name : #LWPage,
-	#superclass : #ZnEntity,
+	#superclass : #Object,
 	#instVars : [
 		'ctx',
 		'id',
