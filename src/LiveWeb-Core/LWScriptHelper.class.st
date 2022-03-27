@@ -8,6 +8,14 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+LWScriptHelper class >> call: block [
+	^ LWScriptCallback new 
+		callback: block
+		
+	
+]
+
+{ #category : #'as yet unclassified' }
 LWScriptHelper class >> call: block with: jsParam1 [ 
 	^ LWScriptCallback new 
 		callback: block;
@@ -79,6 +87,11 @@ LWScriptHelper class >> formValues: selector [
      for(const e of new FormData(document.querySelector(''<1s>'')).entries())
         d[e[0]]=e[1];
      return d;})()' expandMacrosWith: selector
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptHelper class >> inputChecked: id [ 
+	^ 'document.getElementById(''<1s>'').checked' expandMacrosWith: id
 ]
 
 { #category : #'as yet unclassified' }

@@ -1,3 +1,6 @@
+"
+I am the base class for CSS expressions that can be calculated.
+"
 Class {
 	#name : #CSSExpr,
 	#superclass : #Object,
@@ -46,4 +49,14 @@ CSSExpr >> calc: op with: right [
 { #category : #testing }
 CSSExpr >> isCSSCalculated [
 	^ false
+]
+
+{ #category : #accessing }
+CSSExpr >> max: aCSSExpr [
+ ^ CSSFnExpr new function: #max; arguments: { self. aCSSExpr } 
+]
+
+{ #category : #accessing }
+CSSExpr >> min: aCSSExpr [
+ ^ CSSFnExpr new function: #min; arguments: { self. aCSSExpr } 
 ]

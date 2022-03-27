@@ -119,9 +119,15 @@ LWStylesheetProvider >> registerClass: cls with: aStyleBlock [
 		at: cls
 		put: decl. 
 		
-	"Send new CSS declarations in the background to any listening pages"
-	[ css := String streamContents: [ :out | self writeCSS: cls decl: decl on: out ].
-	  listeners do: [ :l | l onStyleAdded: css ] ] fork
+	"Send new CSS declarations to any listening pages"
+	css := String streamContents: [ :out | self writeCSS: cls decl: decl on: out ].
+ 	[ listeners do: [ :l | l onStyleAdded: css ] ]
+	on: Error
+	do: [ :err | LWLogEvent warn: 'Failed to send new CSS to some listeners' ].
+	
+	"If there are child styles, add those as well"
+	b childStyles keysAndValuesDo: [ :childSelector :childStyleBlock |
+		self registerClass: cls,' ',childSelector with: childStyleBlock ]
 ]
 
 { #category : #adding }
@@ -134,7 +140,7 @@ LWStylesheetProvider >> removeStyleAddedListener: listener [
 { #category : #accessing }
 LWStylesheetProvider >> style: aStyleBlock [
 	"Register a new style in this stylesheet.
-	Answers with an associaciont #class->'generated class name' that can be directly used
+	Answers with an association #class->'generated class name' that can be directly used
 	in HTML rendering as attribute."
 
 	| sender cls |
@@ -146,7 +152,7 @@ LWStylesheetProvider >> style: aStyleBlock [
 		
 	self registerClass: cls with: aStyleBlock.
 
-	^ #class->cls
+	^ LWClassAttribute new cls: cls
 ]
 
 { #category : #accessing }
@@ -168,7 +174,17 @@ LWStylesheetProvider >> style: aStyleBlock namedGlobally: globalName [
 ]
 
 { #category : #writing }
-LWStylesheetProvider >> writeCSS: class decl: decl on: out [ 
+LWStylesheetProvider >> writeCSS: className decl: decl on: out [ 
+  | class childSelector subs |
+  subs := className substrings.
+  subs size > 1
+  ifTrue: [ 
+    class := subs first. 
+    childSelector := ' ' join: subs allButFirst ]
+  ifFalse: [ 
+	 class := className.
+	 childSelector := '' ].
+	
 	(class at: 1) = $@ ifFalse: [ out nextPut: $. ].
 	(class indexOf: $:) > 0 
 		ifTrue: [ | split |
@@ -176,7 +192,9 @@ LWStylesheetProvider >> writeCSS: class decl: decl on: out [
 			split allButLastDo: [ :part | out nextPutAll: part; nextPutAll: '\:' ].
 			out nextPutAll: split last ]
 		ifFalse: [ out nextPutAll: class ].
-	out nextPutAll: ' { '; 
+	out nextPutAll: ' '; 
+	    nextPutAll: childSelector;
+	    nextPutAll: ' { '; 
 	    nextPutAll: decl;
 	    nextPutAll: '}'; 
 	    nextPut: Character lf.

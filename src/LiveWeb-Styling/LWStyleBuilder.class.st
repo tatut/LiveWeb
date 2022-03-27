@@ -10,14 +10,29 @@ Class {
 	#name : #LWStyleBuilder,
 	#superclass : #LWStyle,
 	#instVars : [
-		'props'
+		'props',
+		'childStyles'
 	],
 	#category : #'LiveWeb-Styling'
 }
 
+{ #category : #'as yet unclassified' }
+LWStyleBuilder >> child: cssSelector with: aStyleBlock [
+	childStyles 
+		at: cssSelector 
+		put: aStyleBlock
+	
+]
+
+{ #category : #accessing }
+LWStyleBuilder >> childStyles [
+	^ childStyles
+]
+
 { #category : #initialization }
 LWStyleBuilder >> initialize [
 	props := Dictionary new.
+	childStyles := Dictionary new.
 ]
 
 { #category : #rendering }

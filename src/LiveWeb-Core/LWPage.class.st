@@ -138,7 +138,7 @@ LWPage class >> clientConnectionScript [
                     var method = patch[1];
                     var payload = patch[2];
                     if(this.debug) console.log("elt: ", elt, "method: ", method, ", payload: ", payload);
-						  switch(method) {  
+                    switch(method) {  
                        case "R": _lw.R(elt,payload); break;
                        case "A": elt.innerHTML += payload; break;
                        case "P": elt.innerHTML = payload + elt.innerHTML; break;
@@ -153,7 +153,13 @@ LWPage class >> clientConnectionScript [
                            elt.insertBefore(patch[3], elt.childNodes[patch[2]]); break;
                        case "H": /* flasH an animation class */
                            _lw.flash(elt,payload); break;
-						}
+                       case "+C": /* add class */
+                           elt.classList.add(payload); break;
+                       case "-C": /* remove class */
+                           elt.classList.remove(payload); break;
+                       case "T": /* render from template to target id */
+                           _lw.T(elt,payload[0],payload[1]); break;
+                    }
                 }
             }
         }
@@ -196,6 +202,24 @@ LWPage class >> clientConnectionScript [
 					}
             })
         }
+    },
+    T: function(templateElt, targetEltId, data) { 
+		 let target = document.getElementById(targetEltId);
+		 target.textContent="";
+		 for(let i=0;i<data.length;i++) {
+		   let n = document.importNode(templateElt.content,true).firstChild;
+		   n.classList.add("templateItem"+(i%2==0?"Even":"Odd"));
+			n.getAttributeNames().forEach(a => { 
+			  let v = n.getAttribute(a);
+			  if(typeof(v) === "string" && v.startsWith("_lw_slot:")) { 
+			    n.setAttribute(a, data[i][parseInt(v.substring(9))]);
+			  }
+			});
+			n.querySelectorAll("slot").forEach(s => { 
+			  s.outerText = data[i][parseInt(s.name)];
+			});
+			target.appendChild(n);
+		 };
     },
     flash: function(elt, className) { 
       // add animationend handler if needed
@@ -247,6 +271,12 @@ LWPage class >> registerPage: aPageInstance for: aUUID [
 LWPage class >> unregisterPage: uuid [
 	"should unmount any components left over?"
 	currentPages removeKey: uuid.
+]
+
+{ #category : #accessing }
+LWPage >> args [
+	"answer with the arguments for this page"
+	^ args
 ]
 
 { #category : #'API - accessing' }
@@ -330,14 +360,22 @@ LWPage >> usePushState [
 
 { #category : #accessing }
 LWPage >> value: req [
+	| content |
+	[ 
 	id := UUIDGenerator next. 
 	ctx := LWContext new.
 	ctx page: self.
 	args := self readArguments: req.
 	self prepareCtx .
-	^ ZnResponse ok: (ZnStringEntity new 
-      string: (String streamContents: [:out | self writeOn: out ]);
-		 contentType: 'text/html')
+	content := String streamContents: [:out | self writeOn: out ].
+	^ ZnResponse ok: (ZnStringEntity new string: content; contentType: 'text/html; charset=UTF-8')
+	] on: Error 
+     do: [ :err | 
+		LWLogEvent error: 'Error rendering page: ', self printString, ' error: ', err printString.  
+		err debug.
+		^ ZnResponse serverError: 'Internal server error, see log for details.'
+	].
+	
 ]
 
 { #category : #writing }

@@ -73,7 +73,8 @@ LWComponent >> childrenRecursive [
 LWComponent >> doMount [ 
 	"internal, never override. Do initialization in mount."
 	self mount.
-	mounted := true
+	mounted := true.
+	self inContext: ctx. "reset context for any child components added in mount"
 ]
 
 { #category : #'as yet unclassified' }
@@ -105,8 +106,9 @@ LWComponent >> ifMounted: aBlock [
 
 { #category : #'instance creation' }
 LWComponent >> inContext: aContext [
- 	ctx := aContext.
-	id := ctx registerComponent: self.
+	ctx ifNotNil: [ ctx = aContext ifFalse: [ Error signal: 'can''t change context of a component!' ] ]
+		ifNil: [ ctx := aContext.
+					id := ctx registerComponent: self. ].
 	self children do: [ :c | c inContext: aContext ].
 	
 	
@@ -128,6 +130,14 @@ LWComponent >> mount [
 	Component can acquire resources or start init before the first render."
 ]
 
+{ #category : #accessing }
+LWComponent >> nonNilChildren: childArray [ 
+	"Utility to filter out not yet initialized children."
+	^ Generator on: [ :yield |
+		childArray select: #isNotNil thenDo: [ :c | yield value: c ]
+	]
+]
+
 { #category : #rendering }
 LWComponent >> render: aHtmlRenderer [
 	"Render this component using HTML renderer. 
@@ -136,8 +146,8 @@ LWComponent >> render: aHtmlRenderer [
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
 	| oldId oldComp |
 	
-	ctx ifNil: [ Error new signal: 'Cant''t render without context!' ].
-	
+	ctx ifNil: [ Error new signal: 'Cant''t render without context! ', self printString ].
+
 	mounted ifFalse: [ 
 		self doMount
 	].

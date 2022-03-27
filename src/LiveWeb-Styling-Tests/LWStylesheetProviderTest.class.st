@@ -24,7 +24,7 @@ LWStylesheetProviderTest >> testSheet [
 	
 	"check generated CSS has the classes"
 	css := (String streamContents: [ :out | ts writeOn: out ]) lines .
-	self assert: ((css at: 1) beginsWith: ('.myContainer\:background\:margin\:<1s> { ' expandMacrosWith: hash)) description: '1st rule starts with correct selector'.
+	self assert: ((css at: 1) beginsWith: ('.myContainer\:background\:margin\:<1s>  { ' expandMacrosWith: hash)) description: '1st rule starts with correct selector'.
 	self assert: ((css at: 1) includesSubstring: 'display: flex;') description: 'has flex property'.
 	self assert: ((css at: 1) includesSubstring: 'flex-direction: col;') description: 'has flex-direction property'.
 	self assert: ((css at: 1) includesSubstring: 'background-color: wheat;') description: 'has bacground-color property'.

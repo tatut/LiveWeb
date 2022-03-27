@@ -1,3 +1,6 @@
+"
+I am the base class for hooks that change how attributes are rendered.
+"
 Class {
 	#name : #LWAttributeRenderer,
 	#superclass : #Object,

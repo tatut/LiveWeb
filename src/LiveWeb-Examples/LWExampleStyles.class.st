@@ -40,6 +40,77 @@ LWExampleStyles >> flexRow: s [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formCollectionContainer [ 
+	^ self style: [ :s | self flexCol: s ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formErrorMessage [
+	^ self style: [ :s | s fontWeight: #bold; backgroundColor: #red ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formField [ 
+	^ self style: [ :s | 
+		s display: #block
+			 ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formFieldError [ 
+	^ self style: [ :s | 
+		s child: 'input' with: [ :input |
+				input borderColor: #red; borderWidth: 3px ]]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formFieldLabel [ 
+	^ self style: [ :s | s 
+			display: 'inline-block';
+			width: 15vw  ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formInput: hasError [
+	^ self style: [ :s | 
+		hasError 
+		  ifTrue: [ s borderColor: #red; borderWidth: 1px ]
+		  ifFalse: [ s backgroundColor: #wheat ]
+		 ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formInputAndError [ 
+	^ self style: [ :s | self flexCol: s ]
+
+]
+
+{ #category : #'as yet unclassified' }
+LWExampleStyles >> formTypeAhead [
+	^ self style: [ :s | 
+		self flexCol: s.
+		s child: '.formCandidates' with: [ :c | c
+				display: #none;
+				position: #absolute;
+				zIndex: 99;
+				backgroundColor: #white;
+				border: 'solid 1px';
+				borderRadius: 5px;
+				padding: 0.5 em ];
+		 child: '.formCandidates .highlight' with: [ :h | h backgroundColor: #wheat ];
+		 child: '.formCandidates :hover' with: [ :h | h backgroundColor: #wheat ]  
+		  
+		]
+
+]
+
 { #category : #accessing }
 LWExampleStyles >> globals [
 	self keyframes: #shake with: {
@@ -53,11 +124,6 @@ LWExampleStyles >> globals [
 	self style: [ :s | s animationName: #shake; animationDuration: '500ms' ] 
 	     namedGlobally: #invalid.
 
-]
-
-{ #category : #initialization }
-LWExampleStyles >> initialize [
-	super initialize
 ]
 
 { #category : #api }
