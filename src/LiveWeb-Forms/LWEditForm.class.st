@@ -122,7 +122,7 @@ LWEditForm >> mount [
 	"If form is dependent, try to read the object now (it's okay if it doesn't exist)"
 	self isDependent ifTrue: [ entity := self form read: accessor ].
 	
-	childComponents := entityClass reStoreDefinition instVarDefinitions 
+	childComponents := entityClass lwEditFormFieldDefinitions
 		reject: [ :d | exclude includes: d key ]
 		thenCollect: [ :d | 
 		| c |

@@ -1,6 +1,6 @@
 Extension { #name : #Object }
 
-{ #category : #'*LiveWeb-Forms' }
+{ #category : #'*LiveWeb-ReStore' }
 Object class >> asLWEditFormComponent: form accessor: accessor [
 	"Try to create an editor component for any type by common editor name pattern 'LW<class>Editor'."
 	| cls c |

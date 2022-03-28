@@ -14,7 +14,7 @@ BaselineOfLiveWeb >> baseline: spec [
 		package: 'LiveWeb-Styling' with: [ spec requires: #('LiveWeb-Core') ];
 		package: 'LiveWeb-Core-Tests' with: [ spec requires: #('LiveWeb-Core') ];
 		package: 'LiveWeb-Styling-Tests' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ];
-		package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling' 'LiveWeb-Forms') ];
+		package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling' 'LiveWeb-Forms' 'LiveWeb-ReStore') ];
 		package: 'LiveWeb-Forms' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ];
 		group: 'default' with: #(core tests);
 		group: 'core' with: #('LiveWeb-Core' 'LiveWeb-Styling');

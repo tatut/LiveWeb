@@ -1,6 +1,6 @@
 Extension { #name : #SSWDBScaledDecimalWithInfo }
 
-{ #category : #'*LiveWeb-Forms' }
+{ #category : #'*LiveWeb-ReStore' }
 SSWDBScaledDecimalWithInfo >> asLWEditFormComponent: form accessor: accessor [
 	^ LWScaledDecimalEditor new
 		 scale: self scale;
