@@ -16,7 +16,9 @@ Class {
 { #category : #'as yet unclassified' }
 LWPushStateRoute >> fieldSegments [
 	"answer with accessors for segments that are fields to extract from the path."
-	^ segments select: [ :s | s first = $: ] thenCollect: [ :s | s allButFirst asSymbol ]
+	^ segments select: [ :s | 
+		 s isEmpty ifTrue: false ifFalse: [ s first = $: ]]
+	  thenCollect: [ :s | s allButFirst asSymbol ]
 ]
 
 { #category : #accessing }

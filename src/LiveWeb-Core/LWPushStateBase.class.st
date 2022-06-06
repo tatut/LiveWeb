@@ -32,11 +32,13 @@ LWPushStateBase >> asRoute [
 	^ String streamContents: [ :out |
 		matchedRoute segments do: [ :seg |
 			out << $/.
+			seg isNotEmpty ifTrue: [ 
 			seg first = $:
 			ifTrue: [ 
 				out << (self perform: (seg allButFirst asSymbol)) asString ]
 			ifFalse: [ 
 				out << seg ]	
+			]
 		]
 	]
 ]
