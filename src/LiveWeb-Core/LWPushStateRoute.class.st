@@ -34,8 +34,9 @@ LWPushStateRoute >> match: inputSegments [
 	match matchedRoute: self.
 	
   segments with: inputSegments do: [ :expected :received |
-		expected first = $: 
-		ifTrue: [ 
+	  | param |
+	  param := expected isEmpty ifTrue: false  ifFalse: [ expected first = $: ]. 
+		param ifTrue: [ 
 			match perform: (expected allButFirst,':') asSymbol with: received ]
 		ifFalse: [ 
 			expected ~= received ifTrue: [ ^ nil ] ]

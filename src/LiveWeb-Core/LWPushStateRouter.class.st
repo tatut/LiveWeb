@@ -33,7 +33,9 @@ LWPushStateRouter >> initialize [
 LWPushStateRouter >> match: aZnUri [
 	"Parse state from route. Answer with the parsed state."
 	| segments |
-	segments := aZnUri segments.
+	segments := aZnUri segments 
+	  ifNil: {''} 
+	  ifNotNil: [ :segs | segs select: [:s | s size > 0 ]].
 	routes do: [ :r |
 		| match |
 		match := r match: segments.
