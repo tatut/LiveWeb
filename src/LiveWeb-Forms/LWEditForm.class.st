@@ -94,6 +94,11 @@ LWEditForm >> field: aFieldName configure: aConfigurationBlock [
 	(self field: aFieldName) configure: aConfigurationBlock
 ]
 
+{ #category : #'as yet unclassified' }
+LWEditForm >> fieldDefinitions [ 
+  ^ entityClass lwEditFormFieldDefinitions
+]
+
 { #category : #accessing }
 LWEditForm >> fieldRenderBlock: aRenderBlock [
 	"Set the block that overrides default field rendering wrapper.
@@ -117,12 +122,12 @@ LWEditForm >> isDependent [
 
 { #category : #'component lifecycle' }
 LWEditForm >> mount [
-	"Create edit components for all children in ReStore definition."
+	"Create edit components for all children in entity class definition."
 	
 	"If form is dependent, try to read the object now (it's okay if it doesn't exist)"
 	self isDependent ifTrue: [ entity := self form read: accessor ].
 	
-	childComponents := entityClass lwEditFormFieldDefinitions
+	childComponents := self fieldDefinitions 
 		reject: [ :d | exclude includes: d key ]
 		thenCollect: [ :d | 
 		| c |
