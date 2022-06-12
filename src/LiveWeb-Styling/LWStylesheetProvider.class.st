@@ -38,6 +38,28 @@ LWStylesheetProvider class >> clearProviders [
 	providers := Dictionary new.
 ]
 
+{ #category : #'as yet unclassified' }
+LWStylesheetProvider class >> developmentMode [
+  "Automatically clear providers when a method of LWStylsheetProvider 
+  class changes."
+  SystemAnnouncer uniqueInstance 
+    when: MethodAnnouncement 
+    send: #methodAnnouncement: 
+    to: self
+
+]
+
+{ #category : #'as yet unclassified' }
+LWStylesheetProvider class >> methodAnnouncement: anAnnouncement [
+  anAnnouncement method classBinding value ifNotNil: [ :cls |
+		(cls allSuperclasses includes: self) ifTrue: [
+			Transcript show: 'Style method changed, clearing providers.'; cr.
+			self clearProviders.
+		]
+	].
+
+]
+
 { #category : #accessing }
 LWStylesheetProvider class >> provider: class [
 	"Get a singleton provider of the given class."
