@@ -15,7 +15,7 @@ Class {
 LWFormMessages >> capitalizedField: forAccessor [
 	"Separate numbers and words with spaces and capitalize first."
 	| words |
-	words := forAccessor splitCamelCase collectAll: [:w | w regex: '([^\d]*)|(\d+)' matchesCollect: #yourself].
+	words := forAccessor splitCamelCase collect: [:w | (w matchesRegex: '([^\d]*)|(\d+)') ifTrue: w ifFalse: false].
 	^ String streamContents: [:out |
 		out << words first capitalized.
 		words allButFirstDo: [:w | out << Character space; << w asLowercase ] ]
