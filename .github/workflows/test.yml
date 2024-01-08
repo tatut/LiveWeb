@@ -5,6 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Prepare java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@12.2
+        with:
+          cli: 1.10.1.693              # Clojure CLI based on tools.deps
+
       - uses: hpi-swa/setup-smalltalkCI@v1
         id: smalltalkci
         with:
