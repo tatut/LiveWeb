@@ -44,6 +44,13 @@ LWSingleContainer >> containerElement: anObject [
 	containerElement := anObject
 ]
 
+{ #category : #initialization }
+LWSingleContainer >> initialize [ 
+   super initialize.
+	containerElement := #span.
+	containerAttributes := Array empty.
+]
+
 { #category : #rendering }
 LWSingleContainer >> renderOn: h [
 	child
