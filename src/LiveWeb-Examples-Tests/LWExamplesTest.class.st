@@ -7,6 +7,19 @@ Class {
 	#category : #'LiveWeb-Examples-Tests'
 }
 
+{ #category : #running }
+LWExamplesTest >> setUp [
+	super setUp.
+
+	LWExamples start.
+]
+
+{ #category : #running }
+LWExamplesTest >> tearDown [ 
+   LWExamples stop
+
+]
+
 { #category : #tests }
 LWExamplesTest >> testUsingPlaywright [ 
    "Note: this should be run in GitHub Actions CI only"
@@ -15,6 +28,6 @@ LWExamplesTest >> testUsingPlaywright [
 	file := FileLocator root / 'home' / 'runner' / 'work' / 'LiveWeb' / 'LiveWeb' / 'playwright' / 'test.done'.
 	Transcript show: 'File: ', file asString; cr.
 	[ file exists ] whileFalse: [ (Delay forSeconds: 1) wait ].
-	self assert: file contents lines last equals: '0 failures, 0 errors.' 
+	self assert: file contents lines last equals: '0 failures, 0 errors.'.
 	
 ]
