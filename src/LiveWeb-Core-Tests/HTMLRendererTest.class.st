@@ -23,7 +23,7 @@ HTMLRendererTest >> testAttributes [
 		
 	"or a dictionary"
 	self assert: (self html: [:h |
-		h div: (Dictionary newFromAssociations: { #class -> 'foo' }) with: 'content'
+		h div: ({ #class -> 'foo' } asDictionary) with: 'content'
 		])
 		equals: '<div class="foo">content</div>'
 ]
