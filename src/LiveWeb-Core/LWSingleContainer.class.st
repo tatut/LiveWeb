@@ -8,7 +8,9 @@ Class {
 	#name : #LWSingleContainer,
 	#superclass : #LWComponent,
 	#instVars : [
-		'child'
+		'child',
+		'containerElement',
+		'containerAttributes'
 	],
 	#category : #'LiveWeb-Core'
 }
@@ -30,10 +32,23 @@ LWSingleContainer >> children [
 			]
 ]
 
+{ #category : #accessing }
+LWSingleContainer >> containerAttributes: anObject [
+
+	containerAttributes := anObject
+]
+
+{ #category : #accessing }
+LWSingleContainer >> containerElement: anObject [
+
+	containerElement := anObject
+]
+
 { #category : #rendering }
 LWSingleContainer >> renderOn: h [
 	child
 	 ifNil: [ h script: { #type -> 'liveweb/placeholder' } with: '' ]
 	 ifNotNil: [ 
-		h span: [ child render: h ] ]
+		h render: containerElement attrs: containerAttributes with: [ child render: h ] 
+	 ]
 ]
