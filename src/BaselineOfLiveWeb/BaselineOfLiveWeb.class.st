@@ -7,9 +7,9 @@ Class {
 { #category : #baselines }
 BaselineOfLiveWeb >> baseline: spec [
 	<baseline>
-	spec for: #common do: [ 
+	spec for: #common do: [
 		self reStore: spec.
-		spec 
+		spec
 		package: 'Zinc-WebSocket-Core' with: [ spec repository: 'github://svenvc/zinc' ];
  		package: 'LiveWeb-Core' with: [ spec requires: #('Zinc-WebSocket-Core') ];
 		package: 'LiveWeb-Styling' with: [ spec requires: #('LiveWeb-Core') ];
@@ -21,8 +21,9 @@ BaselineOfLiveWeb >> baseline: spec [
 		group: 'default' with: #(core tests);
 		group: 'core' with: #('LiveWeb-Core' 'LiveWeb-Styling');
 		group: 'tests' with: #('LiveWeb-Core-Tests' 'LiveWeb-Styling-Tests');
-		group: 'examples' with: #('core' 'LiveWeb-Examples')
-		
+		group: 'examples' with: #('core' 'LiveWeb-Examples');
+                group: 'fulltests' with: #(core tests 'LiveWeb-Examples' 'LiveWeb-Examples-Tests')
+
 	]
 ]
 
@@ -31,7 +32,7 @@ BaselineOfLiveWeb >> reStore: spec [
 	spec
 		baseline: 'ReStore'
 		with: [
-			spec  
+			spec
 				repository: 'github://rko281/ReStoreForPharo';
 				loads: 'Examples'
 		]
