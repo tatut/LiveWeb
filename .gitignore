@@ -1,0 +1,3 @@
+playwright/.clj-kondo
+playwright/.cpcache
+playwright/.*
