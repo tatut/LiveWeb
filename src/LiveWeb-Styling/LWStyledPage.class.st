@@ -8,7 +8,7 @@ Class {
 	#category : #'LiveWeb-Styling'
 }
 
-{ #category : #'instance creation' }
+{ #category : #'API - accessing' }
 LWStyledPage >> head: _args [
 	| ssp |
 	ssp := ctx at: #stylesheetProvider.

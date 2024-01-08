@@ -78,6 +78,12 @@ LWStylesheetProvider >> addStyleAddedListener: listener [
 	
 ]
 
+{ #category : #requirements }
+LWStylesheetProvider >> empty [ 
+ "Empty style, placeholder when you want a method for customization but it has not styling by default."
+ ^ 'class' -> ''
+]
+
 { #category : #'as yet unclassified' }
 LWStylesheetProvider >> generateClassName: namePrefix with: arguments [
 	^ arguments isEmpty 
