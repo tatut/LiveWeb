@@ -10,7 +10,7 @@ Class {
 { #category : #running }
 LWExamplesTest >> setUp [
 	super setUp.
-
+	self timeLimit: (Duration seconds: 30).
 	LWExamples start.
 ]
 
