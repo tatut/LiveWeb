@@ -11,8 +11,8 @@ Class {
 LWExamplesTest >> testUsingPlaywright [ 
    "Note: this should be run in GitHub Actions CI only"
 	| file | 
-	LibC system: '/home/runner/work/LiveWeb/LiveWeb/playwright/run.sh'.
-	file := FileLocator home / 'work' / 'LiveWeb' / 'LiveWeb' / 'playwright' / 'test.done'.
+	LibC system: '/home/runner/work/LiveWeb/LiveWeb/playwright/run.sh &'.
+	file := FileLocator root / 'home' / 'runner' / 'work' / 'LiveWeb' / 'LiveWeb' / 'playwright' / 'test.done'.
 	Transcript show: 'File: ', file asString; cr.
 	[ file exists ] whileFalse: [ (Delay forSeconds: 1) wait ].
 	self assert: file contents lines last equals: '0 failures, 0 errors.' 
