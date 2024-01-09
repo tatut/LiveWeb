@@ -7,17 +7,17 @@ Class {
 	#category : #'LiveWeb-Examples-Tests'
 }
 
-{ #category : #running }
-LWExamplesTest >> setUp [
-	super setUp.
-	self timeLimit: (Duration minutes: 1).
-	LWExamples start.
+{ #category : #initialization }
+LWExamplesTest >> initialize [ 
+  LWExamples start.
+	
 ]
 
 { #category : #running }
-LWExamplesTest >> tearDown [ 
-   LWExamples stop
-
+LWExamplesTest >> setUp [
+	super setUp.
+	self timeLimit: (Duration minutes: 2).
+	
 ]
 
 { #category : #tests }
