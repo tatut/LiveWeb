@@ -9,6 +9,7 @@ Class {
 
 { #category : #initialization }
 LWExamplesTest >> initialize [ 
+  super initialize.
   LWExamples start.
 	
 ]
