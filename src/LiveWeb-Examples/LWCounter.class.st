@@ -22,7 +22,7 @@ LWCounter >> initialize [
 
 { #category : #rendering }
 LWCounter >> renderOn: h [
-	h div: [ 
+	h div: { #class->'counterComponent' } with: [ 
 		h button: { #class -> 'inc'. #onclick -> [ self counter: counter + 1 ] } with: '+'.
 		h div: { #class -> 'counter' } with: counter.
 		h button: { #class -> 'dec'. #onclick -> [ self counter: counter - 1 ] } with: '-'
