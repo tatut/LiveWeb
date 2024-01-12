@@ -30,7 +30,7 @@ LWExampleMain >> initialize [
 LWExampleMain >> renderOn: h [
 	h div: [ 
 		menu render: h.
-		h div: { #class -> 'example' } with: [ 
+		h div: { #class -> 'example box' } with: [ 
 			example render: h 
 		]
 	]

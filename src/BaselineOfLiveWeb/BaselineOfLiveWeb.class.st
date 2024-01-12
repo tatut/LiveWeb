@@ -15,7 +15,8 @@ BaselineOfLiveWeb >> baseline: spec [
 		package: 'LiveWeb-Styling' with: [ spec requires: #('LiveWeb-Core') ];
 		package: 'LiveWeb-Core-Tests' with: [ spec requires: #('LiveWeb-Core') ];
 		package: 'LiveWeb-Styling-Tests' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ];
-		package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling' 'LiveWeb-Forms' 'LiveWeb-ReStore') ];
+		package: 'LiveWeb-Bulma' with: [ spec requires: #('LiveWeb-Core') ];
+		package: 'LiveWeb-Examples' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling' 'LiveWeb-Forms' 'LiveWeb-Bulma' 'LiveWeb-ReStore') ];
 		package: 'Pows-Core' with: [ spec repository: 'github://tatut/pharo-Pows' ];
       package: 'LiveWeb-Examples-Tests' with: [ spec requires: #('LiveWeb-Examples' 'Pows-Core') ];
 		package: 'LiveWeb-Forms' with: [ spec requires: #('LiveWeb-Core' 'LiveWeb-Styling') ];

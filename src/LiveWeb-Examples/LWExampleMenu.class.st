@@ -1,6 +1,6 @@
 Class {
 	#name : #LWExampleMenu,
-	#superclass : #LWStyledComponent,
+	#superclass : #LWBulmaComponent,
 	#instVars : [
 		'active'
 	],
@@ -14,26 +14,22 @@ LWExampleMenu >> active: activeItem [
 ]
 
 { #category : #'as yet unclassified' }
-LWExampleMenu >> menu: h link: exampleName titled: titleText [
-  | activeItem |
-  activeItem := active = exampleName.
-	h div: { self style menuLink: activeItem } with: [ 
-		| location |
-		location := '/examples/',exampleName.
-		h a: { #href -> location. #onclick -> (ctx goJS: location with: { #example -> exampleName } asDictionary) } with: titleText
-  ]
+LWExampleMenu >> onactivate: exampleName [ 
+  | location |
+  location := '/examples/',exampleName.
+  ctx go: location with: { #example -> exampleName } asDictionary
 ]
 
-{ #category : #rendering }
-LWExampleMenu >> renderOn: h [
-	h div: { self style menu } with: [
-			self
-			menu: h link: 'counter' titled: 'Counter';
-			menu: h link: 'multi-counter' titled: 'Multi counter';
-			menu: h link: 'wordle' titled: 'Wordle';
- 			menu: h link: 'clock' titled: 'Clock';
- 			menu: h link: 'typeahead' titled: 'Typeahead';
-			menu: h link: 'tree' titled: 'Tree'
-			
-		].
+{ #category : #accessing }
+LWExampleMenu >> view: build [ 
+	^build tabs 
+		onchange: [ :tab | self onactivate: tab ];
+		active: active;
+		tab: 'Counter' -> 'counter';
+		tab: 'Multi counter' -> 'multi-counter';
+		tab: 'Wordle' -> 'wordle';
+		tab: 'Clock' -> 'clock';
+		tab: 'Typeahead' -> 'typeahead';
+		tab: 'Tree' -> 'tree'
+		
 ]

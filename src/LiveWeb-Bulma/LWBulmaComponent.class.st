@@ -15,9 +15,20 @@ Class {
 	#category : #'LiveWeb-Bulma'
 }
 
+{ #category : #accessing }
+LWBulmaComponent >> children [ 
+	^ Generator on: [ :g | root ifNotNil: [ g yield: root ] ].
+
+]
+
 { #category : #'component lifecycle' }
 LWBulmaComponent >> mount [ 
   root := self view: LWBulma new
+]
+
+{ #category : #rendering }
+LWBulmaComponent >> renderOn: h [
+  root render: h
 ]
 
 { #category : #accessing }

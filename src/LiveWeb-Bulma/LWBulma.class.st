@@ -29,3 +29,8 @@ LWBulma >> columns [
 	"Create a Bulma columns container"
 	 ^ LWBulmaColumns new
 ]
+
+{ #category : #accessing }
+LWBulma >> tabs [ 
+ ^ LWBulmaTabs new
+]

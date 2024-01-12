@@ -1,6 +1,6 @@
 Class {
 	#name : #LWExamplePage,
-	#superclass : #LWStyledPage,
+	#superclass : #LWBulmaPage,
 	#category : #'LiveWeb-Examples'
 }
 
@@ -15,6 +15,18 @@ LWExamplePage >> body: _args [
 	^ LWExampleMain new state: self initialPushState
 ]
 
+{ #category : #'API - accessing' }
+LWExamplePage >> head: _args [
+	| ssp |
+	ssp := ctx at: #stylesheetProvider.
+	ssp ifNil: [ ^ nil ].
+	^ LWFragmentContainer new 
+	   add: (super head: _args);
+		add: (LWStylesheetComponent on: ssp);
+		yourself
+	
+]
+
 { #category : #'push state handling' }
 LWExamplePage >> initialPushState [ 
 	| example |
@@ -27,6 +39,7 @@ LWExamplePage >> initialPushState [
 LWExamplePage >> prepareCtx [ 
 	super prepareCtx .
 	ctx at: #formMessages put: LWFormMessages new. 
+	ctx at: #stylesheetProvider put: self stylesheetProvider 
 ]
 
 { #category : #'push state handling' }

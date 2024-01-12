@@ -3,7 +3,7 @@ I am an example of a component that has a container of subcomponents, that can b
 "
 Class {
 	#name : #LWMultiCounter,
-	#superclass : #LWComponent,
+	#superclass : #LWBulmaComponent,
 	#instVars : [
 		'counters'
 	],
@@ -40,7 +40,7 @@ LWMultiCounter >> renderOn: h [
 		h div: { #style -> 'display: flex; flex: row;' }
 		 with: [ 
 				h input: { #id -> #initialCount }.
-				h button: { #onclick -> (Js call: [ :c | counters add: (LWCounter new counter: c asNumber) ] with: (Js inputValue: 'initialCount')) }
+				h button: { #class -> 'button is-outlined'. #onclick -> (Js call: [ :c | counters add: (LWCounter new counter: c asNumber) ] with: (Js inputValue: 'initialCount')) }
 				    with: 'Add new counter'		
 				 ]]
 ]

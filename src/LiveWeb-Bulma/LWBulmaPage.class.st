@@ -14,6 +14,9 @@ LWBulmaPage >> bulmaURL [
 ]
 
 { #category : #'API - accessing' }
-LWBulmaPage >> head: h [
- h link: { #rel -> 'stylesheet'. #href -> self bulmaURL }
+LWBulmaPage >> head: _args [
+ ^ LWBlockContainer new block: [ :h | 
+	  h link: { #rel -> 'stylesheet'. #href -> self bulmaURL };
+	    meta: { #name -> 'viewport'. #content -> 'width=device-width, initial-scale=1' }
+	  ]
 ]

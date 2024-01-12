@@ -173,7 +173,7 @@ LWExampleStyles >> wordleGuessCharacter: inPosition word: inWord [
 LWExampleStyles >> wordleKey: s [
   s display: 'block'; 
     width: 7vw; height: 7vh; margin: 2px; 
-    fontSize: 5.5vh; fontFamily:'sans-serif'; textTransform: 'capitalize'; textAlign:'center';
+    fontSize: 4.5vh; fontFamily:'sans-serif'; textTransform: 'capitalize'; textAlign:'center';
     border: 'solid 0.5vw black'; borderRadius: 2vw;
     cursor: 'pointer'
 
