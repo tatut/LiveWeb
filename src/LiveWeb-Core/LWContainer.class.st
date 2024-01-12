@@ -76,8 +76,13 @@ LWContainer >> initialize [
 ]
 
 { #category : #rendering }
-LWContainer >> renderOn: h [ 
-	h render: containerElement 
-	  attrs: containerAttributes 
-	  with: [ self children do: [:c | c render: h ] ].
+LWContainer >> renderChildren: h [
+	self children do: [ :c | c render: h ]
+]
+
+{ #category : #rendering }
+LWContainer >> renderOn: h [
+	h render: containerElement
+	  attrs: containerAttributes
+	  with: [ self renderChildren: h ]
 ]
