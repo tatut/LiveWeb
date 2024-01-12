@@ -48,3 +48,13 @@ LWExamplesTest >> testMultiCounter [
 	locate: #( 'div.counter' 'nth=5' ) assert: [ :d | d hasText: '42' ]
 	
 ]
+
+{ #category : #tests }
+LWExamplesTest >> testTypeahead [ 
+  self
+  go: 'http://localhost:8080/examples/typeahead';
+  locate: 'input#selected' do: [ :i | i pressSequentially: 'LWExamples' ];
+  locate: 'div.formCandidates div' assert: [ :c | c hasCount: 3 ];
+  locate: '[data-typeahead-id=LWExamples]' do: #click;
+  locate: 'div.selectedClass' assert: [ :s | s hasText: 'You have chosen: LWExamples' ]
+]

@@ -2,7 +2,8 @@ Class {
 	#name : #LWTypeAheadExample,
 	#superclass : #LWComponent,
 	#instVars : [
-		'typeahead'
+		'typeahead',
+		'selected'
 	],
 	#category : #'LiveWeb-Examples'
 }
@@ -25,8 +26,8 @@ LWTypeAheadExample >> initialize [
            span: [ h templateSlot: [ :c | c subclasses size asString ] ]]];
      fetchCandidates: [ :v | 
 			Smalltalk globals allClasses select: [ :c | (v,'*') match: c name ]];
-		accessor: #first;
-		form: (LWEditForm new entity: OrderedCollection new) .
+		accessor: #selected;
+		form: (LWEditForm new entity: self) .
 
 ]
 
@@ -34,6 +35,22 @@ LWTypeAheadExample >> initialize [
 LWTypeAheadExample >> renderOn: h [
 	h div: [ 
 		h h3: 'Type ahead from Smalltalk image classes:'.
-		typeahead render: h ]
+		typeahead render: h.
+		selected ifNotNil: [ 
+			h div: { #class -> 'selectedClass' } with: 'You have chosen: ', selected asString
+		]	
+	 ]
 
+]
+
+{ #category : #accessing }
+LWTypeAheadExample >> selected [
+
+	^ selected
+]
+
+{ #category : #accessing }
+LWTypeAheadExample >> selected: anObject [
+	selected := anObject.
+	self changed
 ]
