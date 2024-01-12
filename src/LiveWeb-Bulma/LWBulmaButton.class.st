@@ -1,3 +1,10 @@
+"
+I am a Bulma button component. 
+
+I have content and an onclick action. 
+My look can be tweaked with the styling methods like #bePrimary and #beOutlined.
+
+"
 Class {
 	#name : #LWBulmaButton,
 	#superclass : #LWContainer,
@@ -8,102 +15,112 @@ Class {
 	#category : #'LiveWeb-Bulma'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beBlack [
- style := 'is-black'
+ self style: 'is-black'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beDanger [
- style := 'is-danger'
+ self style: 'is-danger'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beDark [
- style := 'is-dark'
+ self style: 'is-dark'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beFullWidth [ 
  self style: 'is-fullwidth'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beGhost [
- style := 'is-ghost'
+ self style: 'is-ghost'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beInfo [
- style := 'is-info'
+ self style: 'is-info'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beInverted [ 
  self style: 'is-inverted'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beLarge [
  self style: 'is-large'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beLight [
  self style: 'is-light'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beLink [
  self style: 'is-link'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
+LWBulmaButton >> beLoading [
+	self style: 'is-loading'
+]
+
+{ #category : #styling }
 LWBulmaButton >> beMedium [
  self style: 'is-medium'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beNormal [
  self style: 'is-normal'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beOutlined [ 
  self style: 'is-outlined'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> bePrimary [
  self style: 'is-primary'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beRounded [ 
  self style: 'is-rounded'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beSmall [ 
  self style: 'is-small'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
+LWBulmaButton >> beStatic [ 
+ self style: 'is-static'
+]
+
+{ #category : #styling }
 LWBulmaButton >> beSuccess [
  self style: 'is-success'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beText [
  self style: 'is-text'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beWarning [
  self style: 'is-warning'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #styling }
 LWBulmaButton >> beWhite [ 
  self style: 'is-white'
 ]
@@ -130,4 +147,11 @@ LWBulmaButton >> renderOn: h [
 { #category : #accessing }
 LWBulmaButton >> style: styleToAdd [
  styles add: styleToAdd
+]
+
+{ #category : #styling }
+LWBulmaButton >> toggleLoading [
+	(styles includes: 'is-loading')
+	  ifTrue: [ styles remove: 'is-loading' ]
+	  ifFalse: [ styles add: 'is-loading' ]
 ]
