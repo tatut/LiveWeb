@@ -81,7 +81,7 @@ LWTreeNode >> renderOn: h [
 		h span: ' ', label.
  ].
  expanded ifTrue: [ 
-	h ul: [ 
+	h ul: { #class -> 'pl-5' } with: [ 
 	  children do: [ :c | h li: [ c render: h ] ]
 	]
  ]
