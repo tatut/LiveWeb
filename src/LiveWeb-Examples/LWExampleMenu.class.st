@@ -27,10 +27,13 @@ LWExampleMenu >> menu: h link: exampleName titled: titleText [
 { #category : #rendering }
 LWExampleMenu >> renderOn: h [
 	h div: { self style menu } with: [
-			self menu: h link: 'counter' titled: 'Counter'.
-			self menu: h link: 'multi-counter' titled: 'Multi counter'.
-			self menu: h link: 'wordle' titled: 'Wordle'.
-			self menu: h link: 'clock' titled: 'Clock'.
-			self menu: h link: 'typeahead' titled: 'Typeahead'.
+			self
+			menu: h link: 'counter' titled: 'Counter';
+			menu: h link: 'multi-counter' titled: 'Multi counter';
+			menu: h link: 'wordle' titled: 'Wordle';
+ 			menu: h link: 'clock' titled: 'Clock';
+ 			menu: h link: 'typeahead' titled: 'Typeahead';
+			menu: h link: 'tree' titled: 'Tree'
+			
 		].
 ]
