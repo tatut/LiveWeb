@@ -189,7 +189,7 @@ LWStylesheetProvider >> style: aStyleBlock named: namePrefix [
 	| cls |	
 	cls := self generateClassName: namePrefix with: thisContext sender arguments.
 	self registerClass: cls with: aStyleBlock.
-	^ #class->cls
+	^ LWClassAttribute new cls: cls
 ]
 
 { #category : #accessing }
@@ -198,7 +198,7 @@ LWStylesheetProvider >> style: aStyleBlock namedGlobally: globalName [
 	| cls |
 	cls := globalName asString.
 	self registerClass: cls with: aStyleBlock.
-	^ #class->cls
+	^ LWClassAttribute new cls: cls
 ]
 
 { #category : #writing }
