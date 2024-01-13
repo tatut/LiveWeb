@@ -7,6 +7,21 @@ Class {
 	#category : #'LiveWeb-Examples-Tests'
 }
 
+{ #category : #asserting }
+LWExamplesTest >> assertDisabled: keys [
+	self locate: '[data-disabled=true]' assert: [ :d | d hasCount: keys size ].
+	keys do: [ :k |
+		self locate: ('[data-key=''{1}'']' format: { k }) assert: [ :kl | kl hasAttribute: 'data-disabled' valued: 'true' ]
+	]
+]
+
+{ #category : #asserting }
+LWExamplesTest >> assertGuess: nth inPosition: inPos inWord: inWord [
+ self
+ locate: { '.wordleGuess'. 'nth={1}' format: { nth }. '.in-position' } assert: [ :p | p hasCount: inPos ];
+ locate: { '.wordleGuess'. 'nth={1}' format: { nth }. '.in-word' } assert: [ :p | p hasCount: inWord ]
+]
+
 { #category : #initialization }
 LWExamplesTest >> initialize [ 
   super initialize.
@@ -72,7 +87,27 @@ LWExamplesTest >> testTypeahead [
   locate: 'div.selectedClass' assert: [ :s | s hasText: 'You have chosen: LWExamples' ]
 ]
 
+{ #category : #tests }
+LWExamplesTest >> testWordle [
+ self 
+ go: 'http://localhost:8080/examples/wordle?cheat=horse';
+ locate: '.wordleGuess' assert: [ :g | g hasCount: 6 ];
+ wordleGuess: 'aisle';
+ assertGuess: 0 inPosition: 1 inWord: 2;
+ assertDisabled: 'ail';
+ wordleGuess: 'house';
+ assertGuess: 1 inPosition: 4 inWord: 4;
+ assertDisabled: 'ailu';
+ wordleGuess: 'horse';
+ locate: '.centeredDialog' assert: [ :d | d hasText: 'YOU WIN!' ]
+]
+
 { #category : #'as yet unclassified' }
 LWExamplesTest >> treeNode: aLabel [ 
  ^ '[data-treenode-label=''{1}'']' format: { aLabel }
+]
+
+{ #category : #'as yet unclassified' }
+LWExamplesTest >> wordleGuess: word [
+ self locate: 'body' do: [ :b | b pressSequentially: word; press: 'Enter' ]
 ]

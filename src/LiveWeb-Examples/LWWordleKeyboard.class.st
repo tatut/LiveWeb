@@ -52,7 +52,9 @@ LWWordleKeyboard >> renderOn: h [
 				last := (row at: 1) = $z.
 				last ifTrue: [ h button: { #onclick -> [ game enter ] } with: 'ENTER' ].
 				row do: [ :ch |
-					h div: { self style wordleKeyboardKey: (disabledKeys includes: ch). #onclick -> [ game type: ch ] }
+					h div: { self style wordleKeyboardKey: (disabledKeys includes: ch). #onclick -> [ game type: ch ].
+					         'data-disabled' -> (disabledKeys includes: ch).
+						      'data-key' -> ch }
 						with: ch 
 				].
 				last ifTrue: [ h button: { #onclick -> [ game backspace ] } with: 'BACKSPACE' ]

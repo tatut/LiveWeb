@@ -25,6 +25,13 @@ Class {
 }
 
 { #category : #'code-critics' }
+ManifestLiveWebExamples class >> ruleStringConcatenationRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#LWWordleGuess #renderOn: #false)) #'2024-01-13T07:45:27.645546+02:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestLiveWebExamples class >> ruleUtilityMethodsRuleV1FalsePositive [
 	^ #(#(#(#RGPackageDefinition #(#'LiveWeb-Examples')) #'2021-12-28T18:13:31.52601+02:00') )
 ]
