@@ -7,6 +7,12 @@ Class {
 	#category : #'LiveWeb-Examples'
 }
 
+{ #category : #examples }
+LWCounter class >> example42 [ 
+ <lwExample: 'Counter with value 42'>
+ ^ self new counter: 42.
+]
+
 { #category : #accessing }
 LWCounter >> counter: newCounterValue [
 	counter := newCounterValue.

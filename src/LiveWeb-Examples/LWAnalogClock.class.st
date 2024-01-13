@@ -7,15 +7,26 @@ The process is terminated when the component is unmounted.
 Class {
 	#name : #LWAnalogClock,
 	#superclass : #LWClock,
+	#instVars : [
+		'size'
+	],
 	#category : #'LiveWeb-Examples'
 }
 
 { #category : #'as yet unclassified' }
-LWAnalogClock >> exampleThreeOClock [ 
- <lwExample: 'Show a clock at 7 minutes and 20 seconds past 3 o''clock'>
- ^ self class new 
-    time: (Time hour: 15 minute: 7 second: 20)
- 
+LWAnalogClock class >> exampleThreeOClock [
+
+	<lwExample:
+	'Show a clock at 7 minutes and 20 seconds past 3 o''clock'>
+	| aLWAnalogClock |
+	aLWAnalogClock := self new.
+	^ aLWAnalogClock class new time: (Time hour: 15 minute: 7 second: 20)
+]
+
+{ #category : #initialization }
+LWAnalogClock >> initialize [ 
+  super initialize.
+  size := 256.
 ]
 
 { #category : #rendering }
@@ -23,10 +34,10 @@ LWAnalogClock >> renderOn: h [
 	| transform |
 	transform := [ :deg | #transform->('rotate(<1p> 50 50)' expandMacrosWith: deg asFloat) ].
 	h div: [  
-		h svg: { #viewBox -> '0 0 100 100' }
+		h svg: { #width -> size. #height -> size. #viewBox -> '0 0 100 100' }
 		with: [  
-			h circle: { #cx -> 50 . #cy -> 50 . #r -> 45. self style clockFace  }.
-			h g: { self style clockHands } with: [ 
+			h circle: { #cx -> 50 . #cy -> 50 . #r -> 45. #style -> 'stroke-width: 2px; stroke: wheat;'  }.
+			h g: { #style -> 'stroke-width: 1px; fill: #333; stroke: #555'} with: [ 
 				h rect: { #x->48.5. #y->22.5. 
 							 #width->5. #height->30. 
 							 #rx->2.5. #ry->2.55.
@@ -37,4 +48,9 @@ LWAnalogClock >> renderOn: h [
 							 transform value: (time seconds * 6) }.
 			]].
 	] 
+]
+
+{ #category : #accessing }
+LWAnalogClock >> size: newSize [ 
+ size := newSize.
 ]

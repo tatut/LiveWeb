@@ -59,7 +59,6 @@ LWDevListing >> label [
 
 { #category : #rendering }
 LWDevListing >> renderListingOn: h [
-Transcript show: 'rendering listing ', self class name asString;cr.
 	h tbody: [
 	  self items do: [ :p |
 		  h tr: [

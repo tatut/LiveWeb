@@ -93,7 +93,7 @@ LWPageConnection >> rerenderComponent: component [
 	  self send: { { component id asString . 'R' . self renderToString: component } } ]
 	on: Exception  
 	do: [ :e |
-		LWLogEvent error: 'Error in component: ', component printString.
+		LWLogEvent error: ('Error in component: {1}, message: {2}' format: { component printString. e messageText }).
 		ws close. ].
 ]
 

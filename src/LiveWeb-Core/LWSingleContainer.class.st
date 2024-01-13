@@ -20,7 +20,7 @@ LWSingleContainer >> child: aChildComponent [
 	"Set the new child component"
 	child ifNotNil: [ ctx cleanup: child unmount: true ].
 	child := aChildComponent.
-	ctx ifNotNil: [ child inContext: ctx ].
+	ctx ifNotNil: [ child ifNotNil: [ child inContext: ctx ] ].
 	self changed.
 
 ]
@@ -42,6 +42,11 @@ LWSingleContainer >> containerAttributes: anObject [
 LWSingleContainer >> containerElement: anObject [
 
 	containerElement := anObject
+]
+
+{ #category : #testing }
+LWSingleContainer >> hasChild [ 
+ ^ child isNil
 ]
 
 { #category : #initialization }

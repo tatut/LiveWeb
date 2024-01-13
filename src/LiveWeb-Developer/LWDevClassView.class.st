@@ -20,8 +20,11 @@ LWDevClassView >> cls: aClass [
 LWDevClassView >> createMethodListing [ 
   | methodList |
   methodList :=  LWContainer new containerElement: #div; containerAttributes: { #class -> 'is-flex is-flex-direction-column' }.
+  (cls class methods sorted: [:a :b | a name < b name]) do: [ :m |
+	  methodList add: (LWDevMethodView new beClass cls: cls; method: m)
+  ].
   (cls methods sorted: [ :a :b | a name < b name ]) do: [ :m |
-	 methodList add: (LWDevMethodView new method: m)
+	 methodList add: (LWDevMethodView new beInstance cls: cls; method: m)
 	].
   ^ methodList
 
