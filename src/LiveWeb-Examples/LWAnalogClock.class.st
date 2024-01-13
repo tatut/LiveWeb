@@ -10,6 +10,14 @@ Class {
 	#category : #'LiveWeb-Examples'
 }
 
+{ #category : #'as yet unclassified' }
+LWAnalogClock >> exampleThreeOClock [ 
+ <lwExample: 'Show a clock at 7 minutes and 20 seconds past 3 o''clock'>
+ ^ self class new 
+    time: (Time hour: 15 minute: 7 second: 20)
+ 
+]
+
 { #category : #rendering }
 LWAnalogClock >> renderOn: h [
 	| transform |

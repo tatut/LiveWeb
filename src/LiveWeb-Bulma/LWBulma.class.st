@@ -30,7 +30,24 @@ LWBulma >> columns [
 	 ^ LWBulmaColumns new
 ]
 
+{ #category : #'as yet unclassified' }
+LWBulma >> flexCol [
+  ^ LWContainer new containerElement: #div; containerAttributes: { #class -> 'is-flex is-flex-direction-column' }; yourself 
+
+]
+
+{ #category : #'as yet unclassified' }
+LWBulma >> flexRow [
+  ^ LWContainer new containerElement: #div; containerAttributes: { #class -> 'is-flex is-flex-direction-row' }; yourself 
+
+]
+
 { #category : #accessing }
 LWBulma >> tabs [ 
  ^ LWBulmaTabs new
+]
+
+{ #category : #'as yet unclassified' }
+LWBulma >> tile [ 
+ ^ LWBulmaTile new
 ]
