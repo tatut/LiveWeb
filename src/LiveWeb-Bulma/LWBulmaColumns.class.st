@@ -57,8 +57,8 @@ LWBulmaColumns >> initialize [
 
 { #category : #'as yet unclassified' }
 LWBulmaColumns >> oneFifth: aComponent [
-	"Add component that takes four fifths of space"
-  columns add: aComponent -> 'is-two-fifth'
+	"Add component that takes one fifth of space"
+  columns add: aComponent -> 'is-one-fifth'
 ]
 
 { #category : #'as yet unclassified' }
