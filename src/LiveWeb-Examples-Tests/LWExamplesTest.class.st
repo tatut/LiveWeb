@@ -50,6 +50,19 @@ LWExamplesTest >> testMultiCounter [
 ]
 
 { #category : #tests }
+LWExamplesTest >> testTree [
+ self
+ go: 'http://localhost:8080/examples/tree';
+ locate: '.treenode' assert: [ :t | t hasCount: 1 ];
+ locate: { (self treeNode: 'Smalltalk packages'). 'button'} do: #click;
+ locate: (self treeNode: 'LiveWeb') assert: [ :t | t hasCount: 1 ];
+ locate: { self treeNode: 'LiveWeb'. 'button'} do: #click;
+ locate: { self treeNode: 'LiveWeb'. self treeNode: 'Examples' } assert: [ :t | t hasCount: 1 ];
+ locate: { self treeNode: 'LiveWeb'. self treeNode: 'Examples'. 'button' } do: #click;
+ locate: { (self treeNode: 'LWTreeNode'). 'div'. 'span'} assert: [ :t | t hasText: '[Class]' ]
+]
+
+{ #category : #tests }
 LWExamplesTest >> testTypeahead [ 
   self
   go: 'http://localhost:8080/examples/typeahead';
@@ -57,4 +70,9 @@ LWExamplesTest >> testTypeahead [
   locate: 'div.formCandidates div' assert: [ :c | c hasCount: 3 ];
   locate: '[data-typeahead-id=LWExamples]' do: #click;
   locate: 'div.selectedClass' assert: [ :s | s hasText: 'You have chosen: LWExamples' ]
+]
+
+{ #category : #'as yet unclassified' }
+LWExamplesTest >> treeNode: aLabel [ 
+ ^ '[data-treenode-label=''{1}'']' format: { aLabel }
 ]

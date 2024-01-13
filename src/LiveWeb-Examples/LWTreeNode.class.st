@@ -70,15 +70,15 @@ LWTreeNode >> leaf: childLabel [
 
 { #category : #rendering }
 LWTreeNode >> renderOn: h [
- h div: { #class -> 'treenode' } with: [ 
+ h div: { #class -> 'treenode'. 'data-treenode-label' -> label } with: [ 
 	h div: { #style -> 'display: flex;' } with: [ 
 		leaf 
 			ifTrue: [ h span: '[Class]' ] 
 			ifFalse: [ 
-				h button: { #onclick -> [ self toggleExpanded ] } with: [ 
+				h button: { #class -> 'expand'. #onclick -> [ self toggleExpanded ] } with: [ 
  	   				expanded ifTrue: [ h renderContent: '-' ] ifFalse: [ h renderContent: '+' ]]
 			].
-		h span: ' ', label.
+		h renderContent: ' ', label.
  ].
  expanded ifTrue: [ 
 	h ul: { #class -> 'pl-5' } with: [ 
