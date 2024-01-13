@@ -11,6 +11,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+LWTreeNode class >> exampleSimpleTree [
+ <lwExample: 'Simple tree few items'>
+ ^ self new beBranch 
+     label: 'root';
+     child: 'My Documents' do: [ :d | d beBranch; child: 'Music'; child: 'Pictures' ];
+     child: 'Secret stuff (don''t look)' do: [ :d | d beBranch; child: 'Passwords & codes' do: [ :p | p beBranch; child: 'Nuclear launch codes' ] ];
+     yourself
+]
+
+{ #category : #'as yet unclassified' }
 LWTreeNode >> beBranch [ 
   leaf := false
 
@@ -36,6 +46,12 @@ LWTreeNode >> child: childLabel [
 			children add: newChild.
 			newChild 
 	 ]
+]
+
+{ #category : #'as yet unclassified' }
+LWTreeNode >> child: aLabel do: block [ 
+  block value: (self child: aLabel).
+  ^ self
 ]
 
 { #category : #accessing }
