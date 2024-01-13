@@ -39,11 +39,14 @@ LWWordleGuess >> renderOn: h [
 	h div: { self style wordleGuess }
 		with: [ 
 			1 to: 5 do: [ :i | 
-				| ch inWord inPosition |
+				| ch inWord inPosition cls |
 				ch := guess at: i ifAbsent: Character space.
 				inWord := committed & (word includes: ch).
 				inPosition := committed & ((word at: i) = ch).
-				h div: { self style wordleGuessCharacter: inPosition word: inWord }
+				cls := String streamContents: [ :c |
+					inPosition ifTrue: [ c nextPutAll: 'in-position ' ].
+					inWord ifTrue: [ c nextPutAll: 'in-word' ] ]. 
+				h div: { (self style wordleGuessCharacter: inPosition word: inWord), (#class -> cls) }
 				  with: ch.
 			]
 	 	]

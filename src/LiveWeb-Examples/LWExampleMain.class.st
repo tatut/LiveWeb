@@ -38,7 +38,7 @@ LWExampleMain >> renderOn: h [
 
 { #category : #accessing }
 LWExampleMain >> state: aDictionary [
-	| ex |
+	| ex component |
 	state := aDictionary.
 	
 	"check push state for example to use"
@@ -50,8 +50,12 @@ LWExampleMain >> state: aDictionary [
 		'crud' -> LWCrudExample.
 		'typeahead' -> LWTypeAheadExample.
 		'tree' -> LWTreeExample } asDictionary at: (state at: 'example').
-
-	"set the child component to a new instance and change active item for menu"
-	example child: ex new.
+	"create new instance of example component"
+	component := ex new.
+	ex = LWWordle ifTrue: [ component configure: (state at: 'query') ]. "for tests"
+	
+	"set the child component to the example instance"
+	example child: component.
+	
 	menu active: (state at: 'example').
 ]

@@ -32,7 +32,7 @@ LWExamplePage >> initialPushState [
 	| example |
 	example := args uri segments last.
 	LWLogEvent debug: 'we got the args: ', example asString.
-	^ { #example -> example } asDictionary 
+	^ { #example -> example. #query -> args uri query } asDictionary 
 ]
 
 { #category : #'as yet unclassified' }

@@ -42,6 +42,13 @@ LWWordle >> children [
 		]
 ]
 
+{ #category : #configuring }
+LWWordle >> configure: queryParams [
+	(queryParams includesKey: 'cheat') ifFalse: [ ^ self ].
+	word := queryParams at: 'cheat'.
+	guesses do: [ :g | g word: word ]
+]
+
 { #category : #'instance creation' }
 LWWordle >> enter [ 
 	"enter the current guess"
