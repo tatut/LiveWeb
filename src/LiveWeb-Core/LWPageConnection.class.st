@@ -104,7 +104,7 @@ LWPageConnection >> run: aWebSocket [
 	
 	[ ws runWith: [ :msg |
 		LWLogEvent debug: '<- ', msg printString.
-		self callback: msg ]] 
+		self tryCallback: msg ]] 
 	on: ConnectionClosed 
 	do: [ 
 		LWLogEvent debug: 'Page disconnected, id: ', page id asString.
@@ -117,4 +117,13 @@ LWPageConnection >> run: aWebSocket [
 { #category : #instructions }
 LWPageConnection >> send: patches [
 	ws sendMessage: (STONJSON toString: patches)
+]
+
+{ #category : #'as yet unclassified' }
+LWPageConnection >> tryCallback: message [ 
+ [ self callback: message ]
+ on: Error 
+ do: [ :ex |
+	LWLogEvent error: 'Error in callback processing: ', ex asString
+ ]
 ]

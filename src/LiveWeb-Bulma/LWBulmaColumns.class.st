@@ -70,7 +70,7 @@ LWBulmaColumns >> oneQuarter: aComponent [
 LWBulmaColumns >> renderOn: h [
  h div: { #class -> 'columns' } with: [ 
 	columns do: [ :c |
-		h div: { #class -> ('column {1}' format: {c value}) } with: [ c key render ]
+		h div: { #class -> ('column {1}' format: {c value}) } with: [ c key render: h ]
 	]
  ]
 ]
