@@ -63,7 +63,8 @@ LWDevListing >> renderListingOn: h [
 	  self items do: [ :p |
 		  h tr: [
 			  h
-				  td: { (#onclick -> ('{1}(''{2}'')' format: {
+				  td: { #class -> 'is-clickable'. 
+				        (#onclick -> ('{1}(''{2}'')' format: {
 							    self selectJSName.
 							    (self itemName: p) })) }
 				  with: p name ] ] ]
@@ -82,7 +83,7 @@ LWDevListing >> renderOn: h [
 					   call: [ :f | self filter: f ]
 					   with: (Js inputValue: self filterJSName)) debounceMs: 300)) }.
 		h div: { #style->'height:90vh;overflow-y:scroll;' } with: [ 
-		h table: { #class -> 'table is-striped' } with: [
+		h table: { #style -> 'font-size: 0.75em;'. #class -> 'table is-striped' } with: [
 			h thead: [ h tr: [ h td: self label ] ].
 			listing render: h] ]
 	]

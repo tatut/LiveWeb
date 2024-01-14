@@ -13,6 +13,15 @@ Class {
 	#category : #'LiveWeb-Core'
 }
 
+{ #category : #adding }
+LWFragmentContainer >> add: aComponentOrString [ 
+ aComponentOrString isString 
+	ifTrue: [ super add: 
+		(LWBlockContainer new block: [:h | h raw: aComponentOrString ]) ]
+	ifFalse: [ super add: aComponentOrString ].
+^ aComponentOrString 
+]
+
 { #category : #initialization }
 LWFragmentContainer >> initialize [ 
  super initialize.

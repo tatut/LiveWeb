@@ -19,7 +19,9 @@ LWDevClassView >> cls: aClass [
 { #category : #'as yet unclassified' }
 LWDevClassView >> createMethodListing [ 
   | methodList |
-  methodList :=  LWContainer new containerElement: #div; containerAttributes: { #class -> 'is-flex is-flex-direction-column' }.
+  methodList :=  LWContainer new 
+	containerElement: #div; 
+	containerAttributes: { #class -> 'is-flex is-flex-direction-column' }.
   (cls class methods sorted: [:a :b | a name < b name]) do: [ :m |
 	  methodList add: (LWDevMethodView new beClass cls: cls; method: m)
   ].
@@ -42,17 +44,20 @@ LWDevClassView >> initialize [
 
 { #category : #rendering }
 LWDevClassView >> renderClassDefOn: h [
+  h div: { #style -> 'height: 20vh' } with: [  
   cls ifNil: [ h div: 'No class selected'. ^ nil ].
   h div: [ 
 		h strong: 'Name: '; span: cls name
-		
+		"FIXME: show slots, superclass and so on"
   ] 
+]
 	
 ]
 
 { #category : #accessing }
 LWDevClassView >> view: view [
  ^view flexCol 
+	attr: #style -> 'height: 95vh; overflow-y: scroll';
 	add: (view box add: classDef; yourself);
 	add: (view box add: methods; yourself);
 	yourself

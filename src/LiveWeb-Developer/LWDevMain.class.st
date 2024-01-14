@@ -10,8 +10,8 @@ LWDevMain >> view: view [
  classView := LWDevClassView new.
  pkgView := LWDevPackageView new classView: classView.
  ^ view columns 
-	oneFifth: (LWDevPackageMenu new pkgView: pkgView);
-	oneFifth: pkgView;
-	threeFifths: (view box add: classView; yourself).
+	add: (LWDevPackageMenu new pkgView: pkgView) sized: 2;
+	add: pkgView sized: 2;
+	auto: classView; yourself.
   
 ]

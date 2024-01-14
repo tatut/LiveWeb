@@ -36,6 +36,27 @@ LWContainer >> add: aChildComponent beforeIndex: idx [
 	^ aChildComponent 
 ]
 
+{ #category : #'as yet unclassified' }
+LWContainer >> attr: nameValueAssociation [ 
+	"Set the container attribute. Overwriting it if it exists."
+	self attr: nameValueAssociation key update: [ nameValueAssociation value ]
+]
+
+{ #category : #'as yet unclassified' }
+LWContainer >> attr: name update: block [ 
+	"Update attribute container attribute. Creating it if it does not exist.
+	 If the attribute doesn't exist, the update block is called with an empty string.
+	 If the component is mounted, the new attribute will be patched in."
+	| attrs newVal |
+	attrs := containerAttributes asOrderedCollection.
+	attrs detect: [ :a | a name = name ] 
+	 ifFound: [ :assoc | newVal := (block cull: assoc value). assoc value: newVal ]
+	 ifNone: [ newVal := (block cull: ''). attrs add: name -> newVal ].
+	containerAttributes := attrs.
+	self send: '@' with: { name -> newVal } asDictionary.
+
+]
+
 { #category : #accessing }
 LWContainer >> childCount [
 	^ children ifNil: 0 ifNotNil: [ children size ]

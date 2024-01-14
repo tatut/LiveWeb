@@ -47,8 +47,8 @@ LWDevMethodView >> renderOn: h [
 	h div: { #class -> 'is-box' } with: [ 
 		h div: [ h strong: method selector asString;
 			        span: { #class -> 'tag is-light' } with: (instance ifTrue: [ 'instance' ] ifFalse: ['class'])
-			 ]; 
-		  textarea: { #rows -> '7'. #cols -> '80' } with: method sourceCode.
+			 ];
+		  pre: { #onclick -> 'initEditor()'. #class -> 'codeEditor bulma-reset-mixin'. #style -> 'max-height: 40vh;' } with: [  h renderContent: method sourceCode ].
  		(method pragmaAt: #lwExample:) ifNotNil: [ :exp |
 			| desc |
 			desc := exp argumentAt: 1.

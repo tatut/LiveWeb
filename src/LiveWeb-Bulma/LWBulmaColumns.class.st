@@ -17,7 +17,7 @@ Class {
 { #category : #'as yet unclassified' }
 LWBulmaColumns >> add: aComponent sized: size [
  "Add any Bulma size definition, like 12 column "
- columns add: aComponent -> 'is-', size asString
+ columns add: aComponent -> ('is-', size asString)
 ]
 
 { #category : #'as yet unclassified' }
