@@ -26,7 +26,7 @@ LWAnalogClock class >> exampleThreeOClock [
 { #category : #initialization }
 LWAnalogClock >> initialize [ 
   super initialize.
-  size := 256.
+  size := 500.
 ]
 
 { #category : #rendering }

@@ -22,12 +22,20 @@ LWDevPage >> head: _args [
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ace.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ext-language_tools.min.js"></script>
        <script>function initEditor() {
-        let e = window.event.target; 
+        const e = window.event.target; 
+        if(e.tagName != "PRE" || e.classList.contains("ace_editor")) return;
+console.log(e.classList);
+        const side = e.dataset.side;
         e.style.height = Math.max(100, e.clientHeight) + "px";
         let editor = ace.edit(e);
         editor.session.setMode("ace/mode/text");
         editor.setTheme("ace/theme/tomorrow");
         editor.resize();
+ 		  editor.commands.addCommand({
+			name: "save", 
+			bindKey: {win: "Ctrl-s", mac: "Command-s"}, 
+			exec: function(editor) { window.event.preventDefault(); lwCompileMethod(side, editor.session.getValue()); },
+         readOnly: true});
        }
        </script>';
 		yourself

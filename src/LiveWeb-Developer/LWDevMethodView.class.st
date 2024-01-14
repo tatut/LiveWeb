@@ -48,12 +48,14 @@ LWDevMethodView >> renderOn: h [
 		h div: [ h strong: method selector asString;
 			        span: { #class -> 'tag is-light' } with: (instance ifTrue: [ 'instance' ] ifFalse: ['class'])
 			 ];
-		  pre: { #onclick -> 'initEditor()'. #class -> 'codeEditor bulma-reset-mixin'. #style -> 'max-height: 40vh;' } with: [  h renderContent: method sourceCode ].
+		  pre: { 'data-side' -> (instance ifTrue: ['instance'] ifFalse:['class']). 
+		          #onclick -> 'initEditor()'.
+				    #class -> 'codeEditor bulma-reset-mixin'. #style -> 'max-height: 40vh;' } with: [  h renderContent: method sourceCode ].
  		(method pragmaAt: #lwExample:) ifNotNil: [ :exp |
 			| desc |
 			desc := exp argumentAt: 1.
 			h div: [ 
-			 h input: { #name -> method name. #type -> 'checkbox'. #onchange -> [ self toggleExample ] };
+			 h input: { #id -> method name. #type -> 'checkbox'. #onchange -> [ self toggleExample ] };
 			   label: { #for -> method name } with: (' Show example: {1}' format: { desc })
 			]
 		].
