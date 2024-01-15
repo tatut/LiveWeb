@@ -18,7 +18,8 @@ LWDevPage >> body: _args [
 LWDevPage >> head: _args [
 	^ LWFragmentContainer new 
 		add: (super head: _args);
-		add: '
+		add: (String streamContents: [ :out | 
+			out << '
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ace.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ext-language_tools.min.js"></script>
        <script>function initEditor() {
@@ -36,8 +37,9 @@ console.log(e.classList);
 			bindKey: {win: "Ctrl-s", mac: "Command-s"}, 
 			exec: function(editor) { window.event.preventDefault(); lwCompileMethod(side, editor.session.getValue()); },
          readOnly: true});
-       }
-       </script>';
+       }';
+		 << (LWDevHTMLCompiler htmlToJsonScript);
+		<< '</script>' ]);
 		yourself
 		
 ]
