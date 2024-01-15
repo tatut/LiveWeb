@@ -23,6 +23,22 @@ LWAnalogClock class >> exampleThreeOClock [
 	^ aLWAnalogClock class new time: (Time hour: 15 minute: 7 second: 20)
 ]
 
+{ #category : #'as yet unclassified' }
+LWAnalogClock class >> exampleWithSlider [ 
+  <lwExample: 'Slider to set any time of day'>
+	| aLWAnalogClock range |
+		aLWAnalogClock := self new time: (Time seconds: 0).
+		range := LWBlockContainer new block: [ :h | 
+			h div: {#width->'100%'} with: [
+				 h input: { #value -> 0. #width -> '100%'.
+ 								#type -> 'range'. #min -> 0. #max -> 43200.
+								#style -> 'display: inline-block; width: 100%;'.
+ 								#oninput -> (Js call: [ :v | aLWAnalogClock time: (Time seconds: v asInteger) ] with: 'window.event.target.value')}] ].
+	^ LWContainer new
+		add: aLWAnalogClock;
+		add: range; yourself
+]
+
 { #category : #initialization }
 LWAnalogClock >> initialize [ 
   super initialize.
