@@ -81,8 +81,8 @@ LWDevHTMLCompiler >> compileAttr: attrCode [
 	"If there are multiple blocks, emit code to append string."
 	^ String streamContents: [ :out |
 			out << '(String streamContents: [ :__lw_attr | '.
-			blocks do: [ :b | out << '__lw_attr << '; << b; << '. ' ]
-			out << ')'.
+			blocks do: [ :b | out << '__lw_attr << ('; << b; << '). ' ].
+			out << '])'.
 	 ].		 
 ]
 
@@ -96,10 +96,11 @@ LWDevHTMLCompiler >> compileContent: content [
 
 { #category : #compiling }
 LWDevHTMLCompiler >> compileRepeat: lwRepeat tag: tagName attrs: tagAttrs with: content [ 
- | binding |
+ | binding idx |
  "split on first space to separate binding name and code for collection, eg. x items "
  binding := lwRepeat splitOnFirst: $ .
- code << '('; << binding second; << ') do: [ :'; << binding first; << ' | ';cr.
+ idx := tagAttrs removeKey: 'lw:index' ifAbsent: [ '__lw_index' ].
+ code << '('; << binding second; << ') doWithIndex: [ :'; << binding first; << ' :'; << idx; << ' | ';cr.
  self compileTag: tagName attrs: tagAttrs with: content.
  code << '].'; cr.
  ^ true
