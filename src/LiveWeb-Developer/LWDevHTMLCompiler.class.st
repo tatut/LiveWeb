@@ -87,33 +87,56 @@ LWDevHTMLCompiler >> compileAttr: attrCode [
 ]
 
 { #category : #compiling }
-LWDevHTMLCompiler >> compileSpecial: tagName attrs: tagAttrs with: content [ 
- | lwRepeat binding |
- lwRepeat := tagAttrs at: 'lw:repeat' ifAbsent: [ ^ false ].
+LWDevHTMLCompiler >> compileContent: content [
+	(self splitMustache: content) do: [ :block |
+		code << rendererName; <<' renderContent: ('; << block; << ').'; cr.
+	].
+
+]
+
+{ #category : #compiling }
+LWDevHTMLCompiler >> compileRepeat: lwRepeat tag: tagName attrs: tagAttrs with: content [ 
+ | binding |
  "split on first space to separate binding name and code for collection, eg. x items "
  binding := lwRepeat splitOnFirst: $ .
  code << '('; << binding second; << ') do: [ :'; << binding first; << ' | ';cr.
- tagAttrs removeKey: 'lw:repeat'.
  self compileTag: tagName attrs: tagAttrs with: content.
  code << '].'; cr.
  ^ true
 ]
 
 { #category : #compiling }
-LWDevHTMLCompiler >> compileTag: parsedTag [ 
- | tagName tagAttrs content |
- "If parsed tag is a string (content) output it via"
- parsedTag isString ifTrue: [ 
-	code << rendererName; << ' renderContent: '''; << parsedTag; << '''.'; cr.
-	^ nil  ].
+LWDevHTMLCompiler >> compileSpecial: tagName attrs: tagAttrs with: content [ 
+ #( ('lw:repeat' compileRepeat:tag:attrs:with:) ) do: [ :attrAndMethod |
+	tagAttrs 
+	  at: attrAndMethod first 
+	  ifPresent: [ :val | ^ self perform: attrAndMethod second 
+		   with: val
+			with: tagName
+			with: (tagAttrs removeKey: attrAndMethod first; yourself)
+		   with: content ]
+	].
+ "No special attribute was compiled, return false"	
+ ^ false 
 
- "extract tag, attrs and content"
- tagName := parsedTag first asString asLowercase.
- tagAttrs := parsedTag second.
- content := parsedTag allButFirst: 2.
+]
 
- "handle any special tags, like lw:repeat to repeat the element for each binding"
- self compileTag: tagName attrs: tagAttrs with: content.
+{ #category : #compiling }
+LWDevHTMLCompiler >> compileTag: parsedTag [
+
+	| tagName tagAttrs content |
+	"If parsed tag is a string (content) output it via"
+	parsedTag isString ifTrue: [
+		self compileContent: parsedTag.
+		^ nil ].
+
+	"extract tag, attrs and content"
+	tagName := parsedTag first asString asLowercase.
+	tagAttrs := parsedTag second.
+	content := parsedTag allButFirst: 2.
+
+	"handle any special tags, like lw:repeat to repeat the element for each binding"
+	self compileTag: tagName attrs: tagAttrs with: content
 ]
 
 { #category : #compiling }
@@ -127,8 +150,7 @@ LWDevHTMLCompiler >> compileTag: tagName attrs: tagAttrs with: content [
 		<< ': { '.
 	tagAttrs associationsDo: [ :attr |
 		code
-			<< attr key;
-			<< ' -> ';
+			<< ''''; << attr key; << ''' -> ';
 			<< (self compileAttr: attr value);
 			<< ' ' ].
 	code << ' } with: [ '.
