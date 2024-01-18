@@ -32,8 +32,10 @@ SlFormField >> default [
 ]
 
 { #category : #'as yet unclassified' }
-SlFormField >> default: aComponent [
-		self slotAt: 'default' put: aComponent.
+SlFormField >> default: aComponentOrString [
+		self slotAt: 'default' put: (aComponentOrString isString 
+		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
+		  ifFalse: [ aComponentOrString ]).
 ]
 
 { #category : #'as yet unclassified' }

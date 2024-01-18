@@ -56,8 +56,10 @@ SlElement class >> compileSlots [
 	(self elementSlots, #(default)) do: [ :s |
 		self compile: ('{1}
 		^ self slotAt: ''{1}''.' format: { s }).
-		self compile: ('{1}: aComponent
-		self slotAt: ''{1}'' put: aComponent.' format: { s })
+		self compile: ('{1}: aComponentOrString
+		self slotAt: ''{1}'' put: (aComponentOrString isString 
+		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
+		  ifFalse: [ aComponentOrString ]).' format: { s })
 	].
 ]
 
@@ -90,8 +92,10 @@ SlElement >> default [
 ]
 
 { #category : #'as yet unclassified' }
-SlElement >> default: aComponent [
-		self slotAt: 'default' put: aComponent.
+SlElement >> default: aComponentOrString [
+		self slotAt: 'default' put: (aComponentOrString isString 
+		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
+		  ifFalse: [ aComponentOrString ]).
 ]
 
 { #category : #'as yet unclassified' }
@@ -103,4 +107,9 @@ SlElement >> slot [
 SlElement >> slot: newValue [
 		self assert: newValue isString.
 		self attrAt: 'slot' update: [ newValue ]
+]
+
+{ #category : #accessing }
+SlElement >> tag [ 
+ ^ '-' join: (self class name splitCamelCase collect: #asLowercase)
 ]

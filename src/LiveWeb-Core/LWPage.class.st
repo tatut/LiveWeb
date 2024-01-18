@@ -112,7 +112,7 @@ LWPage class >> clientConnectionScript [
             // has static class + dynamic part
             elt.className = elt.getAttribute("data-rl-class") + " " + value;
         } else {
-            if(value === null) {
+            if(value === null || value === false) {
                 elt.removeAttribute(attr);
             } else {
                 elt.setAttribute(attr,value);

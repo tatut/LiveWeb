@@ -28,6 +28,12 @@ LWComponent class >> initialize [
 	Js := LWScriptHelper 
 ]
 
+{ #category : #converting }
+LWComponent >> asLWComponent [ 
+ ^ self 
+
+]
+
 { #category : #updating }
 LWComponent >> changed [ 
 	"Signal that this component state has changed and should be rerendered.

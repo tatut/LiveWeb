@@ -30,6 +30,12 @@ LWSwitch >> children [
 	^ ReadStream on: { child }
 ]
 
+{ #category : #initialization }
+LWSwitch >> initialize [ 
+  super initialize.
+  on := false.
+]
+
 { #category : #testing }
 LWSwitch >> isOn [ 
 	"is the switch on?"

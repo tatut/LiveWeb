@@ -30,8 +30,10 @@ SlCheckbox >> default [
 ]
 
 { #category : #'as yet unclassified' }
-SlCheckbox >> default: aComponent [
-		self slotAt: 'default' put: aComponent.
+SlCheckbox >> default: aComponentOrString [
+		self slotAt: 'default' put: (aComponentOrString isString 
+		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
+		  ifFalse: [ aComponentOrString ]).
 ]
 
 { #category : #'as yet unclassified' }
@@ -69,10 +71,7 @@ SlCheckbox >> indeterminate: newValue [
 
 { #category : #accessing }
 SlCheckbox >> label: textOrComponent [
-  self default: (textOrComponent isString 
-	ifTrue: [ LWBlockContainer new block: [ :h | h span: textOrComponent ] ]
-	ifFalse: [ textOrComponent ])
-
+  self add: textOrComponent asLWComponent 
 ]
 
 { #category : #'as yet unclassified' }
