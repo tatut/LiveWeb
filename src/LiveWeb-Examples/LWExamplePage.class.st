@@ -1,6 +1,6 @@
 Class {
 	#name : #LWExamplePage,
-	#superclass : #LWBulmaPage,
+	#superclass : #SlLWPage,
 	#category : #'LiveWeb-Examples'
 }
 

@@ -15,7 +15,7 @@ LWTreeNode class >> exampleSimpleTree [
  <lwExample: 'Simple tree few items'>
  ^ self new beBranch 
      label: 'root';
-     child: 'My Documents' do: [ :d | d beBranch; child: 'Music'; child: 'Pictures' ];
+     child: 'My Documents and settings' do: [ :d | d beBranch; child: 'Music'; child: 'Pictures' ];
      child: 'Secret stuff (don''t look)' do: [ :d | d beBranch; child: 'Passwords & codes' do: [ :p | p beBranch; child: 'Nuclear launch codes' ] ];
      yourself
 ]

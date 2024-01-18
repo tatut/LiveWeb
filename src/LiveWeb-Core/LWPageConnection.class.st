@@ -49,6 +49,15 @@ LWPageConnection >> callback: idAndArgs [
 ]
 
 { #category : #'as yet unclassified' }
+LWPageConnection >> component: parentComponent appendChild: newChildComponent [
+	| html p |
+	html := self renderToString: newChildComponent.
+	p := parentComponent id asString.
+	self send: { { p . 'A' . html } }.
+
+]
+
+{ #category : #'as yet unclassified' }
 LWPageConnection >> component: parentComponent childAdded: newChildComponent at: index [
 	| html p cc |
 	html := self renderToString: newChildComponent.
@@ -74,6 +83,13 @@ LWPageConnection >> page [
 LWPageConnection >> page: anObject [
 
 	page := anObject
+]
+
+{ #category : #'as yet unclassified' }
+LWPageConnection >> removeComponent: componentToRemove [
+   "Send patch to remove a component from DOM."
+	self send: { { componentToRemove . 'D' } }.
+
 ]
 
 { #category : #rendering }

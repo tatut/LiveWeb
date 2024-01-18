@@ -9,14 +9,22 @@ Class {
 	#instVars : [
 		'state',
 		'example',
-		'menu'
+		'menu',
+		'check',
+		'alert'
 	],
 	#category : #'LiveWeb-Examples'
 }
 
 { #category : #accessing }
 LWExampleMain >> children [ 
-	^ ReadStream on: { example . menu }
+	^ ReadStream on: { example . menu. check. alert }
+]
+
+{ #category : #rendering }
+LWExampleMain >> htmlRendererClass [  
+ ^ SlHTMLRenderer 
+
 ]
 
 { #category : #initialization }
@@ -24,12 +32,17 @@ LWExampleMain >> initialize [
 	super initialize.
 	example := LWSingleContainer new.
 	menu := LWExampleMenu new.
+	check := SlCheckbox new
+		label: 'is shoelace cool?';
+		on: SlCheckboxEvent  do: [ :e | Transcript show: 'it is cool? ', e printString; cr ].
+	alert := LWSwitch new off; child: (SlAlert new default: 'yes it is very cool').
 ]
 
 { #category : #rendering }
 LWExampleMain >> renderOn: h [
 	h div: [ 
 		menu render: h.
+		check render: h.
 		h div: { #class -> 'example box' } with: [ 
 			example render: h 
 		]

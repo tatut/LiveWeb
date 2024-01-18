@@ -280,9 +280,14 @@ LWPage >> args [
 ]
 
 { #category : #'API - accessing' }
-LWPage >> body: args [
+LWPage >> body: _args [
 	"create the body LWComponent"
 	SubclassResponsibility new signal: 'LWPage subclasses must implement body'
+]
+
+{ #category : #'as yet unclassified' }
+LWPage >> bodyAttributes: _args [ 
+ ^ #()
 ]
 
 { #category : #accessing }
@@ -396,7 +401,7 @@ LWPage >> writeOn: stream [
 			head inContext: ctx.
 			head render: h ].
 	   ].
-     h body: [ 
+     h body: (self bodyAttributes: args) with: [ 
 		body inContext: ctx.
 		body render: h.
 		

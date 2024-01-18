@@ -55,7 +55,7 @@ LWComponent >> children [
 	^ ReadStream on: #().
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'component lifecycle' }
 LWComponent >> childrenRecursive [
 	"answer with a read stream of all recursive children for this component.
 	This includes all descendants.
@@ -69,7 +69,7 @@ LWComponent >> childrenRecursive [
 	  ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'component lifecycle' }
 LWComponent >> doMount [ 
 	"internal, never override. Do initialization in mount."
 	self mount.
@@ -77,12 +77,17 @@ LWComponent >> doMount [
 	self inContext: ctx. "reset context for any child components added in mount"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'component lifecycle' }
 LWComponent >> doUnmount [ 
 	"internal, never override. Do cleanup in unmount."
 	self unmount.
 	mounted := false
 	
+]
+
+{ #category : #rendering }
+LWComponent >> htmlRendererClass [ 
+ ^ HTMLRenderer 
 ]
 
 { #category : #accessing }
@@ -98,7 +103,7 @@ LWComponent >> ifConnected: aBlock [
 	ctx connection ifNotNil: [ aBlock value: ctx connection ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'component lifecycle' }
 LWComponent >> ifMounted: aBlock [
 	"Run block if this component is mounted."
 	mounted ifTrue: [ aBlock value ]
@@ -139,12 +144,23 @@ LWComponent >> nonNilChildren: childArray [
 ]
 
 { #category : #rendering }
+LWComponent >> prepareRenderer: renderer [ 
+	| cls |
+	cls := self htmlRendererClass.
+	cls = renderer class ifTrue: [ ^ renderer ].
+	^ cls new 
+		out: renderer out;
+		ctx: renderer ctx
+		
+]
+
+{ #category : #rendering }
 LWComponent >> render: aHtmlRenderer [
 	"Render this component using HTML renderer. 
 	Mounts the component before first render.
 	Sets the component id to renderer before calling renderOn:. 
 	Subclasses should not override this, but instead override renderOn: to produce HTML."
-	| oldId oldComp |
+	| oldId oldComp renderer |
 	
 	ctx ifNil: [ Error new signal: 'Cant''t render without context! ', self printString ].
 
@@ -156,8 +172,9 @@ LWComponent >> render: aHtmlRenderer [
 	restore them if parent renders something after rendering children"
 	oldId := aHtmlRenderer id.
 	oldComp := aHtmlRenderer component.
-	aHtmlRenderer id: id; component: self.
-	self renderOn: aHtmlRenderer.
+	renderer := self prepareRenderer: aHtmlRenderer.
+	renderer id: id; component: self.
+	self renderOn: renderer.
 	aHtmlRenderer id: oldId; component: oldComp.
 ]
 
@@ -167,7 +184,7 @@ LWComponent >> renderOn: aHtmlRenderer [
 	SubclassResponsibility new signal: 'LWComponent subclasses must implement renderOn: '
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #updating }
 LWComponent >> send: patchType with: content [
 	"Send patch for this component if component is mounted."
 	self ifMounted: [ ctx send: patchType for: id with: content ]

@@ -60,11 +60,27 @@ LWContext >> cleanupComponent: c unmount: shouldUnmount [
 ]
 
 { #category : #'component lifecycle' }
+LWContext >> component: parentComponent appendChild: newChildComponent [
+	"notify that a child was appended to an already mounted parent component.
+	Will mount and render the child and send it to the client, adding it
+	as the last child of the parent."
+	connection component: parentComponent appendChild: newChildComponent.
+]
+
+{ #category : #'component lifecycle' }
 LWContext >> component: parentComponent childAdded: newChildComponent at: index [
 	"notify that a child was added to an already mounted parent component.
 	Will mount and render the child and send it to the client, adding it
 	to the page DOM at the right position."
 	connection component: parentComponent childAdded: newChildComponent at: index.
+]
+
+{ #category : #'component lifecycle' }
+LWContext >> component: parentComponent removeChild: childToRemove [
+	"notify that a child was removed from an already mounted parent component.
+	Will cleanup the component and send a patch to remove it from DOM."
+	self cleanup: childToRemove unmount: true.
+	connection component: parentComponent removeChild: childToRemove.
 ]
 
 { #category : #accessing }
@@ -195,6 +211,14 @@ LWContext >> registerComponent: anLWComponent [
 	components ifNil: [ components := Dictionary new. ].
 	components at: id put: anLWComponent.
 	^ id
+]
+
+{ #category : #'component lifecycle' }
+LWContext >> removeComponent: componentToRemove [
+	"notify that an already mounted component was removed.
+	Will cleanup the component and send a patch to remove it from DOM."
+	self cleanup: componentToRemove unmount: true.
+	connection removeComponent: componentToRemove.
 ]
 
 { #category : #'component lifecycle' }
