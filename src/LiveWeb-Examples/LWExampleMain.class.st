@@ -18,7 +18,7 @@ Class {
 
 { #category : #accessing }
 LWExampleMain >> children [ 
-	^ ReadStream on: { example . menu. check. alert }
+	^ ReadStream on: { example . menu }
 ]
 
 { #category : #rendering }
@@ -32,19 +32,12 @@ LWExampleMain >> initialize [
 	super initialize.
 	example := LWSingleContainer new.
 	menu := LWExampleMenu new.
-	alert := SlAlert new add: 'yes it is very cool'; yourself.
-	check := SlCheckbox new
-		label: 'is shoelace cool?';
-		on: SlCheckboxEvent  do: [ :e | alert open: e checked ]
-	
 ]
 
 { #category : #rendering }
 LWExampleMain >> renderOn: h [
 	h div: [ 
 		menu render: h.
-		check render: h.
-		alert render: h.
 		h div: { #class -> 'example box' } with: [ 
 			example render: h 
 		]
