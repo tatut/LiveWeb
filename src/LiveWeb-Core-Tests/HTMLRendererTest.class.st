@@ -97,7 +97,7 @@ HTMLRendererTest >> testOnlyAttrs [
 	self assert: (self html: [:h |
 		h div: { #id->'hello' }
 		])
-		equals: '<div id="hello"/>'
+		equals: '<div id="hello"></div>'
 ]
 
 { #category : #tests }
