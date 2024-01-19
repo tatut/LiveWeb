@@ -21,12 +21,6 @@ LWExampleMain >> children [
 	^ ReadStream on: { example . menu }
 ]
 
-{ #category : #rendering }
-LWExampleMain >> htmlRendererClass [  
- ^ SlHTMLRenderer 
-
-]
-
 { #category : #initialization }
 LWExampleMain >> initialize [
 	super initialize.
