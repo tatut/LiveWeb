@@ -25,18 +25,6 @@ SlCheckbox >> checked: newValue [
 ]
 
 { #category : #'as yet unclassified' }
-SlCheckbox >> default [
-		^ self slotAt: 'default'.
-]
-
-{ #category : #'as yet unclassified' }
-SlCheckbox >> default: aComponentOrString [
-		self slotAt: 'default' put: (aComponentOrString isString 
-		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
-		  ifFalse: [ aComponentOrString ]).
-]
-
-{ #category : #'as yet unclassified' }
 SlCheckbox >> defaultChecked [
 		^ self attrAt: 'defaultChecked'
 ]

@@ -27,18 +27,6 @@ SlFormField class >> elementProperties [
 ]
 
 { #category : #'as yet unclassified' }
-SlFormField >> default [
-		^ self slotAt: 'default'.
-]
-
-{ #category : #'as yet unclassified' }
-SlFormField >> default: aComponentOrString [
-		self slotAt: 'default' put: (aComponentOrString isString 
-		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
-		  ifFalse: [ aComponentOrString ]).
-]
-
-{ #category : #'as yet unclassified' }
 SlFormField >> disabled [
 		^ self attrAt: 'disabled'
 ]
@@ -47,16 +35,6 @@ SlFormField >> disabled [
 SlFormField >> disabled: newValue [
 		self assert: (newValue isKindOf: Boolean).
 		self attrAt: 'disabled' update: [ newValue ]
-]
-
-{ #category : #'as yet unclassified' }
-SlFormField >> form [
-		^ containerAttributes detect: [ :a | a name = 'form' ]
-]
-
-{ #category : #'as yet unclassified' }
-SlFormField >> form: newValue [
-		self attr: 'form' update: [ newValue ]
 ]
 
 { #category : #'as yet unclassified' }

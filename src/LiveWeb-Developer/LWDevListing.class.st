@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'filter',
 		'export',
-		'listing'
+		'listing',
+		'slot'
 	],
 	#category : #'LiveWeb-Developer'
 }
@@ -72,8 +73,7 @@ LWDevListing >> renderListingOn: h [
 
 { #category : #rendering }
 LWDevListing >> renderOn: h [
-
-	h div: { #style -> 'height: 95vh;' } with: [
+	h div: { #style -> 'display: inline-block; height: 95vh;'. #slot-> slot } with: [
 		export render: h.
 		h input: {
 				(#placeholder -> 'filter...').
@@ -97,4 +97,9 @@ LWDevListing >> select: value [
 { #category : #'as yet unclassified' }
 LWDevListing >> selectJSName [ 
  ^ 'select{1}' format: { ('' join: self class name splitCamelCase allButFirst) }
+]
+
+{ #category : #accessing }
+LWDevListing >> slot: slotName [ 
+ slot := slotName
 ]

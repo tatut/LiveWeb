@@ -1,6 +1,6 @@
 Class {
 	#name : #LWDevPage,
-	#superclass : #LWBulmaPage,
+	#superclass : #SlLWPage,
 	#category : #'LiveWeb-Developer'
 }
 
@@ -38,7 +38,14 @@ console.log(e.classList);
 			exec: function(editor) { window.event.preventDefault(); lwCompileMethod(side, editor.session.getValue()); },
          readOnly: true});
        }';
-		 << (LWDevHTMLCompiler htmlToJsonScript);
+		<< (LWDevHTMLCompiler htmlToJsonScript);
+		"Add shift+enter listener to open spotter"
+		<< 'window.addEventListener("keydown", e => { 
+           if(e.key=="Enter" && e.shiftKey) { 
+		     let spotter = document.querySelector(".spotter");
+		       spotter.setAttribute("open",true); 
+		    }
+		   });';
 		<< '</script>' ]);
 		yourself
 		

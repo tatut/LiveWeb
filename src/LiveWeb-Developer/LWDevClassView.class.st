@@ -1,14 +1,21 @@
 Class {
 	#name : #LWDevClassView,
-	#superclass : #LWBulmaComponent,
+	#superclass : #LWComponent,
 	#instVars : [
 		'classDef',
 		'methods',
 		'cls',
-		'export'
+		'export',
+		'slot'
 	],
 	#category : #'LiveWeb-Developer'
 }
+
+{ #category : #accessing }
+LWDevClassView >> children [ 
+ ^ ReadStream on: { export. classDef. methods  }
+
+]
 
 { #category : #accessing }
 LWDevClassView >> cls: aClass [
@@ -56,16 +63,34 @@ LWDevClassView >> initialize [
  methods := LWSingleContainer new.
 ]
 
+{ #category : #accessing }
+LWDevClassView >> render: h [
+ h div: {#slot->slot. #style-> 'display: inline-flex; flex-direction: column; height: 95vh; overflow-y: scroll'}
+   with: [  
+	  export render: h.
+	  classDef render: h.
+	  methods render: h
+	]
+]
+
 { #category : #rendering }
 LWDevClassView >> renderClassDefOn: h [
   h div: { #class -> 'section' } with: [  
-  cls ifNil: [ h div: 'No class selected'. ^ nil ].
-  h div: [ 
-		h strong: 'Name: '; span: cls name
-		"FIXME: show slots, superclass and so on"
-  ] 
-]
+  cls 
+	ifNil: [ h div: 'No class selected'. ]
+   ifNotNil: [
+	  h div: [ 
+		 h strong: 'Name: '; span: cls name
+		 "FIXME: show slots, superclass and so on"
+    ] 
+  ]
+ ]
 	
+]
+
+{ #category : #accessing }
+LWDevClassView >> slot: slotName [ 
+ slot := slotName
 ]
 
 { #category : #accessing }

@@ -32,18 +32,6 @@ SlAlert >> closable: newValue [
 ]
 
 { #category : #'as yet unclassified' }
-SlAlert >> default [
-		^ self slotAt: 'default'.
-]
-
-{ #category : #'as yet unclassified' }
-SlAlert >> default: aComponentOrString [
-		self slotAt: 'default' put: (aComponentOrString isString 
-		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
-		  ifFalse: [ aComponentOrString ]).
-]
-
-{ #category : #'as yet unclassified' }
 SlAlert >> duration [
 		^ self attrAt: 'duration'
 ]
@@ -61,9 +49,7 @@ SlAlert >> icon [
 
 { #category : #'as yet unclassified' }
 SlAlert >> icon: aComponentOrString [
-		self slotAt: 'icon' put: (aComponentOrString isString 
-		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
-		  ifFalse: [ aComponentOrString ]).
+		self slotAt: 'icon' put: (self asSlotComponent: aComponentOrString).
 ]
 
 { #category : #'as yet unclassified' }

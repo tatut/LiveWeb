@@ -34,6 +34,11 @@ LWCustomElement >> add: aComponent beforeIndex: idx [
 ]
 
 { #category : #accessing }
+LWCustomElement >> addClassName: aClassName [ 
+ ^self attrAt: 'class' update: [ :old | (' ' join: { old. aClassName })]
+]
+
+{ #category : #accessing }
 LWCustomElement >> attrAt: name [
 	^ attrs at: name
 ]
@@ -64,6 +69,11 @@ LWCustomElement >> children [
 			content do: [ :c | g yield: c ]
 		]
 	 ]
+]
+
+{ #category : #accessing }
+LWCustomElement >> className: aClassName [ 
+ ^self attrAt: 'class' update: [ aClassName ]
 ]
 
 { #category : #initialization }
@@ -97,7 +107,7 @@ LWCustomElement >> renderAttrs: h [
 							<< ' ';
 							<< name;
 							<< '="';
-							<< (h escapeAttributeValue: val asString);
+							<< (h escapeHtml: val asString);
 							<< '"' ] ] "skip boolean attributes that are false" ] ]
 ]
 

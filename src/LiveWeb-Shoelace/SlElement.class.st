@@ -16,9 +16,10 @@ SlElement class >> compileAccessors [
    jsOnlyProps := self elementProperties asSet.
  
 	props do: [ :p |
-		| pname ptype typeCheck |
-		pname := p first. 
+		| pname aname ptype typeCheck |
+		aname := p first. 
 		ptype := p second.
+		pname := self kebabToCamel: aname.
 		typeCheck := ''.
 		ptype isArray ifTrue: [ 
 			typeCheck := 'self assert: ( #( {1} ) includes: newValue).' format: { 
@@ -35,10 +36,10 @@ SlElement class >> compileAccessors [
 		  typeCheck := 'self assert: newValue isString.'
 		 ].
 		self compile: ('{1}
-		^ self attrAt: ''{1}''' format: { pname }).
+		^ self attrAt: ''{2}''' format: { pname. aname }).
 		self compile: ('{1}: newValue
 		{2}
-		self attrAt: ''{1}'' update: [ newValue ]' format: { pname. typeCheck }).
+		self attrAt: ''{3}'' update: [ newValue ]' format: { pname. typeCheck. aname }).
 		
 		
    ]
@@ -53,13 +54,13 @@ SlElement class >> compileAll [
 
 { #category : #compiling }
 SlElement class >> compileSlots [ 
-	(self elementSlots, #(default)) do: [ :s |
+	self elementSlots do: [ :s |
+		| sel |
+		sel := self kebabToCamel: s.
 		self compile: ('{1}
-		^ self slotAt: ''{1}''.' format: { s }).
+		^ self slotAt: ''{2}''.' format: {sel. s}).
 		self compile: ('{1}: aComponentOrString
-		self slotAt: ''{1}'' put: (aComponentOrString isString 
-		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
-		  ifFalse: [ aComponentOrString ]).' format: { s })
+		self slotAt: ''{2}'' put: (self asSlotComponent: aComponentOrString).' format: {sel. s})
 	].
 ]
 
@@ -87,15 +88,21 @@ SlElement class >> elementSlots [
 ]
 
 { #category : #'as yet unclassified' }
-SlElement >> default [
-		^ self slotAt: 'default'.
+SlElement class >> kebabToCamel: kebab [
+ | parts |
+ parts := kebab splitOn: $-.
+ ^String streamContents: [ :out | 
+	out << parts first.
+	parts allButFirst do: [ :p | out << p capitalized ]
+ ]
 ]
 
-{ #category : #'as yet unclassified' }
-SlElement >> default: aComponentOrString [
-		self slotAt: 'default' put: (aComponentOrString isString 
-		  ifTrue: [ LWBlockContainer new block: [ :h | h span: aComponentOrString ] ]
-		  ifFalse: [ aComponentOrString ]).
+{ #category : #converting }
+SlElement >> asSlotComponent: aComponent [ 
+ ^ (aComponent respondsTo: #slot:) 
+  ifTrue: [ aComponent ]
+  ifFalse: [ LWCustomElementSlot new child: (aComponent asLWComponent) ].
+
 ]
 
 { #category : #'as yet unclassified' }
