@@ -39,7 +39,8 @@ LWScriptCallback >> asJS: cb [
 
 { #category : #converting }
 LWScriptCallback >> asLWScriptCallback [ 
-  ^ self
+ ^ self 
+
 ]
 
 { #category : #accessing }

@@ -35,7 +35,8 @@ LWDevMain >> initialize [
 	spotterDialog := SlDialog new 
 		className: 'spotter';
 		label: 'Jump to class';
-		add: (LWBlockContainer new block: [ :h | h input: { #placeholder -> 'type classname part' } ]);
+		add: (SlInput new placeholder: 'type class name'; autofocus: true;
+			on: SlInputEvent do: (Js debounced: [ :e | e inspect ] wait: (Duration milliSeconds: 250)));
 		yourself. 
 
 ]

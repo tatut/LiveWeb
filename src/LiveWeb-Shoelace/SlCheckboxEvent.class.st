@@ -9,11 +9,6 @@ SlCheckboxEvent class >> eventFields [
 	^ #('checked')
 ]
 
-{ #category : #'as yet unclassified' }
-SlCheckboxEvent class >> eventJS [ 
-^'{"checked":e.target.checked}'
-]
-
 { #category : #accessing }
 SlCheckboxEvent class >> type [ 
 ^'sl-change'

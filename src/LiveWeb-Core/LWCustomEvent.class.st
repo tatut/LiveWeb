@@ -19,20 +19,12 @@ LWCustomEvent class >> eventFields [
 	self subclassResponsibility 
 ]
 
-{ #category : #'as yet unclassified' }
-LWCustomEvent class >> eventJS [ 
- "Build JS to create the event object in the browser side, using the event 'e'.
-  For example: ^ '{''value'': e.target.value}'
- "
- self subclassResponsibility. 
-]
-
 { #category : #'instance creation' }
-LWCustomEvent class >> fromDictionary: d [
+LWCustomEvent class >> fromArray: arr [
  | e |
  e := self new.
- self eventFields do: [ :f |
-	e at: f put: (d at: f)
+ self eventFields doWithIndex: [ :f :i |
+	e at: f key put: (arr at: i)
  ].
  ^ e
 ]

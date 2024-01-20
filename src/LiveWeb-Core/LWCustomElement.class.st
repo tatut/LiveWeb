@@ -125,14 +125,17 @@ LWCustomElement >> renderCustomEvents: h [
  h script: [ 
 	h raw: 'window.addEventListener("load",function(){ const '; raw: c; raw: ' = _lw.get('; raw: id asString; raw: ');'.
 	eventListeners do: [ :e |
-		| cb event callback |
+		| cb event callback block |
 		event := e key.
-		callback := e value.
-		cb := ctx registerCallback: [ :d | |evt|
-			evt := event fromDictionary: d.
-			callback value: evt ] for: self. 
-      h raw: c; raw: '.addEventListener("'; raw: event type; raw: '",e=>_lws(';
-        raw: cb asString; raw: ', ['; raw: event eventJS; raw: ']));'
+		callback := e value asLWScriptCallback.
+		callback jsParams: { '[{1}]' format: {(',' join: (event eventFields collect: #value))} }.
+		block := callback callback.
+		cb := ctx registerCallback: [ :arr | |evt|
+			evt := event fromArray: arr.
+			block value: evt ] for: self. 
+      h raw: c; raw: '.addEventListener("'; raw: event type; raw: '",e=>';
+        raw: (callback asJS: cb);
+        raw: ');'
     ].
   h raw: '})'
 ]
