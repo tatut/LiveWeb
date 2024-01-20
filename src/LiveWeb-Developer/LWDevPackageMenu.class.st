@@ -9,11 +9,8 @@ Class {
 
 { #category : #rendering }
 LWDevPackageMenu >> items [
-  | pkgs f |
-  pkgs := Smalltalk packages sorted.
-  filter isEmpty ifTrue: [ ^pkgs ].
-  f := '*{1}*' format: { filter }.
-  ^ pkgs select: [ :p | f match: p name  ]
+  ^ Smalltalk packages sorted.
+  
 ]
 
 { #category : #accessing }

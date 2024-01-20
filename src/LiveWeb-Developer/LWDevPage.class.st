@@ -20,6 +20,10 @@ LWDevPage >> head: _args [
 		add: (super head: _args);
 		add: (String streamContents: [ :out | 
 			out << '
+			<style>
+			.listing-menu-item::part(base) { font-size: 0.75rem; padding: 1px; }
+			</style>
+			
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ace.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ext-language_tools.min.js"></script>
        <script>function initEditor() {

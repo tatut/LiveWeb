@@ -3,6 +3,7 @@ Class {
 	#superclass : #LWComponent,
 	#instVars : [
 		'filter',
+		'filterInput',
 		'export',
 		'listing',
 		'slot'
@@ -12,7 +13,7 @@ Class {
 
 { #category : #accessing }
 LWDevListing >> children [ 
- ^ ReadStream on: { export. listing }
+ ^ ReadStream on: { filterInput. listing }
 
 ]
 
@@ -28,18 +29,26 @@ LWDevListing >> filter: anObject [
 	listing changed 
 ]
 
-{ #category : #'as yet unclassified' }
-LWDevListing >> filterJSName [ 
- ^ 'filter{1}' format: { ('' join: self class name splitCamelCase allButFirst) }
+{ #category : #accessing }
+LWDevListing >> filteredItems [ 
+  | items f |
+  items := self items.
+  filter isEmpty ifTrue: [ ^ items ].
+  f := '*{1}*' format: { filter }.
+  ^ items select: [ :p | f match: (self itemName: p) ]
 ]
 
 { #category : #initialization }
 LWDevListing >> initialize [ 
  super initialize.
  filter := ''.
- export := LWExportJS new 
-	export: self selectJSName -> [ :sel | self select: sel ].
- listing := LWBlockContainer new block: [ :h | self renderListingOn: h ]
+ filterInput := SlInput new on: SlInputEvent do: (Js debounced: [ :e | self filter: e value ] wait: (Duration milliSeconds: 200));
+	size: 'small';
+	placeholder: ('{1}...' format: {self label}).
+ listing := SlMenu new dynamicItems: [ :h | self renderListingOn: h];
+	on: SlSelectEvent do: [ :e | 
+		self select: e selectedItemValue ] .
+
 ]
 
 { #category : #scripting }
@@ -60,43 +69,26 @@ LWDevListing >> label [
 
 { #category : #rendering }
 LWDevListing >> renderListingOn: h [
-	h tbody: [
-	  self items do: [ :p |
-		  h tr: [
-			  h
-				  td: { #class -> 'is-clickable'. 
-				        (#onclick -> ('{1}(''{2}'')' format: {
-							    self selectJSName.
-							    (self itemName: p) })) }
-				  with: p name ] ] ]
+	self filteredItems do: [ :item |
+		| n |
+		n := self itemName: item.
+		h render: 'sl-menu-item'
+		  attrs: { #value -> n. #class -> 'listing-menu-item' }
+		  with: n 
+	].
 ]
 
 { #category : #rendering }
 LWDevListing >> renderOn: h [
 	h div: { #style -> 'display: inline-block; height: 95vh;'. #slot-> slot } with: [
-		export render: h.
-		h input: {
-				(#placeholder -> 'filter...').
-				(#value -> filter).
-				(#id -> self filterJSName).
-				(#oninput -> ((Js
-					   call: [ :f | self filter: f ]
-					   with: (Js inputValue: self filterJSName)) debounceMs: 300)) }.
-		h div: { #style->'height:90vh;overflow-y:scroll;' } with: [ 
-		h table: { #style -> 'font-size: 0.75em;'. #class -> 'table is-striped' } with: [
-			h thead: [ h tr: [ h td: self label ] ].
-			listing render: h] ]
+		filterInput render: h.
+		listing render: h.
 	]
 ]
 
 { #category : #enumerating }
 LWDevListing >> select: value [ 
  self subclassResponsibility 
-]
-
-{ #category : #'as yet unclassified' }
-LWDevListing >> selectJSName [ 
- ^ 'select{1}' format: { ('' join: self class name splitCamelCase allButFirst) }
 ]
 
 { #category : #accessing }

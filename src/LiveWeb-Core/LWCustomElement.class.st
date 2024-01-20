@@ -119,7 +119,9 @@ LWCustomElement >> renderAttrs: h [
 
 { #category : #rendering }
 LWCustomElement >> renderContent: h [
-  content do: [ :c | c render: h ]
+  content ifNotNil: [ 
+    content do: [ :c | c render: h ]
+  ]
 ]
 
 { #category : #rendering }
@@ -154,7 +156,7 @@ LWCustomElement >> renderOn: h [
 	self renderAttrs: h. 
 	h out << '>'.
 	slots ifNotNil: [ self renderSlots: h ].
-	content ifNotNil: [ self renderContent: h ].
+	self renderContent: h.
 	h out << '</'; << t; << '>'.
 	self renderCustomEvents: h
 ]
