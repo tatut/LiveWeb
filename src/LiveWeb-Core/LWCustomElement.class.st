@@ -76,6 +76,12 @@ LWCustomElement >> className: aClassName [
  ^self attrAt: 'class' update: [ aClassName ]
 ]
 
+{ #category : #private }
+LWCustomElement >> fillFrom: aCollection with: aBlock [
+ "Implement filling from collection so we can be a target for collect:into: calls."
+ aCollection do: [ :c | self add: (aBlock value: c) ]
+]
+
 { #category : #initialization }
 LWCustomElement >> initialize [ 
   super initialize. 
@@ -118,12 +124,9 @@ LWCustomElement >> renderContent: h [
 
 { #category : #rendering }
 LWCustomElement >> renderCustomEvents: h [
- | c |
  eventListeners ifNil: [ ^ nil ].
  "Output a script that finds the rendered element and adds listeners to it"
- c := '_c{1}' format: { id }.
- h script: [ 
-	h raw: 'window.addEventListener("load",function(){ const '; raw: c; raw: ' = _lw.get('; raw: id asString; raw: ');'.
+ h js: [ :out | 
 	eventListeners do: [ :e |
 		| cb event callback block |
 		event := e key.
@@ -133,11 +136,10 @@ LWCustomElement >> renderCustomEvents: h [
 		cb := ctx registerCallback: [ :arr | |evt|
 			evt := event fromArray: arr.
 			block value: evt ] for: self. 
-      h raw: c; raw: '.addEventListener("'; raw: event type; raw: '",e=>';
-        raw: (callback asJS: cb);
-        raw: ');'
+      out << 'this.addEventListener("'; << event type; << '",e=>{console.log(e);';
+        << (callback asJS: cb);
+        << '});'
     ].
-  h raw: '})'
 ]
 ]
 

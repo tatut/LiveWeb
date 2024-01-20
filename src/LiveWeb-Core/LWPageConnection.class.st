@@ -93,6 +93,16 @@ LWPageConnection >> removeComponent: componentToRemove [
 ]
 
 { #category : #rendering }
+LWPageConnection >> renderComponent: component markup: out js: jsOut [
+  | h |
+	h := page htmlRenderer: out.
+	h ctx: page ctx.
+	h jsWriter: jsOut.
+	component render: h
+
+]
+
+{ #category : #rendering }
 LWPageConnection >> renderToString: component [ 
 	^ String streamContents: [:out |
 		| h |
@@ -105,8 +115,16 @@ LWPageConnection >> renderToString: component [
 
 { #category : #'as yet unclassified' }
 LWPageConnection >> rerenderComponent: component [
+   | html js id |
 	[ page ctx cleanup: component unmount: false.
-	  self send: { { component id asString . 'R' . self renderToString: component } } ]
+	  html := String streamContents: [ :htmlOut |
+		js := String streamContents: [ :jsOut |
+			self renderComponent: component markup: htmlOut js: jsOut. ]].
+	  id := component id asString.
+	  self send: ({{ id . 'R' . html }}, 
+	              "Add JS script patch, if component did output script code"
+					  (js ifEmpty: [#()] ifNotEmpty: [{{ id . 'E' . js }}])) 
+	]
 	on: Exception  
 	do: [ :e |
 		LWLogEvent error: ('Error in component: {1}, message: {2}' format: { component printString. e messageText }).
