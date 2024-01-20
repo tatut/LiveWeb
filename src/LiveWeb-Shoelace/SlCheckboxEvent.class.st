@@ -4,9 +4,9 @@ Class {
 	#category : #'LiveWeb-Shoelace'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 SlCheckboxEvent class >> eventFields [ 
-	^ #('checked')
+	^ { #checked -> 'e.target.checked' }
 ]
 
 { #category : #accessing }

@@ -9,12 +9,11 @@ Class {
 	#category : #'LiveWeb-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 LWCustomEvent class >> eventFields [ 
-	"Return an array of field names in the event. These will be added to self as associations 
-	when deserializing an event from JSON.
+	"Return an array of associations mapping instance variables to JS code needed to extract the value from event.
 	
-	for example: ^ #( value )
+	for example: ^ { #value -> 'e.target.value' }
 	"
 	self subclassResponsibility 
 ]

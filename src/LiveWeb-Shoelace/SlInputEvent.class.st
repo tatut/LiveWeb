@@ -7,6 +7,11 @@ Class {
 	#category : #'LiveWeb-Shoelace'
 }
 
+{ #category : #serialization }
+SlInputEvent class >> eventFields [ 
+ ^ { #value -> 'e.target.value' }
+]
+
 { #category : #accessing }
 SlInputEvent class >> type [ 
  ^ 'sl-input'

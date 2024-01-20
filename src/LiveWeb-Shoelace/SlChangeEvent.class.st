@@ -4,9 +4,9 @@ Class {
 	#category : #'LiveWeb-Shoelace'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 SlChangeEvent class >> eventFields [ 
-	^ #( 'value' )
+	^ { #value -> 'e.target.value' }
 ]
 
 { #category : #accessing }
