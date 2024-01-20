@@ -3,7 +3,8 @@ Class {
 	#superclass : #LWComponent,
 	#instVars : [
 		'dialog',
-		'menu'
+		'menu',
+		'classView'
 	],
 	#category : #'LiveWeb-Developer'
 }
@@ -14,6 +15,12 @@ LWDevSpotter >> children [
 
 ]
 
+{ #category : #accessing }
+LWDevSpotter >> classView: anObject [
+
+	classView := anObject
+]
+
 { #category : #'typing/selecting keys' }
 LWDevSpotter >> find: aString [ 
  | find classes classMenu |
@@ -22,7 +29,11 @@ LWDevSpotter >> find: aString [
  find isEmpty
   ifTrue: [ classMenu add: (SlMenuItem new disabled: true; add: 'Type part of class name to search'; yourself) ]
   ifFalse: [  
-	classMenu on: SlSelectEvent do: [ :e | e inspect ]. "selected something!"
+	classMenu 
+		on: SlSelectEvent 
+		do: ([ :e | classView cls: (self class environment at: e selectedItemValue asSymbol) ]
+		      "close dialog after"
+				asLWScriptCallback thenJS: 'this.parentNode.parentNode.hide()'). 
    find := '*{1}*' format: { aString }.
    classes := (Smalltalk globals allClasses select: [ :c | find match: c name ]) takeFirst: 20.
    classes 

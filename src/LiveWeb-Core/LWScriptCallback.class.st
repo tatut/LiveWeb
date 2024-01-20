@@ -14,27 +14,41 @@ Class {
 		'condition',
 		'jsParams',
 		'debounceMs',
-		'preventDefault'
+		'preventDefault',
+		'thenJS'
 	],
 	#category : #'LiveWeb-Core'
 }
 
+{ #category : #'as yet unclassified' }
+LWScriptCallback >> afterSend: id [
+ thenJS ifNil: [ ^ 'null' ].
+
+]
+
+{ #category : #'as yet unclassified' }
+LWScriptCallback >> afterSend: js forComponent: id [
+ thenJS ifNil: [ ^ nil ].
+ js << ',(function(){';
+    << thenJS;
+    << '}).bind(_lw.get("';
+    << id asString;
+    << '"))'
+ 
+
+]
+
 { #category : #converting }
-LWScriptCallback >> asJS: cb [
+LWScriptCallback >> asJS: cb forComponent: id [
 	^ String streamContents: [ :js |
-		preventDefault ifTrue: [ js nextPutAll: 
-			'window.event.preventDefault();' ].
-		condition ifNotNil: [ js nextPutAll: 'if('; nextPutAll: condition; nextPutAll: ') '  ].
-		js nextPutAll: '_lws('; 
-			nextPutAll: cb asString; 
-			nextPutAll:',['.
-		jsParams 	doWithIndex: [ :p :i | 
-			i > 1 ifTrue: [ js nextPut: $, ].
-			js nextPutAll: p.		
-		].
-		js nextPutAll: ']'.
-		debounceMs ifNotNil: [ js nextPut: $,; nextPutAll: debounceMs asString ].
-		js nextPut: $) ]
+		preventDefault ifTrue: [ js << 'window.event.preventDefault();' ].
+		condition ifNotNil: [ js << 'if(!('; << condition; << ')) return;'  ].
+		js << '_lws('; << cb asString; << ',[';
+			<< (',' join: jsParams);
+			<< '],';
+		   << (debounceMs ifNil: [ '0' ] ifNotNil: [ debounceMs asString]).
+		self afterSend: js forComponent: id.
+		js << ')' ]
 ]
 
 { #category : #converting }
@@ -100,6 +114,13 @@ LWScriptCallback >> jsParams: anObject [
 { #category : #accessing }
 LWScriptCallback >> preventDefault: prevent [
 	preventDefault := prevent
+]
+
+{ #category : #accessing }
+LWScriptCallback >> thenJS: aScript [
+	"Set JS code to run immediately after sending the callback.
+	JavaScript 'this' is bound to the current component."
+ thenJS := aScript
 ]
 
 { #category : #evaluating }

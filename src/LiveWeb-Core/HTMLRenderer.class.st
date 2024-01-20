@@ -1677,27 +1677,34 @@ HTMLRenderer >> render: aTag with: attrsOrContent [
 { #category : #rendering }
 HTMLRenderer >> renderAttrs: attrs [
 	"Output all attributes"
-	(attrs isDictionary ifTrue: [ attrs associations ] ifFalse: [ attrs ])
-	   collect: [ :attr | attributeRenderer render: attr ]
+
+	(attrs isDictionary
+		 ifTrue: [ attrs associations ]
+		 ifFalse: [ attrs ])
+		collect: [ :attr | attributeRenderer render: attr ]
 		thenDo: [ :attr |
 			| name value |
 			name := attr key asString.
 			value := attr value.
-			
+
 			(BooleanAttributes includes: name)
-				ifTrue: [
-					"boolean attr, only output the name if value is not false/nil"
-					(value isNil) | (value = false) ifFalse: [ out nextPut: Character space; nextPutAll: name ]
-				]
-				ifFalse: [   
-				('on*' match: name) & ((value isBlock) | (value class = LWScriptCallback))
-					ifTrue: [ value := value asLWScriptCallback asJS: (ctx registerCallback: value for: component) ].
-				out nextPut: Character space;
-					 nextPutAll: name; 
-					 nextPutAll: '="'.
-				self escapeHtml: value asString to: out.
-				out nextPut: $".
-			]]
+				ifTrue: [ "boolean attr, only output the name if value is not false/nil"
+					value isNil | (value = false) ifFalse: [
+						out
+							nextPut: Character space;
+							nextPutAll: name ] ]
+				ifFalse: [
+					('on*' match: name)
+					& (value isBlock | (value class = LWScriptCallback)) ifTrue: [
+						value := value asLWScriptCallback
+							         asJS: (ctx registerCallback: value for: component)
+							         forComponent: component id ].
+					out
+						nextPut: Character space;
+						nextPutAll: name;
+						nextPutAll: '="'.
+					self escapeHtml: value asString to: out.
+					out nextPut: $" ] ]
 ]
 
 { #category : #rendering }

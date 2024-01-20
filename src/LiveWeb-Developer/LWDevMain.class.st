@@ -33,7 +33,7 @@ LWDevMain >> initialize [
 		vertical: false;
 		start: splitListing;
 		end: classView.
-	spotterDialog := LWDevSpotter new.
+	spotterDialog := LWDevSpotter new classView: classView.
 	
 
 ]

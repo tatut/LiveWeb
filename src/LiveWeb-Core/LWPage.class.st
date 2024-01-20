@@ -39,26 +39,26 @@ LWPage class >> clientConnectionScript [
     get: function(id) {
         return document.querySelector("[data-lw=''"+id+"'']");
     },
-    send: function(id, args, debouncems) {
+    send: function(id, args, debouncems, afterSend) {
         if(this.debug) console.log("Sending id:", id, ", args: ", args);
         if(!this.connected) {
             this.preOpenQueue.push({id: id, args: args});
         } else {
-            if(debouncems === undefined) {
-                this._send(id,args);
+            if(debouncems === undefined || debouncems === 0) {
+                this._send(id,args, afterSend);
             } else {
                 var tid = this.debounceTimeout[id];
                 if(tid !== undefined) {
                     window.clearTimeout(tid);
                 }
                 this.debounceTimeout[id] = window.setTimeout(
-                    function() { _lw._send(id,args); },
+                    function() { _lw._send(id,args,afterSend); },
                     debouncems
                 );
             }
         }
     },
-    _send: function(id,args) {
+    _send: function(id,args,afterSend) {
         if(this.type === "sse") {
             var l = window.location;
             fetch(l.protocol+"//"+l.host+this.cpath+"?id="+this.cid,
@@ -71,6 +71,7 @@ LWPage class >> clientConnectionScript [
         } else {
             console.err("Unknown connection type: ", this.type);
         }
+		  if(typeof(afterSend)==="function") afterSend();
     },
     onopen: function(e) {
         this.connected = true;

@@ -127,6 +127,7 @@ LWPageConnection >> rerenderComponent: component [
 	]
 	on: Exception  
 	do: [ :e |
+		e inspect.
 		LWLogEvent error: ('Error in component: {1}, message: {2}' format: { component printString. e messageText }).
 		ws close. ].
 ]

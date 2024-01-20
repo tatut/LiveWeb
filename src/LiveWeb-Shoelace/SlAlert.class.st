@@ -21,6 +21,36 @@ SlAlert class >> elementSlots [
 ]
 
 { #category : #'as yet unclassified' }
+SlAlert class >> simpleAlertWithTextExample [
+ <lwExample: 'Simple alert with text'>
+ ^ self new add: 'I''m an alert and I''m okay!'; open: true
+]
+
+{ #category : #'as yet unclassified' }
+SlAlert class >> toastExample [ 
+ <lwExample: 'Example of moving alert to toast'>
+ ^ LWContainer new
+    add: (self new variant: 'success'; className: 'example-toast'; 
+				icon: (SlIcon new name: 'lungs');
+				duration: 3000;
+				add: 'to your continued health!'; yourself);
+    add: (SlButton new 
+  				on: SlClickEvent do: 'document.querySelector(".example-toast").toast()';
+				add: 'toast it'; yourself);
+	 yourself
+]
+
+{ #category : #'as yet unclassified' }
+SlAlert class >> warningAlertWithIconExample [ 
+ <lwExample: 'Warning and icon'>
+ ^ self new 
+	 	add: 'Something alarming just happened!';
+		variant: 'warning';
+		icon: (SlIcon new name: 'exclamation-triangle');
+		open: true.
+]
+
+{ #category : #'as yet unclassified' }
 SlAlert >> closable [
 		^ self attrAt: 'closable'
 ]

@@ -89,9 +89,9 @@ LWCustomElement >> initialize [
 ]
 
 { #category : #convenience }
-LWCustomElement >> on: aLWCustomEventType do: aBlock [
+LWCustomElement >> on: aLWCustomEventType do: aBlockOrScript [
  eventListeners ifNil: [ eventListeners := OrderedCollection new. ].
- eventListeners add: aLWCustomEventType -> aBlock
+ eventListeners add: aLWCustomEventType -> aBlockOrScript
 ]
 
 { #category : #rendering }
@@ -126,23 +126,33 @@ LWCustomElement >> renderContent: h [
 
 { #category : #rendering }
 LWCustomElement >> renderCustomEvents: h [
- eventListeners ifNil: [ ^ nil ].
- "Output a script that finds the rendered element and adds listeners to it"
- h js: [ :out | 
-	eventListeners do: [ :e |
-		| cb event callback block |
-		event := e key.
-		callback := e value asLWScriptCallback.
-		callback jsParams: { '[{1}]' format: {(',' join: (event eventFields collect: #value))} }.
-		block := callback callback.
-		cb := ctx registerCallback: [ :arr | |evt|
-			evt := event fromArray: arr.
-			block value: evt ] for: self. 
-      out << 'this.addEventListener("'; << event type; << '",e=>{console.log(e);';
-        << (callback asJS: cb);
-        << '});'
-    ].
-]
+
+	eventListeners ifNil: [ ^ nil ].
+	"Output a script that finds the rendered element and adds listeners to it"
+	h js: [ :out |
+		eventListeners select: [ :e | e value isString ] thenDo: [ :jsEvent |
+			out << 'this.addEventListener("'; << jsEvent key type; << '",(function(e){'; 
+			    << jsEvent value; << '}).bind(_lw.get('; << id asString; << ')));' ].
+		eventListeners reject: [:e | e value isString ] thenDo: [ :e |
+			| cb event callback block |
+			event := e key.
+			callback := e value asLWScriptCallback.
+			callback jsParams:
+				{ ('[{1}]' format:
+					 { (',' join: (event eventFields collect: #value)) }) }.
+			block := callback callback.
+			cb := ctx
+				      registerCallback: [ :arr |
+					      | evt |
+					      evt := event fromArray: arr.
+					      block value: evt ]
+				      for: self.
+			out
+				<< 'this.addEventListener("';
+				<< event type;
+				<< '",e=>{';
+				<< (callback asJS: cb forComponent: id);
+				<< '});' ] ]
 ]
 
 { #category : #rendering }
