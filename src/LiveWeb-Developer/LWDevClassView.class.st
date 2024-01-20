@@ -26,13 +26,14 @@ LWDevClassView >> cls: aClass [
 
 { #category : #compiling }
 LWDevClassView >> compile: side source: source [
-	| target |
+	| target methodName |
 	target := side = 'instance'
 		          ifTrue: [ cls ]
 		          ifFalse: [ cls class ].
-	target compile: source.
+	methodName := target compile: source.
 	"FIXME: should listen to method announcement? should only change/add method that was compiled"
-	methods child: self createMethodListing .
+	"methods child: self createMethodListing ."
+	self update: side = 'instance' method: methodName.
 	
 ]
 
@@ -91,6 +92,19 @@ LWDevClassView >> renderClassDefOn: h [
 { #category : #accessing }
 LWDevClassView >> slot: slotName [ 
  slot := slotName
+]
+
+{ #category : #'as yet unclassified' }
+LWDevClassView >> update: isInstance method: named [
+ | in mv |
+ in := methods child children.
+ [ mv := in next ] whileNotNil: [ 
+	(mv method selector = named) & (isInstance = mv isInstance) ifTrue: [ 
+		mv refresh.
+		^ nil
+	]
+ ]
+ "No method was found? This must be a new method, add it."
 ]
 
 { #category : #accessing }

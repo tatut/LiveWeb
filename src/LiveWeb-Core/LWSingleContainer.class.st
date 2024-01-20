@@ -16,6 +16,11 @@ Class {
 }
 
 { #category : #accessing }
+LWSingleContainer >> child [ 
+ ^ child
+]
+
+{ #category : #accessing }
 LWSingleContainer >> child: aChildComponent [
 	"Set the new child component"
 	child ifNotNil: [ ctx cleanup: child unmount: true ].
@@ -46,7 +51,7 @@ LWSingleContainer >> containerElement: anObject [
 
 { #category : #testing }
 LWSingleContainer >> hasChild [ 
- ^ child isNil
+ ^ child isNil not
 ]
 
 { #category : #initialization }

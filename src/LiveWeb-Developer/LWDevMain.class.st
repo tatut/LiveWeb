@@ -29,6 +29,7 @@ LWDevMain >> initialize [
 		start: pkgListing;
 		end: pkgView.
    splitMain := SlSplitPanel new 
+		position: 33; "33% for pkg/class listings, rest for class view"
 		vertical: false;
 		start: splitListing;
 		end: classView.
