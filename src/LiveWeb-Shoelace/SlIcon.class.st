@@ -29,6 +29,11 @@ SlIcon class >> iconsExample [
 		yourself
 ]
 
+{ #category : #'instance creation' }
+SlIcon class >> named: iconName [ 
+ ^ self new name: iconName
+]
+
 { #category : #'as yet unclassified' }
 SlIcon >> label [
 		^ self attrAt: 'label'

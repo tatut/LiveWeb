@@ -8,6 +8,13 @@ Class {
 }
 
 { #category : #'code-critics' }
+ManifestLiveWebDeveloper class >> ruleBadMessageRule2V1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#LWDevClassExamplesView #updateExample #false)) #'2024-01-21T12:36:39.236663+02:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestLiveWebDeveloper class >> ruleCollectionMessagesToExternalObjectRuleV1FalsePositive [
 
 	<ignoreForCoverage>

@@ -20,6 +20,11 @@ LWDevMain >> children [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LWDevMain >> classViewFor: className [ 
+ ^ classView
+]
+
 { #category : #compiling }
 LWDevMain >> compile: className side: side source: source [
 	| target methodName cls |
@@ -32,6 +37,7 @@ LWDevMain >> compile: className side: side source: source [
 	"methods child: self createMethodListing ."
 	(self methodsViewFor: className) 
 	  update: side = 'instance' method: methodName.
+	(self classViewFor: className) methodChanged: methodName.
 	
 ]
 

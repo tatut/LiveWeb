@@ -4,29 +4,37 @@ Class {
 	#instVars : [
 		'cls',
 		'slot',
-		'examples'
+		'examples',
+		'classInfo'
 	],
 	#category : #'LiveWeb-Developer'
 }
 
 { #category : #accessing }
 LWDevClassView >> children [ 
- ^ ReadStream on: { examples  }
+ ^ ReadStream on: { classInfo. examples  }
 
 ]
 
 { #category : #accessing }
 LWDevClassView >> cls: aClass [
  cls := aClass.
- self changed.
+ examples cls: aClass.
+ classInfo changed. 
 
 ]
 
 { #category : #initialization }
 LWDevClassView >> initialize [ 
  super initialize.
+ classInfo := LWBlockContainer new block: [ :h | self renderClassDefOn: h ].
  examples := LWDevClassExamplesView new.
 
+]
+
+{ #category : #updating }
+LWDevClassView >> methodChanged: methodSelector [ 
+ examples updateExample
 ]
 
 { #category : #rendering }
@@ -48,7 +56,8 @@ LWDevClassView >> renderClassDefOn: h [
 LWDevClassView >> renderOn: h [
  h div: {#slot->slot. #style-> 'display: inline-flex; flex-direction: column; overflow-y: scroll'}
    with: [  
-	  self renderClassDefOn: h.
+	  classInfo render: h.
+	  h render: 'sl-divider' with: ''.
 	  examples render: h.
 	]
 ]
