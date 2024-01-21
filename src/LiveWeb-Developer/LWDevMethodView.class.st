@@ -77,8 +77,10 @@ LWDevMethodView >> renderOn: h [
 			        render: 'sl-tag' attrs: { #variant -> 'neutral'. #size -> 'small' } with: (instance ifTrue: [ 'instance' ] ifFalse: ['class'])
 			 ];
 		  pre: { 'data-side' -> (instance ifTrue: ['instance'] ifFalse:['class']). 
+		         'data-class' -> cls name.
 		          #onclick -> 'initEditor()'.
-				    #class -> 'codeEditor bulma-reset-mixin'. #style -> 'max-height: 40vh;' } with: [  h renderContent: method sourceCode ].
+				    #class -> 'codeEditor'. #style -> 'max-height: 40vh; overflow-y: scroll;' } 
+		  with: [  h renderContent: method sourceCode ].
  		(method pragmaAt: #lwExample:) ifNotNil: [ :exp |
 			| desc |
 			desc := exp argumentAt: 1.

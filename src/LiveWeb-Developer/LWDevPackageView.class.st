@@ -3,14 +3,14 @@ Class {
 	#superclass : #LWDevListing,
 	#instVars : [
 		'package',
-		'classView'
+		'onClassSelected'
 	],
 	#category : #'LiveWeb-Developer'
 }
 
-{ #category : #accessing }
-LWDevPackageView >> classView: aClassView [
-  classView := aClassView
+{ #category : #'accessing - classes' }
+LWDevPackageView >> classSelected: aClass [
+ onClassSelected value: aClass
 ]
 
 { #category : #accessing }
@@ -27,6 +27,11 @@ LWDevPackageView >> label [
 ]
 
 { #category : #accessing }
+LWDevPackageView >> onClassSelected: aBlock [ 
+ onClassSelected := aBlock 
+]
+
+{ #category : #accessing }
 LWDevPackageView >> package: pkg [
 	package := pkg.
 	listing changed
@@ -34,5 +39,5 @@ LWDevPackageView >> package: pkg [
 
 { #category : #enumerating }
 LWDevPackageView >> select: className [ 
-	classView cls: (package classes detect: [ :c | c name = className ])
+	self classSelected: (package classes detect: [ :c | c name = className ])
 ]

@@ -80,9 +80,12 @@ LWDevListing >> renderListingOn: h [
 
 { #category : #rendering }
 LWDevListing >> renderOn: h [
-	h div: { #style -> 'display: inline-block; height: 95vh;'. #slot-> slot } with: [
+	h div: { #slot-> slot } with: [
 		filterInput render: h.
-		listing render: h.
+		h div: { #style -> 'display: inline-block; width: 100%; height: 90vh; overflow-y: scroll; overflow-x: hidden;' } 
+		  with: [ 
+			listing render: h.
+		]
 	]
 ]
 

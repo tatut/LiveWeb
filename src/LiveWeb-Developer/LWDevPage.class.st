@@ -31,6 +31,7 @@ LWDevPage >> head: _args [
         if(e.tagName != "PRE" || e.classList.contains("ace_editor")) return;
 console.log(e.classList);
         const side = e.dataset.side;
+        const cls = e.dataset.class;
         e.style.height = Math.max(100, e.clientHeight) + "px";
         let editor = ace.edit(e);
         editor.session.setMode("ace/mode/text");
@@ -39,7 +40,7 @@ console.log(e.classList);
  		  editor.commands.addCommand({
 			name: "save", 
 			bindKey: {win: "Ctrl-s", mac: "Command-s"}, 
-			exec: function(editor) { window.event.preventDefault(); lwCompileMethod(side, editor.session.getValue()); },
+			exec: function(editor) { window.event.preventDefault(); lwCompileMethod(cls, side, editor.session.getValue()); },
          readOnly: true});
        }';
 		<< (LWDevHTMLCompiler htmlToJsonScript);

@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'dialog',
 		'menu',
-		'classView'
+		'classView',
+		'onClassSelected'
 	],
 	#category : #'LiveWeb-Developer'
 }
@@ -13,12 +14,6 @@ Class {
 LWDevSpotter >> children [ 
  ^ReadStream on: { dialog }
 
-]
-
-{ #category : #accessing }
-LWDevSpotter >> classView: anObject [
-
-	classView := anObject
 ]
 
 { #category : #'typing/selecting keys' }
@@ -31,7 +26,7 @@ LWDevSpotter >> find: aString [
   ifFalse: [  
 	classMenu 
 		on: SlSelectEvent 
-		do: ([ :e | classView cls: (self class environment at: e selectedItemValue asSymbol) ]
+		do: ([ :e | self selectClass: e selectedItemValue ]
 		      "close dialog after"
 				asLWScriptCallback thenJS: 'this.parentNode.parentNode.hide()'). 
    find := '*{1}*' format: { aString }.
@@ -58,7 +53,19 @@ LWDevSpotter >> initialize [
  
 ]
 
+{ #category : #accessing }
+LWDevSpotter >> onClassSelected: aBlock [
+  onClassSelected := aBlock
+]
+
 { #category : #rendering }
 LWDevSpotter >> renderOn: h [
  dialog render: h
+]
+
+{ #category : #navigation }
+LWDevSpotter >> selectClass: className [ 
+ | c |
+ c := self class environment at: className asSymbol.
+ onClassSelected value: c
 ]

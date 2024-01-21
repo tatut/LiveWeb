@@ -21,6 +21,14 @@ LWContainer class >> flex: direction [
 		
 ]
 
+{ #category : #'instance creation' }
+LWContainer class >> with: componentArray [ 
+  | c |
+ c := self new.
+ componentArray do: [ :child | c add: child ].
+ ^ c
+]
+
 { #category : #adding }
 LWContainer >> add: aChildComponent [
 	^ self add: aChildComponent beforeIndex: children size + 1
