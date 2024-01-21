@@ -15,12 +15,11 @@ Class {
 
 { #category : #'as yet unclassified' }
 LWAnalogClock class >> exampleThreeOClock [
-
 	<lwExample:
 	'Show a clock at 7 minutes and 20 seconds past 3 o''clock'>
-	| aLWAnalogClock |
-	aLWAnalogClock := self new.
-	^ aLWAnalogClock class new time: (Time hour: 15 minute: 7 second: 20)
+	^ self new
+		  size: 200;
+		  time: (Time hour: 5 minute: 17 second: 55)
 ]
 
 { #category : #'as yet unclassified' }
