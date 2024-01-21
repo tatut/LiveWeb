@@ -32,15 +32,18 @@ SlSelect class >> elementSlots [
 ]
 
 { #category : #'as yet unclassified' }
-SlSelect class >> simpleSelectExample [ 
- <lwExample: 'Simple select with predefined options'>
- ^ self new 
-	placeholder: 'Select your favorite programming language';
-	add: (SlOption option: 'Smalltalk' value: 'st');
-	add: (SlOption option: 'Clojure' value: 'clj');
-	add: (SlOption option: 'Prolog' value: 'pl');
-	add: (SlOption option: 'Erlang' value: 'erl');
-	yourself
+SlSelect class >> simpleSelectExample [
+	<lwExample: 'Simple select with predefined options'>
+	| selected |
+	^ LWContainer with: { self new
+		  placeholder: 'Select your favorite programming language';
+		  on: SlChangeEvent do: [ :e | selected child: e value asLWComponent  ];
+		  options: { 'Smalltalk' -> 'st'.
+						 'Clojure' -> 'clj'.
+						 'Prolog' -> 'pl'.
+						 'Erlang' -> 'erl' };
+		  yourself.
+		selected := LWSingleContainer new. }
 ]
 
 { #category : #'as yet unclassified' }
@@ -191,6 +194,15 @@ SlSelect >> open [
 SlSelect >> open: newValue [
 		self assert: (newValue isKindOf: Boolean).
 		self attrAt: 'open' update: [ newValue ]
+]
+
+{ #category : #accessing }
+SlSelect >> options: labelsAndValues [ 
+	"Add options from a dictionary or array of associations.
+	The key is the label and value is the value.
+	Value should not contain spaces."
+	labelsAndValues asDictionary keysAndValuesDo: [ :label :value |
+		self add: (SlOption option: label value: value) ]
 ]
 
 { #category : #'as yet unclassified' }
