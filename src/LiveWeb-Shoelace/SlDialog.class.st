@@ -17,6 +17,21 @@ SlDialog class >> elementSlots [
 ]
 
 { #category : #'as yet unclassified' }
+SlDialog class >> simpleDialogExample [ 
+ <lwExample: 'Simple dialog with footer button'>
+ | d |
+ ^ LWContainer with: {
+   d := SlDialog new 
+		add: 'this is a dialog.. neat.';
+		footer: (SlButton new 
+			attrAt: #onclick update: [[ d open: false ]];
+			add: 'close'; yourself).
+	(SlButton new 
+		attrAt: #onclick update: [[ d open: true ]];
+		add: 'open dialog'; yourself) }
+]
+
+{ #category : #'as yet unclassified' }
 SlDialog >> footer [
 		^ self slotAt: 'footer'.
 ]

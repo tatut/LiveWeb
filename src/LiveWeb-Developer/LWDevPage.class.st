@@ -47,6 +47,7 @@ console.log(e.classList);
 		"Add shift+enter listener to open spotter"
 		<< 'window.addEventListener("keydown", e => { 
            if(e.key=="Enter" && e.shiftKey) { 
+           e.preventDefault();
 		     let spotter = document.querySelector(".spotter");
 		       spotter.setAttribute("open",true); 
 		    }

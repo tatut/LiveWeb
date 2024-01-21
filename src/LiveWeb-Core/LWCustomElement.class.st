@@ -102,19 +102,21 @@ LWCustomElement >> renderAttrs: h [
 			| name val |
 			name := attr key.
 			val := attr value.
-			val ~= false ifTrue: [
+			val ~= false ifTrue: [ "skip boolean attributes that are false"
 				val = true
 					ifTrue: [ "boolean attribute that is enabled"
 						h out
 							<< ' ';
 							<< name ]
-					ifFalse: [ "some other attribute, stringify"
+					ifFalse: [ 
+						val := h maybeProcessCallbackAttr: name value: val.
+						"some other attribute, stringify"
 						h out
 							<< ' ';
 							<< name;
 							<< '="';
 							<< (h escapeHtml: val asString);
-							<< '"' ] ] "skip boolean attributes that are false" ] ]
+							<< '"' ] ]  ] ]
 ]
 
 { #category : #rendering }
@@ -191,7 +193,7 @@ LWCustomElement >> slotAt: slotName put: aComponent [
 		update: [ :oldComponent |
 			self ifMounted: [ ctx removeComponent: oldComponent ].
 			aComponent ]
-		initial: aComponent.
+		initial: [aComponent].
 	self ifMounted: [ ctx component: self appendChild: aComponent ]
 ]
 
