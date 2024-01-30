@@ -149,6 +149,7 @@ LWPage class >> clientConnectionScript [
                        case "<": elt.parentElement.insertAdjacentElement("afterbegin",elt); break;
                        case ">": elt.parentElement.insertAdjacentElement("beforeend",elt); break;
                        case "@": for(var attr in payload) { _lw.setAttr(elt, attr, payload[attr]) }; break;
+   								 case "S": for(var st in payload) { elt.style[st] = payload[st] }; break;
                        case "E": (new Function(payload)).call(elt); break;
                        case "+": /* add child at index */
                            elt.insertBefore(patch[3], elt.childNodes[patch[2]]); break;
