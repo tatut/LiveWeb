@@ -2,7 +2,7 @@
 I compile HTML into `renderOn:` methods.
 I provide JS to convert an HTML DOM into JSON which can be compiled.
 
-We don't parse HTML in Smalltalk, we just provide the JS that turns a DOM node into
+I don't parse HTML in Smalltalk, I just provide the JS that turns a DOM node into
 JSON. 
 
 A DOM element like:

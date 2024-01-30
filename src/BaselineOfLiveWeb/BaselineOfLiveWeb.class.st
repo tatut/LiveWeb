@@ -26,6 +26,7 @@ BaselineOfLiveWeb >> baseline: spec [
 		package: 'LiveWeb-ReStore' with: [ spec requires: #('ReStore') ];
 		group: 'default' with: #(core tests);
 		group: 'core' with: #('LiveWeb-Core' 'LiveWeb-Styling');
+		group: 'developer' with: #(core 'LiveWeb-Developer');
 		group: 'tests' with: #('LiveWeb-Core-Tests' 'LiveWeb-Styling-Tests' 'LiveWeb-Developer-Tests');
 		group: 'examples' with: #('core' 'LiveWeb-Examples');
       group: 'fulltests' with: #(core tests 'LiveWeb-Examples' 'LiveWeb-Examples-Tests')
