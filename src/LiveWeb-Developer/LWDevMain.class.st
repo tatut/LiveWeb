@@ -27,18 +27,22 @@ LWDevMain >> classViewFor: className [
 
 { #category : #compiling }
 LWDevMain >> compile: className side: side source: source [
+
 	| target methodName cls |
-	cls := self class environment at: className asSymbol .
+	cls := self class environment at: className asSymbol.
 	target := side = 'instance'
 		          ifTrue: [ cls ]
 		          ifFalse: [ cls class ].
-	methodName := target compile: source.
-	"FIXME: should listen to method announcement? should only change/add method that was compiled"
-	"methods child: self createMethodListing ."
-	(self methodsViewFor: className) 
-	  update: side = 'instance' method: methodName.
-	(self classViewFor: className) methodChanged: methodName.
-	
+
+	"if source is a dictionary, then compile this as HTML"
+	methodName := source isDictionary
+		ifTrue: [ target compile: (LWDevHTMLCompiler new compile: source as: 'renderOn: h') ]
+		ifFalse: [ target compile: source ].
+		
+	(self methodsViewFor: className)
+		update: side = 'instance'
+		method: methodName.
+	(self classViewFor: className) methodChanged: methodName
 ]
 
 { #category : #initialization }
@@ -46,7 +50,8 @@ LWDevMain >> initialize [
  | classSplit |
   super initialize.
   export := LWExportJS new 
-		export: #lwCompileMethod -> [ :cname :side :source | self compile: cname side: side source: source ].
+		export: #lwCompileMethod -> [ :cname :side :source | 
+			self compile: cname side: side source: source ].
    classView := LWDevClassView new.
    classMethodsView := LWDevClassMethodsView new.
    classSplit := SlSplitPanel new 

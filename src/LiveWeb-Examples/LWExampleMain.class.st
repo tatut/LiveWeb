@@ -51,7 +51,8 @@ LWExampleMain >> state: aDictionary [
 		'multi-counter' -> LWMultiCounter . 
 		'crud' -> LWCrudExample.
 		'typeahead' -> LWTypeAheadExample.
-		'tree' -> LWTreeExample } asDictionary at: (state at: 'example').
+		'tree' -> LWTreeExample.
+		'todo' -> LWTodoExample } asDictionary at: (state at: 'example').
 	"create new instance of example component"
 	component := ex new.
 	ex = LWWordle ifTrue: [ component configure: (state at: 'query') ]. "for tests"

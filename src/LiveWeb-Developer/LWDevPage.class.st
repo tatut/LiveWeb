@@ -26,21 +26,27 @@ LWDevPage >> head: _args [
 			
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ace.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.1/ext-language_tools.min.js"></script>
-       <script>function initEditor() {
+       <script>function initEditor(mode) {
         const e = window.event.target; 
         if(e.tagName != "PRE" || e.classList.contains("ace_editor")) return;
 console.log(e.classList);
         const side = e.dataset.side;
         const cls = e.dataset.class;
+		  const sel = e.dataset.selector;
+		  const html = mode === "html";
         e.style.height = Math.max(100, e.clientHeight) + "px";
         let editor = ace.edit(e);
-        editor.session.setMode("ace/mode/text");
+        editor.session.setMode("ace/mode/"+(html?"html":"text"));
         editor.setTheme("ace/theme/tomorrow");
         editor.resize();
  		  editor.commands.addCommand({
 			name: "save", 
 			bindKey: {win: "Ctrl-s", mac: "Command-s"}, 
-			exec: function(editor) { window.event.preventDefault(); lwCompileMethod(cls, side, editor.session.getValue()); },
+			exec: function(editor) { 
+				window.event.preventDefault(); 
+				const txt = editor.session.getValue();
+				lwCompileMethod(cls, side, html ? htmlToJson(txt) : txt);
+			},
          readOnly: true});
        }';
 		<< (LWDevHTMLCompiler htmlToJsonScript);

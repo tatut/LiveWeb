@@ -30,6 +30,30 @@ LWDevMethodView >> cls: aClass [
  cls := aClass
 ]
 
+{ #category : #'as yet unclassified' }
+LWDevMethodView >> codeFormat [ 
+ ^ self isHTML 
+	ifTrue:  ['html']
+	ifFalse: ['st']
+]
+
+{ #category : #'as yet unclassified' }
+LWDevMethodView >> codeSource [ 
+ ^ self isHTML 
+   ifTrue: [ self htmlSource ]
+   ifFalse: [ method sourceCode ]
+]
+
+{ #category : #'as yet unclassified' }
+LWDevMethodView >> htmlSource [ 
+ ^ (method pragmaAt: #lwHTML:) argumentAt: 1
+]
+
+{ #category : #testing }
+LWDevMethodView >> isHTML [ 
+ ^ (method pragmaAt: #lwHTML:) isNotNil 
+]
+
 { #category : #testing }
 LWDevMethodView >> isInstance [ 
  ^ instance 
@@ -64,8 +88,8 @@ LWDevMethodView >> renderOn: h [
 			 ];
 		  pre: { 'data-side' -> (instance ifTrue: ['instance'] ifFalse:['class']). 
 		         'data-class' -> cls name.
-		          #onclick -> 'initEditor()'.
+		          #onclick -> ('initEditor(''{1}'')' format: {self codeFormat}).
 				    #class -> 'codeEditor'. #style -> 'max-height: 40vh; overflow-y: scroll;' } 
-		  with: [  h renderContent: method sourceCode ].
+		  with: [  h renderContent: self codeSource ].
  	]
 ]

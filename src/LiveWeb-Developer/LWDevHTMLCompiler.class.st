@@ -65,10 +65,24 @@ LWDevHTMLCompiler class >> isHTMLMethod: m [
 ]
 
 { #category : #compiling }
-LWDevHTMLCompiler >> compile: parsedHtml [ 
+LWDevHTMLCompiler >> compile: parsed [ 
+ "Compile parsed code without method header line or pragma."
  ^String streamContents: [ :c |
 	 code := c.
-	 self compileTag: parsedHtml ]
+	 self compileTag: parsed ]
+]
+
+{ #category : #compiling }
+LWDevHTMLCompiler >> compile: sourceAndParsed as: selectorWithArgs [
+ "Compile an HTML method from the given dictionary that contains the HTML source
+ and the parsed tree and a selector line."
+ ^String streamContents: [ :c |
+	code := c.
+	rendererName := 'h'. "FIXME: actually parse selector line"
+	code << ('{1}
+	<lwHTML: ''{2}''>
+	' format: { selectorWithArgs. self escapeQuotes: (sourceAndParsed at: 'src') }).
+	self compileTag: (sourceAndParsed at: 'parsed') ]
 ]
 
 { #category : #compiling }
@@ -77,7 +91,7 @@ LWDevHTMLCompiler >> compileAttr: attrCode [
 	| blocks |
 	blocks := self splitMustache: attrCode.
 	"If there is only 1 block, return that as is."
-	blocks size = 1 ifTrue: [ ^ blocks first ].
+	blocks size = 1 ifTrue: [ ^ ('({1})' format: blocks) ].
 	"If there are multiple blocks, emit code to append string."
 	^ String streamContents: [ :out |
 			out << '(String streamContents: [ :__lw_attr | '.
@@ -153,12 +167,24 @@ LWDevHTMLCompiler >> compileTag: tagName attrs: tagAttrs with: content [
 		code
 			<< ''''; << attr key; << ''' -> ';
 			<< (self compileAttr: attr value);
-			<< ' ' ].
-	code << ' } with: [ '.
-	content do: [ :c | self compileTag: c ].
-	code
-		<< '].';
-		cr
+			<< '. ' ].
+	code << ' }'.
+	content ifNotEmpty: [ 
+		code << ' with: [ '.
+		content do: [ :c | self compileTag: c ].
+		code << ']'
+	].
+   code << '.'; cr.
+
+]
+
+{ #category : #'as yet unclassified' }
+LWDevHTMLCompiler >> escapeQuotes: str [
+ ^String streamContents: [ :out |
+	str do: [ :ch |
+		out << (ch = $' ifTrue: [ '''''' ] ifFalse: [ ch ])
+	]
+ ]
 ]
 
 { #category : #accessing }
@@ -182,7 +208,7 @@ LWDevHTMLCompiler >> splitMustache: text [
 		ifAbsent: [ Error signal: 'No ending }} found in code block' ].
 	blocks := OrderedCollection new.
 	"Add the text before the first code block, if any"
-	codeStart > 0 ifTrue: [ blocks add: ('''{1}''' format: { text copyFrom: 1 to: codeStart-1 }) ].
+	codeStart > 1 ifTrue: [ blocks add: ('''{1}''' format: { text copyFrom: 1 to: codeStart-1 }) ].
 	"Add the extracted code block"
 	blocks add: (text copyFrom: codeStart+2 to: codeEnd-1).
 	"Recursively handle text after code block"

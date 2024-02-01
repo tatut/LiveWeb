@@ -75,5 +75,7 @@ LWDevHTMLCompilerTest >> testSplitMustache [
  self assert: (c splitMustache: 'I have no code blocks')
       equals: #('''I have no code blocks''') asOrderedCollection.
  self assert: (c splitMustache: '')
-      equals: OrderedCollection empty
+      equals: OrderedCollection empty.
+ self assert: (c splitMustache: '{{foo bar}}')
+		equals: #('foo bar') asOrderedCollection 
 ]
