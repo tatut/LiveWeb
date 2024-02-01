@@ -36,28 +36,17 @@ LWTodoExample >> itemClass: item [
 { #category : #rendering }
 LWTodoExample >> renderOn: h [
 	<lwHTML: '<div class="todos">
-    <ul>
+    <ul> 
         <li lw:repeat="item items" class="todo {{self itemClass: item}}">
             <input type="checkbox" checked="{{item complete}}"> {{item label}}
-        </li>
+        </li> 
     </ul>
     todos here</div>'>
-	h div: { 'class' -> ('todos').  } with: [ h renderContent: ('
-    ').
-h ul: {  } with: [ h renderContent: ('
-        ').
-(items) doWithIndex: [ :item :__lw_index | 
-h li: { 'class' -> (String streamContents: [ :__lw_attr | __lw_attr << ('todo '). __lw_attr << (self itemClass: item). ]).  } with: [ h renderContent: ('
-            ').
-h input: { 'checked' -> (item complete). 'type' -> ('checkbox').  }.
-h renderContent: (' ').
+	h div: { 'class' -> ('todos').  } with: [ h ul: {  } with: [ (items) doWithIndex: [ :item :__lw_index | 
+h li: { 'class' -> (String streamContents: [ :__lw_attr | __lw_attr << ('todo '). __lw_attr << (self itemClass: item). ]).  } with: [ h input: { 'checked' -> (item complete). 'type' -> ('checkbox').  }.
 h renderContent: (item label).
-h renderContent: ('
-        ').
 ].
 ].
-h renderContent: ('
-    ').
 ].
 h renderContent: ('
     todos here').

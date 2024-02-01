@@ -102,7 +102,12 @@ LWDevHTMLCompiler >> compileAttr: attrCode [
 
 { #category : #compiling }
 LWDevHTMLCompiler >> compileContent: content [
-	(self splitMustache: content) do: [ :block |
+ | parts |
+  parts := self splitMustache: content.
+  (parts allSatisfy: [ :c | self isEmptyContent: c ]) ifTrue: [ ^ nil ].
+  [ self isEmptyContent: parts first ]  whileTrue: [ parts := parts allButFirst ].
+  [ self isEmptyContent: parts last ] whileTrue: [ parts := parts allButLast ].
+  parts do: [ :block |
 		code << rendererName; <<' renderContent: ('; << block; << ').'; cr.
 	].
 
@@ -185,6 +190,18 @@ LWDevHTMLCompiler >> escapeQuotes: str [
 		out << (ch = $' ifTrue: [ '''''' ] ifFalse: [ ch ])
 	]
  ]
+]
+
+{ #category : #testing }
+LWDevHTMLCompiler >> isEmptyContent: content [
+ "Empty content is a string surrounded by single quotes and containing only whitespace." 
+ ^ content first = $' 
+	and: [ content last = $' 
+		and: [ content allButFirst allButLast allSatisfy: [ :c | 
+		(c = Character space) |
+		(c = Character tab) |
+		(c = Character cr) |
+		(c = Character lf) ] ]]
 ]
 
 { #category : #accessing }

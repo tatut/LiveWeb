@@ -31,7 +31,7 @@ LWExamples class >> start [
 
 { #category : #public }
 LWExamples class >> startOn: aPort [
-	Server := ZnServer startOn: 8080.
+	Server := ZnServer startOn: aPort.
 	Server delegate map: #__liveweb to: LWPageConnection.
 	Server delegate map: #examples to: [ :req | LWExamplePage value: req ].
    ^ Server
